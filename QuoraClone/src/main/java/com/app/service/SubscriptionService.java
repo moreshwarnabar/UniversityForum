@@ -32,6 +32,7 @@ public class SubscriptionService implements ISubscriptionService {
 		if (cat.isPresent()) {
 			u.removeSubscription(cat.get());
 			userRepo.save(u);
+			catRepo.save(cat.get());
 			return u;
 		} 
 		
