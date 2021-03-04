@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.pojos.Role;
 import com.app.repository.CategoryRepository;
 
 @Service
@@ -17,10 +18,11 @@ public class CategoryServiceImpl implements ICategoryService {
 	private CategoryRepository catRepo;
 	
 	@Override
-	public List<String> fetchAllCategoryNames() {
-		List<String> categoryNames = catRepo.fetchAllNames();
+	public List<String> fetchAllCategoryNames(Role role) {
+		if (role == Role.valueOf("FACULTY")) 
+			return catRepo.fetchAllNamesForRole(true);
 
-		return categoryNames;
+		return catRepo.fetchAllNames();
 	}
 
 }
