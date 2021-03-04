@@ -45,12 +45,4 @@ public class UserServiceImpl implements IUserService {
 		userRepo.save(user);
 	}
 
-	@Override
-	public User remove(String username) {
-		User u = userRepo.fetchUser(username)
-			.orElseThrow(() -> new RuntimeException("not found"));
-		userRepo.delete(u);
-		return u;
-	}
-
 }
