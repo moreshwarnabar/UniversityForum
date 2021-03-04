@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.group4.edac</groupId>
-	<artifactId>QuoraClone</artifactId>
+	<artifactId>QuoraCloneApplication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>QuoraClone</name>
 	<description>Quora based clone for e-DAC project</description>
