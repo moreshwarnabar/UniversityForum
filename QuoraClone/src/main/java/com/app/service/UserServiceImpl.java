@@ -28,6 +28,7 @@ public class UserServiceImpl implements IUserService {
 	public User fetchUser(String username, String password) {
 		User user = userRepo.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new RuntimeException("not found"));
+		user.getCategoriesSubscribed().size();
 		return user;
 	}
 
