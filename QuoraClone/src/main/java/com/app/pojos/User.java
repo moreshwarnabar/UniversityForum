@@ -144,11 +144,13 @@ public class User extends BaseEntity {
 	
 	public void addSubscription(Category c) {
 		categoriesSubscribed.add(c);
+		c.editNumberOfSubscribers(1);
 		c.getSubscribers().add(this);
 	}
 	
 	public void removeSubscription(Category c) {
 		categoriesSubscribed.remove(c);
+		c.editNumberOfSubscribers(-1);
 		c.getSubscribers().remove(this);
 	}
 	

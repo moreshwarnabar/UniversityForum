@@ -31,7 +31,6 @@ public class SubscriptionService implements ISubscriptionService {
 		
 		if (cat.isPresent()) {
 			u.removeSubscription(cat.get());
-			cat.get().editNumberOfSubscribers(-1);
 			userRepo.save(u);
 			return u;
 		} 
@@ -39,7 +38,6 @@ public class SubscriptionService implements ISubscriptionService {
 		Category category = catRepo.findById(id)
 								.orElseThrow(() -> new RuntimeException("no category"));
 		u.addSubscription(category);
-		category.editNumberOfSubscribers(1);
 		userRepo.save(u);
 		return u;
 	}
