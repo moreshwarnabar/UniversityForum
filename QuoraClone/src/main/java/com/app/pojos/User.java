@@ -1,14 +1,22 @@
 package com.app.pojos;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 //@Setter
@@ -40,6 +48,14 @@ public class User extends BaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
+	
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@JoinTable(name = "subscriptions",
+			   joinColumns = @JoinColumn(name = "user_id"),
+			   inverseJoinColumns = @JoinColumn(name = "category_id")
+			   )
+	@JsonIgnoreProperties("subscribers")
+	private Set<Category> categoriesSubscribed = new HashSet<>();
 	
 	public User() {
 		System.out.println("In defaul constructor of " + getClass().getName());
@@ -109,11 +125,33 @@ public class User extends BaseEntity {
 		this.role = role;
 	}
 
+	public Set<Category> getCategoriesSubscribed() {
+		return categoriesSubscribed;
+	}
+
+	public void setCategoriesSubscribed(Set<Category> categoriesSubscribed) {
+		this.categoriesSubscribed = categoriesSubscribed;
+	}
+
 	@Override
 	public String toString() {
 		return "User [firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", gender="
 				+ gender + ", isBlocked=" + isBlocked + ", username=" + username + ", password=" + password + ", role="
 				+ role + "]";
-	}	
+	}
+	
+	// helper methods
+	
+	public void addSubscription(Category c) {
+		categoriesSubscribed.add(c);
+		c.editNumberOfSubscribers(1);
+		c.getSubscribers().add(this);
+	}
+	
+	public void removeSubscription(Category c) {
+		categoriesSubscribed.remove(c);
+		c.editNumberOfSubscribers(-1);
+		c.getSubscribers().remove(this);
+	}
 	
 }

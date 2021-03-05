@@ -19,7 +19,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public List<User> fetchAllUsers() {
-		List<User> users = userRepo.findAll();
+		List<User> users = userRepo.fetchAll();
 		System.out.println(users);
 		return users;
 	}
@@ -28,6 +28,7 @@ public class UserServiceImpl implements IUserService {
 	public User fetchUser(String username, String password) {
 		User user = userRepo.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new RuntimeException("not found"));
+		user.getCategoriesSubscribed().size();
 		return user;
 	}
 
@@ -38,19 +39,11 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public void update(User user) {
-		int id = userRepo.findByUsernameAndPassword(user.getUsername(), user.getPassword())
+		int id = userRepo.fetchUser(user.getUsername())
 					.orElseThrow(() -> new RuntimeException("not found"))
 					.getId();
 		user.setId(id);
 		userRepo.save(user);
-	}
-
-	@Override
-	public User remove(String username) {
-		User u = userRepo.findByUsername(username)
-			.orElseThrow(() -> new RuntimeException("not found"));
-		userRepo.delete(u);
-		return u;
 	}
 
 }
