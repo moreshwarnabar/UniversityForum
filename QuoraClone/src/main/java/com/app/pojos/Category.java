@@ -1,12 +1,15 @@
 package com.app.pojos;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -21,14 +24,15 @@ public class Category extends BaseEntity {
 	@Column(name = "num_of_subscribers")
 	private int numberOfSubscribers;
 	
-	@Column()
+	@Column(name = "faculty_access")
 	private boolean facultyAccess;
 	
-	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST},mappedBy = "categoriesSubscribed")
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Question> questions = new ArrayList<>();
+	
+	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST}, mappedBy = "categoriesSubscribed")
 	@JsonIgnoreProperties("categoriesSubscribed")
 	private Set<User> subscribers = new HashSet<>();
-
-	// one to many with question
 	
 	public Category() {
 		System.out.println("In default constructor of " + getClass().getName());
@@ -64,6 +68,14 @@ public class Category extends BaseEntity {
 
 	public void setSubscribers(Set<User> subscribers) {
 		this.subscribers = subscribers;
+	}
+
+	public List<Question> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<Question> questions) {
+		this.questions = questions;
 	}
 
 	@Override
