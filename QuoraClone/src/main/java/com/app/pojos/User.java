@@ -22,8 +22,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-//@Setter
-//@Getter
 @Table(name = "users")
 public class User extends BaseEntity {
 	
@@ -53,6 +51,7 @@ public class User extends BaseEntity {
 	private Role role;
 	
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "askedBy")
+	@JsonIgnoreProperties(value = {"askedBy", "category"})
 	private List<Question> questionsAsked = new ArrayList<>();
 	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
@@ -60,7 +59,7 @@ public class User extends BaseEntity {
 			   joinColumns = @JoinColumn(name = "user_id"),
 			   inverseJoinColumns = @JoinColumn(name = "category_id")
 			   )
-	@JsonIgnoreProperties("subscribers")
+	@JsonIgnoreProperties(value = {"subscribers", "questions"})
 	private Set<Category> categoriesSubscribed = new HashSet<>();
 	
 	public User() {
