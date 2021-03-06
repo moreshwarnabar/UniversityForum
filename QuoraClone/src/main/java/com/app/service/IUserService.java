@@ -10,8 +10,8 @@ public interface IUserService {
 	
 	User fetchUser(String username, String password);
 	
-	void save(User user);
+	User save(User user);
 
-	void update(User user);
+	User update(User user);
 	
 }

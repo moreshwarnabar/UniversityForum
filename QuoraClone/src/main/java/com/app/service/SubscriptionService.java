@@ -23,11 +23,14 @@ public class SubscriptionService implements ISubscriptionService {
 	private CategoryRepository catRepo;
 	
 	@Override
-	public User updateSubscription(User u, int id) {
+	public User updateSubscription(int userId, int categoryId) {
+		User u = userRepo.findById(userId)
+					.orElseThrow(() -> new RuntimeException("no user"));
+		
 		Optional<Category> cat = u.getCategoriesSubscribed()
-			.stream()
-			.filter(c -> c.getId() == id)
-			.findFirst();
+									.stream()
+									.filter(c -> c.getId() == categoryId)
+									.findFirst();
 		
 		if (cat.isPresent()) {
 			u.removeSubscription(cat.get());
@@ -36,7 +39,7 @@ public class SubscriptionService implements ISubscriptionService {
 			return u;
 		} 
 		
-		Category category = catRepo.findById(id)
+		Category category = catRepo.findById(categoryId)
 								.orElseThrow(() -> new RuntimeException("no category"));
 		u.addSubscription(category);
 		userRepo.save(u);
