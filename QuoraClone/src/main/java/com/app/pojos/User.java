@@ -65,7 +65,7 @@ public class User extends BaseEntity {
 	private Set<Category> categoriesSubscribed = new HashSet<>();
 	
 	public User() {
-		System.out.println("In defaul constructor of " + getClass().getName());
+		System.out.println("In default constructor of " + getClass().getName());
 	}
 
 	public String getFirstName() {
