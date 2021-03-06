@@ -33,15 +33,12 @@ public class UserController {
 	
 	@PostMapping("/")
 	public User addUser(@RequestBody User user) {
-		userService.save(user);
-		return user;
-	}
+		return userService.save(user);
+	}	
 	
 	@PutMapping("/")
 	public User updateUser(@RequestBody User user) {
-		userService.update(user);
-		
-		return user;
+		return userService.update(user);
 	}
 	
 }

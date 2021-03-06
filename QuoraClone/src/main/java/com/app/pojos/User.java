@@ -19,6 +19,7 @@ import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -50,8 +51,9 @@ public class User extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "askedBy")
+	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true, mappedBy = "askedBy")
 	@JsonIgnoreProperties(value = {"askedBy", "category"})
+	@JsonIgnore
 	private List<Question> questionsAsked = new ArrayList<>();
 	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
