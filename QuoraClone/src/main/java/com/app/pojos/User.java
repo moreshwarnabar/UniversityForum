@@ -1,7 +1,9 @@
 package com.app.pojos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +14,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -48,6 +51,9 @@ public class User extends BaseEntity {
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
+	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "askedBy")
+	private List<Question> questionsAsked = new ArrayList<>();
 	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(name = "subscriptions",
@@ -131,6 +137,14 @@ public class User extends BaseEntity {
 
 	public void setCategoriesSubscribed(Set<Category> categoriesSubscribed) {
 		this.categoriesSubscribed = categoriesSubscribed;
+	}
+
+	public List<Question> getQuestionsAsked() {
+		return questionsAsked;
+	}
+
+	public void setQuestionsAsked(List<Question> questionsAsked) {
+		this.questionsAsked = questionsAsked;
 	}
 
 	@Override
