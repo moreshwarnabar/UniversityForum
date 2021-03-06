@@ -29,6 +29,7 @@ public class UserServiceImpl implements IUserService {
 		User user = userRepo.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new RuntimeException("not found"));
 		user.getCategoriesSubscribed().size();
+		user.getQuestionsAsked().size();
 		return user;
 	}
 
