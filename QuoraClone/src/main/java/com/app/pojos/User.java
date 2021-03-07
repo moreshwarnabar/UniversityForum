@@ -21,6 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "users")
@@ -40,12 +41,14 @@ public class User extends BaseEntity {
 	private Gender gender;
 	
 	@Column(name = "is_blocked")
+	@JsonIgnore
 	private boolean isBlocked;
 	
 	@Column(length = 20, unique = true)
 	private String username;
 	
 	@Column(length = 15, nullable = false)
+	@JsonIgnore
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
@@ -100,10 +103,12 @@ public class User extends BaseEntity {
 		this.gender = gender;
 	}
 
+	@JsonIgnore
 	public boolean getIsBlocked() {
 		return isBlocked;
 	}
 
+	@JsonProperty
 	public void setIsBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
 	}
@@ -116,10 +121,12 @@ public class User extends BaseEntity {
 		this.username = username;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
