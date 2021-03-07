@@ -27,8 +27,8 @@ public class UserController {
 	}
 	
 	@GetMapping("/{username}/{password}")
-	public User fetchUser(@PathVariable String username, @PathVariable String password) {
-		return userService.fetchUser(username, password);
+	public User authenticateLogin(@PathVariable String username, @PathVariable String password) {
+		return userService.authenticateUser(username, password);
 	}
 	
 	@PostMapping("/")

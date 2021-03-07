@@ -8,7 +8,7 @@ public interface IUserService {
 	
 	List<User> fetchAllUsers();
 	
-	User fetchUser(String username, String password);
+	User authenticateUser(String username, String password);
 	
 	User save(User user);
 

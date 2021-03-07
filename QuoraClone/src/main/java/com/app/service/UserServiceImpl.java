@@ -25,7 +25,7 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public User fetchUser(String username, String password) {
+	public User authenticateUser(String username, String password) {
 		User user = userRepo.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new RuntimeException("not found"));
 		user.getCategoriesSubscribed().size();
@@ -42,7 +42,7 @@ public class UserServiceImpl implements IUserService {
 		User u = userRepo.findById(user.getId())
 					.orElseThrow(() -> new RuntimeException("not found"));
 		
-		// password, Role
+		u.setIsBlocked(user.getIsBlocked());
 		if (user.getPassword() != null)
 			u.setPassword(user.getPassword());
 		if(user.getRole() != null)
