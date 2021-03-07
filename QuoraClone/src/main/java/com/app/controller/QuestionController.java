@@ -20,16 +20,16 @@ public class QuestionController {
 	@Autowired
 	private IQuestionService questionService;
 	
-	@GetMapping("/{categoryId}")
+	@GetMapping("/all/{categoryId}")
 	public List<Question> fetchAllFromCategory(@PathVariable int categoryId) {
 		return questionService.fetchQuestionForCategory(categoryId);
 	}
 	
-	@GetMapping("/{description}/{categoryId}")
+	@GetMapping("/filter/{description}/{categoryId}")
 	public List<Question> fetchQuestionsContaining(@PathVariable String description, @PathVariable int categoryId) {
 		return questionService.fetchQuestionsContaining(description, categoryId);
 	}
-	
+
 	@PostMapping
 	public Question saveQuestion(@RequestBody Question q) {
 		return questionService.persistQuestion(q);
