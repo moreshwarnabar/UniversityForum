@@ -51,7 +51,7 @@ public class User extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
-	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true, mappedBy = "askedBy")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "askedBy")
 	@JsonIgnoreProperties(value = {"askedBy", "category"})
 	@JsonIgnore
 	private List<Question> questionsAsked = new ArrayList<>();
@@ -62,7 +62,6 @@ public class User extends BaseEntity {
 			   inverseJoinColumns = @JoinColumn(name = "category_id")
 			   )
 	@JsonIgnoreProperties(value = {"subscribers", "questions"})
-	@JsonIgnore
 	private Set<Category> categoriesSubscribed = new HashSet<>();
 	
 	public User() {
