@@ -23,7 +23,6 @@ public class Faculty extends BaseEntity {
 	@Column(length = 10)
 	private String position;
 	
-
 	private int experience;
 	
 	@Column(name = "hire_date")
