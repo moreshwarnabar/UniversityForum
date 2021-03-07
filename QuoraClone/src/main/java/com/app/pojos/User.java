@@ -59,6 +59,10 @@ public class User extends BaseEntity {
 	@JsonIgnore
 	private List<Question> questionsAsked = new ArrayList<>();
 	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "answerBy")
+	@JsonIgnore
+	private List<Answer> answers = new ArrayList<>();
+	
 	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
 	@JoinTable(name = "subscriptions",
 			   joinColumns = @JoinColumn(name = "user_id"),
@@ -153,6 +157,14 @@ public class User extends BaseEntity {
 
 	public void setQuestionsAsked(List<Question> questionsAsked) {
 		this.questionsAsked = questionsAsked;
+	}
+
+	public List<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
 	}
 
 	@Override
