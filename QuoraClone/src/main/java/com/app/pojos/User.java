@@ -62,6 +62,7 @@ public class User extends BaseEntity {
 			   inverseJoinColumns = @JoinColumn(name = "category_id")
 			   )
 	@JsonIgnoreProperties(value = {"subscribers", "questions"})
+	@JsonIgnore
 	private Set<Category> categoriesSubscribed = new HashSet<>();
 	
 	public User() {
@@ -100,11 +101,11 @@ public class User extends BaseEntity {
 		this.gender = gender;
 	}
 
-	public boolean isBlocked() {
+	public boolean getIsBlocked() {
 		return isBlocked;
 	}
 
-	public void setBlocked(boolean isBlocked) {
+	public void setIsBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
 	}
 
