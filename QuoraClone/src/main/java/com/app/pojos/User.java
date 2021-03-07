@@ -21,6 +21,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "users")
@@ -40,18 +41,20 @@ public class User extends BaseEntity {
 	private Gender gender;
 	
 	@Column(name = "is_blocked")
+	@JsonIgnore
 	private boolean isBlocked;
 	
 	@Column(length = 20, unique = true)
 	private String username;
 	
 	@Column(length = 15, nullable = false)
+	@JsonIgnore
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
-	@OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, orphanRemoval = true, mappedBy = "askedBy")
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "askedBy")
 	@JsonIgnoreProperties(value = {"askedBy", "category"})
 	@JsonIgnore
 	private List<Question> questionsAsked = new ArrayList<>();
@@ -100,11 +103,13 @@ public class User extends BaseEntity {
 		this.gender = gender;
 	}
 
-	public boolean isBlocked() {
+	@JsonIgnore
+	public boolean getIsBlocked() {
 		return isBlocked;
 	}
 
-	public void setBlocked(boolean isBlocked) {
+	@JsonProperty
+	public void setIsBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
 	}
 
@@ -116,10 +121,12 @@ public class User extends BaseEntity {
 		this.username = username;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}

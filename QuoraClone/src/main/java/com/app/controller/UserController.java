@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.app.pojos.Question;
 import com.app.pojos.User;
 import com.app.service.IUserService;
 
@@ -21,22 +22,27 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 	
-	@GetMapping("/")
+	@GetMapping
 	public List<User> fetchUsers() {
 		return userService.fetchAllUsers();
 	}
 	
 	@GetMapping("/{username}/{password}")
-	public User fetchUser(@PathVariable String username, @PathVariable String password) {
-		return userService.fetchUser(username, password);
+	public User authenticateLogin(@PathVariable String username, @PathVariable String password) {
+		return userService.authenticateUser(username, password);
 	}
 	
-	@PostMapping("/")
+	@GetMapping("/{userId}")
+	public List<Question> fetchUserQuestions(@PathVariable int userId) {
+		return userService.fetchUserQuestions(userId);
+	}
+	
+	@PostMapping
 	public User addUser(@RequestBody User user) {
 		return userService.save(user);
 	}	
 	
-	@PutMapping("/")
+	@PutMapping
 	public User updateUser(@RequestBody User user) {
 		return userService.update(user);
 	}

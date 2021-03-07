@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.app.pojos.Question;
 import com.app.pojos.User;
-import com.app.repository.QuestionRepository;
 import com.app.repository.UserRepository;
 
 @Service
@@ -18,9 +17,6 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private UserRepository userRepo;
-	
-	@Autowired
-	private QuestionRepository questionRepo;
 
 	@Override
 	public List<User> fetchAllUsers() {
@@ -30,12 +26,20 @@ public class UserServiceImpl implements IUserService {
 	}
 
 	@Override
-	public User fetchUser(String username, String password) {
+	public User authenticateUser(String username, String password) {
 		User user = userRepo.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new RuntimeException("not found"));
 		user.getCategoriesSubscribed().size();
 		return user;
 	}
+
+	@Override
+	public List<Question> fetchUserQuestions(int userId) {
+		User u = userRepo.fetchUserQuestions(userId)
+					.orElseThrow(() -> new RuntimeException("not found"));
+		return u.getQuestionsAsked();
+	}
+
 
 	@Override
 	public User save(User user) {
@@ -44,11 +48,17 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User update(User user) {
-		List<Question> questions = questionRepo.findByAskedBy(user);
-		System.out.println(questions);
-		user.setQuestionsAsked(questions);
+		User u = userRepo.findById(user.getId())
+					.orElseThrow(() -> new RuntimeException("not found"));
 		
-		return userRepo.save(user);
+		u.setIsBlocked(user.getIsBlocked());
+		if (user.getPassword() != null)
+			u.setPassword(user.getPassword());
+		if(user.getRole() != null)
+			u.setRole(user.getRole());
+		
+		u.getCategoriesSubscribed().size();
+		return userRepo.save(u);
 	}
 
 }
