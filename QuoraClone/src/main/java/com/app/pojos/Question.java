@@ -1,15 +1,20 @@
 package com.app.pojos;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -37,7 +42,9 @@ public class Question extends BaseEntity {
 	@JsonIgnoreProperties(value = { "questions", "subscribers" })
 	private Category category;
 
-	// one to many with answer
+	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	private List<Answer> answers= new ArrayList<>();
 
 	public Question() {
 		System.out.println("In default constructor of " + getClass().getName());
@@ -81,6 +88,14 @@ public class Question extends BaseEntity {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public List<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<Answer> answers) {
+		this.answers = answers;
 	}
 
 	@Override
