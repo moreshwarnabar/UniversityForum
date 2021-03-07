@@ -20,7 +20,7 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public List<User> fetchAllUsers() {
-		List<User> users = userRepo.fetchAll();
+		List<User> users = userRepo.findAll();
 		System.out.println(users);
 		return users;
 	}
@@ -29,7 +29,6 @@ public class UserServiceImpl implements IUserService {
 	public User authenticateUser(String username, String password) {
 		User user = userRepo.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new RuntimeException("not found"));
-		user.getCategoriesSubscribed().size();
 		return user;
 	}
 

@@ -1,20 +1,22 @@
 package com.app.pojos;
 
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -160,20 +162,6 @@ public class User extends BaseEntity {
 		return "User [firstName=" + firstName + ", lastName=" + lastName + ", dateOfBirth=" + dateOfBirth + ", gender="
 				+ gender + ", isBlocked=" + isBlocked + ", username=" + username + ", password=" + password + ", role="
 				+ role + "]";
-	}
-	
-	// helper methods
-	
-	public void addSubscription(Category c) {
-		categoriesSubscribed.add(c);
-		c.editNumberOfSubscribers(1);
-		c.getSubscribers().add(this);
-	}
-	
-	public void removeSubscription(Category c) {
-		categoriesSubscribed.remove(c);
-		c.editNumberOfSubscribers(-1);
-		c.getSubscribers().remove(this);
-	}
+	}	
 	
 }
