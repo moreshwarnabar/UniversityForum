@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.pojos.Question;
 import com.app.pojos.User;
 import com.app.repository.UserRepository;
 
@@ -31,6 +32,14 @@ public class UserServiceImpl implements IUserService {
 		user.getCategoriesSubscribed().size();
 		return user;
 	}
+
+	@Override
+	public List<Question> fetchUserQuestions(int userId) {
+		User u = userRepo.fetchUserQuestions(userId)
+					.orElseThrow(() -> new RuntimeException("not found"));
+		return u.getQuestionsAsked();
+	}
+
 
 	@Override
 	public User save(User user) {
