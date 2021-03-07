@@ -2,18 +2,19 @@ package com.app.service;
 
 import java.util.List;
 
+import com.app.pojos.Question;
 import com.app.pojos.User;
 
 public interface IUserService {
 	
 	List<User> fetchAllUsers();
 	
-	User fetchUser(String username, String password);
+	List<Question> fetchUserQuestions(int userId);
 	
-	void save(User user);
+	User authenticateUser(String username, String password);
+	
+	User save(User user);
 
-	void update(User user);
-
-	User remove(String username);
+	User update(User user);
 	
 }

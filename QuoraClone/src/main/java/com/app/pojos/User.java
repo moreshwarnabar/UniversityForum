@@ -2,17 +2,30 @@ package com.app.pojos;
 
 import java.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
-//@Setter
-//@Getter
 @Table(name = "users")
 public class User extends BaseEntity {
 	
@@ -30,19 +43,34 @@ public class User extends BaseEntity {
 	private Gender gender;
 	
 	@Column(name = "is_blocked")
+	@JsonIgnore
 	private boolean isBlocked;
 	
 	@Column(length = 20, unique = true)
 	private String username;
 	
 	@Column(length = 15, nullable = false)
+	@JsonIgnore
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "askedBy")
+	@JsonIgnoreProperties(value = {"askedBy", "category"})
+	@JsonIgnore
+	private List<Question> questionsAsked = new ArrayList<>();
+	
+	@ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+	@JoinTable(name = "subscriptions",
+			   joinColumns = @JoinColumn(name = "user_id"),
+			   inverseJoinColumns = @JoinColumn(name = "category_id")
+			   )
+	@JsonIgnoreProperties(value = {"subscribers", "questions"})
+	private Set<Category> categoriesSubscribed = new HashSet<>();
+	
 	public User() {
-		System.out.println("In defaul constructor of " + getClass().getName());
+		System.out.println("In default constructor of " + getClass().getName());
 	}
 
 	public String getFirstName() {
@@ -77,11 +105,13 @@ public class User extends BaseEntity {
 		this.gender = gender;
 	}
 
-	public boolean isBlocked() {
+	@JsonIgnore
+	public boolean getIsBlocked() {
 		return isBlocked;
 	}
 
-	public void setBlocked(boolean isBlocked) {
+	@JsonProperty
+	public void setIsBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
 	}
 
@@ -93,10 +123,12 @@ public class User extends BaseEntity {
 		this.username = username;
 	}
 
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
+	@JsonProperty
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -107,6 +139,22 @@ public class User extends BaseEntity {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public Set<Category> getCategoriesSubscribed() {
+		return categoriesSubscribed;
+	}
+
+	public void setCategoriesSubscribed(Set<Category> categoriesSubscribed) {
+		this.categoriesSubscribed = categoriesSubscribed;
+	}
+
+	public List<Question> getQuestionsAsked() {
+		return questionsAsked;
+	}
+
+	public void setQuestionsAsked(List<Question> questionsAsked) {
+		this.questionsAsked = questionsAsked;
 	}
 
 	@Override

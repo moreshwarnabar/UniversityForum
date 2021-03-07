@@ -4,6 +4,6 @@ import com.app.pojos.User;
 
 public interface ISubscriptionService {
 	
-	User updateSubscription(User u, int id); 
+	User updateSubscription(int userId, int categoryId); 
 	
 }
