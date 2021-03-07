@@ -29,6 +29,7 @@ public class UserServiceImpl implements IUserService {
 	public User authenticateUser(String username, String password) {
 		User user = userRepo.findByUsernameAndPassword(username, password)
 				.orElseThrow(() -> new RuntimeException("not found"));
+		user.getCategoriesSubscribed().size();
 		return user;
 	}
 
@@ -49,7 +50,7 @@ public class UserServiceImpl implements IUserService {
 	public User update(User user) {
 		User u = userRepo.findById(user.getId())
 					.orElseThrow(() -> new RuntimeException("not found"));
-		
+
 		u.setIsBlocked(user.getIsBlocked());
 		if (user.getPassword() != null)
 			u.setPassword(user.getPassword());
