@@ -45,7 +45,7 @@ public class ContactDetailsController {
 	@PostMapping("/{id}")
 	public ResponseEntity<?> addContactDetails(@RequestBody ContactDetails details, @PathVariable int id) {
 
-		return new ResponseEntity<>(contactDetailsService.saveContactDetails(details, id), HttpStatus.OK);
+		return new ResponseEntity<>(contactDetailsService.saveContactDetails(details, id), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/")
