@@ -6,10 +6,10 @@ import com.app.pojos.Question;
 
 public interface IQuestionService {
 	
-	List<Question> fetchQuestionForCategory(int cId);
+	List<Question> fetchQuestionForCategory(int categoryId);
 	
-	List<Question> fetchQuestionsContaining(String description, int cId);
+	List<Question> fetchQuestionsContaining(String description, int categoryId);
 	
-	Question persistQuestion(Question q);
+	Question persistQuestion(Question question);
 	
 }
