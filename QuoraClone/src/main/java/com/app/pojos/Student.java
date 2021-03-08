@@ -2,10 +2,13 @@ package com.app.pojos;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 
@@ -27,6 +30,7 @@ public class Student extends BaseEntity {
 		@OneToOne
 		@JoinColumn(name = "user_id", nullable = false)
 		@MapsId						//shared primary key
+		@JsonIgnore
 		private User user;
 
 	public String getStream() {
