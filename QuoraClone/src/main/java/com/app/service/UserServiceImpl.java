@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.customexception.UserAuthorizationException;
+import com.app.customexception.UserNotFoundException;
 import com.app.pojos.Question;
 import com.app.pojos.User;
 import com.app.repository.UserRepository;
@@ -28,7 +30,13 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public User authenticateUser(String username, String password) {
 		User user = userRepo.findByUsernameAndPassword(username, password)
-				.orElseThrow(() -> new RuntimeException("not found"));
+				.orElseThrow(() -> new UserAuthorizationException("Invalid username/password"));
+		
+		if (user.getIsBlocked()) {
+			throw new UserAuthorizationException("You have been blocked by admin");
+		}
+		
+		// to fetch the details and avoid lazy initialization exceptions
 		user.getCategoriesSubscribed().size();
 		return user;
 	}
@@ -36,7 +44,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public List<Question> fetchUserQuestions(int userId) {
 		User u = userRepo.fetchUserQuestions(userId)
-					.orElseThrow(() -> new RuntimeException("not found"));
+					.orElseThrow(() -> new UserNotFoundException("No user registered for id " + userId));
 		return u.getQuestionsAsked();
 	}
 
@@ -49,7 +57,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public User update(User user) {
 		User u = userRepo.findById(user.getId())
-					.orElseThrow(() -> new RuntimeException("not found"));
+					.orElseThrow(() -> new UserNotFoundException("No user registered for id " + user.getId()));
 
 		u.setIsBlocked(user.getIsBlocked());
 		if (user.getPassword() != null)
