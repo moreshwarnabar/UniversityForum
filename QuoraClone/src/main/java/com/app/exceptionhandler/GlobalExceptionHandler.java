@@ -5,7 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.app.customexception.AnswerNotFoundException;
 import com.app.customexception.CategoryNotFoundException;
+import com.app.customexception.QuestionNotFoundException;
 import com.app.customexception.UserAuthorizationException;
 import com.app.customexception.UserNotFoundException;
 import com.app.dto.ErrorResponse;
@@ -27,6 +29,16 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(CategoryNotFoundException.class)
 	public ResponseEntity<?> categoryExceptionHandler(CategoryNotFoundException e) {
 		return new ResponseEntity<>(new ErrorResponse("Category not found", e.getMessage()), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(AnswerNotFoundException.class)
+	public ResponseEntity<?> answerExceptionHandler(AnswerNotFoundException e) {
+		return new ResponseEntity<>(new ErrorResponse("Answer not found", e.getMessage()), HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(QuestionNotFoundException.class)
+	public ResponseEntity<?> questionExceptionHandler(QuestionNotFoundException e) {
+		return new ResponseEntity<>(new ErrorResponse("Question not found", e.getMessage()), HttpStatus.NOT_FOUND);
 	}
 
 }
