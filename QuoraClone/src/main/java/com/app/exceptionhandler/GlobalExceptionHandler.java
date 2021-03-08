@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.app.customexception.FacultyHandlingException;
 import com.app.customexception.UserAuthorizationException;
 import com.app.customexception.UserNotFoundException;
 import com.app.dto.ErrorResponse;
@@ -24,5 +25,9 @@ public class GlobalExceptionHandler {
 	}
 	
 	// exception handler methods
+	@ExceptionHandler(FacultyHandlingException.class)
+	public ResponseEntity<?> facultyExceptionHandler(FacultyHandlingException e){
+		return new ResponseEntity<>(new ErrorResponse("Faculty fetching failed!", e.getMessage()), HttpStatus.NOT_FOUND);
+	}
 
 }
