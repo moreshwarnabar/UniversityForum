@@ -3,6 +3,8 @@ package com.app.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,37 +30,34 @@ public class ContactDetailsController {
 
 	// get contact details by user or contact id
 	@GetMapping("/{id}")
-	public ContactDetails fetchContactDetails(@PathVariable int id) {
-		ContactDetails c = contactDetailsService.fetchContactDetails(id);
-		System.out.println(c);
-		return c;
+	public ResponseEntity<?> fetchContactDetails(@PathVariable int id) {
+		return new ResponseEntity<>(contactDetailsService.fetchContactDetails(id), HttpStatus.OK);
 	}
 
 	// get all contact details
 	@GetMapping("/")
-	public List<ContactDetails> fetchAllContactDetails() {
+	public ResponseEntity<?> fetchAllContactDetails() {
 		List<ContactDetails> contacts = contactDetailsService.fetchAllContactDetails();
-		System.out.println(contacts);
-		return contacts;
+		
+		return new ResponseEntity<>(contacts, HttpStatus.OK);
 	}
 
 	@PostMapping("/{id}")
-	public ContactDetails addContactDetails(@RequestBody ContactDetails details, @PathVariable int id) {
+	public ResponseEntity<?> addContactDetails(@RequestBody ContactDetails details, @PathVariable int id) {
 
-		return contactDetailsService.saveContactDetails(details, id);
+		return new ResponseEntity<>(contactDetailsService.saveContactDetails(details, id), HttpStatus.CREATED);
 	}
 
 	@PutMapping("/")
-	public ContactDetails updateContactDetails(@RequestBody ContactDetails details) {
-		System.out.println("in controller -" + details);
+	public ResponseEntity<?> updateContactDetails(@RequestBody ContactDetails details) {
+		
 		ContactDetails c = contactDetailsService.updateContactDetails(details);
-		System.out.println(c);
-		return c;
+		
+		return new ResponseEntity<>(c, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/{id}")
-	public String deleteContactDetails(@PathVariable int id) {
-		return contactDetailsService.deleteContactDetails(id);
-
+	public  ResponseEntity<?> deleteContactDetails(@PathVariable int id) {
+		return new ResponseEntity<>(contactDetailsService.deleteContactDetails(id), HttpStatus.OK);
 	}
 }
