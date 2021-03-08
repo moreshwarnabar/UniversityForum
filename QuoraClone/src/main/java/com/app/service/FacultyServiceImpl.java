@@ -46,7 +46,7 @@ public class FacultyServiceImpl implements IFacultyService {
 	@Override
 	public String deleteFaculty(int facultyId) {
 		Faculty f = facultyRepo.findById(facultyId).orElseThrow(() -> new FacultyHandlingException("Faculty deletion failed : Invalid Faculty ID!"));
-		facultyRepo.deleteById(facultyId);
+		facultyRepo.delete(f);
 		return "Faculty with id "+facultyId+" deleted";
 	}
 
