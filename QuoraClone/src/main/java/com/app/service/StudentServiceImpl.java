@@ -5,6 +5,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.customexception.StudentNotFoundException;
+import com.app.customexception.UserNotFoundException;
 import com.app.pojos.Student;
 import com.app.pojos.User;
 import com.app.repository.StudentRepository;
@@ -20,7 +22,7 @@ public class StudentServiceImpl implements IStudentService {
 	
 	@Override
 	public Student fetchStudents(int id) {
-		Student student = studentRepo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+		Student student = studentRepo.findById(id).orElseThrow(() -> new StudentNotFoundException("Student not found"));
 
 return student;
 	}
@@ -31,7 +33,7 @@ return student;
 		
 		System.out.println(details);
 		User u = userRepo.findById(id)			//UserRepo used here
-				.orElseThrow(() -> new RuntimeException("User not found to add contact details"));
+				.orElseThrow(() -> new UserNotFoundException("User not found "));
 		
 		System.out.println(u);
 		

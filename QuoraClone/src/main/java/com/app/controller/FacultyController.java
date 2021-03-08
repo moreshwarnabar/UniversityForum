@@ -1,6 +1,7 @@
 package com.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,24 +26,23 @@ public class FacultyController {
 		System.out.println("in ctor of " + getClass().getName());
 	}
 	
-	@GetMapping("/{id}")
-	public ResponseEntity<Faculty> fetchFaculty(@PathVariable int id) {
-		System.out.println("in fetch faculty with id "+id);
-		return ResponseEntity.ok(facultyService.fetchFacultyDetails(id));
+	@GetMapping("/{facultyId}")
+	public ResponseEntity<?> fetchFaculty(@PathVariable int facultyId) {
+		return ResponseEntity.ok(facultyService.fetchFacultyDetails(facultyId));
 	}
 	
-	@PostMapping("/{id}")
-	public Faculty addFaculty(@RequestBody Faculty f,@PathVariable int id) {
-		return facultyService.addFaculty(f, id);
+	@PostMapping("/{facultyId}")
+	public ResponseEntity<?> addFaculty(@RequestBody Faculty f,@PathVariable int facultyId) {
+		return new ResponseEntity<>(facultyService.addFaculty(f, facultyId), HttpStatus.CREATED);
 	}
 	
 	@PutMapping
-	public Faculty updateFaculty(@RequestBody Faculty f) {
-		return facultyService.updateFacultyDetails(f);
+	public ResponseEntity<?> updateFaculty(@RequestBody Faculty f) {
+		return ResponseEntity.ok(facultyService.updateFacultyDetails(f));
 	}
 	
-	@DeleteMapping("/{id}")
-	public String deleteFaculty(@PathVariable int id) {
-		return facultyService.deleteFaculty(id);
+	@DeleteMapping("/{facultyId}")
+	public ResponseEntity<?> deleteFaculty(@PathVariable int facultyId) {
+		return ResponseEntity.ok(facultyService.deleteFaculty(facultyId));
 	}
 }
