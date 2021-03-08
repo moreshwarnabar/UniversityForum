@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.customexception.CategoryNotFoundException;
 import com.app.pojos.Category;
 import com.app.pojos.Question;
 import com.app.repository.CategoryRepository;
@@ -23,23 +24,23 @@ public class QuestionServiceImpl implements IQuestionService {
 	private CategoryRepository catRepo;
 
 	@Override
-	public List<Question> fetchQuestionForCategory(int cId) {
-		Category c = catRepo.findById(cId)
-						.orElseThrow(() -> new RuntimeException("category not found"));
+	public List<Question> fetchQuestionForCategory(int categoryId) {
+		Category c = catRepo.findById(categoryId)
+						.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
 		return questionRepo.findByCategory(c);
 	}
 
 	@Override
-	public List<Question> fetchQuestionsContaining(String description, int cId) {
-		Category c = catRepo.findById(cId)
-						.orElseThrow(() -> new RuntimeException("category not found"));
+	public List<Question> fetchQuestionsContaining(String description, int categoryId) {
+		Category c = catRepo.findById(categoryId)
+						.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
 		return questionRepo.findByDescriptionContainingAndCategory(description, c);
 	}
 
 	@Override
-	public Question persistQuestion(Question q) {
-		questionRepo.save(q);
-		return q;
+	public Question persistQuestion(Question question) {
+		questionRepo.save(question);
+		return question;
 	}
 
 }

@@ -5,7 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+
 import com.app.customexception.ContactDetailsNotFoundException;
+import com.app.customexception.FacultyHandlingException;
+import com.app.customexception.CategoryNotFoundException;
 import com.app.customexception.UserAuthorizationException;
 import com.app.customexception.UserNotFoundException;
 import com.app.dto.ErrorResponse;
@@ -31,8 +34,19 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new ErrorResponse("Contact details not found", e.getMessage()), HttpStatus.NOT_FOUND);
 	}
 	
-	@ExceptionHandler(RuntimeException.class)
+	// exception handler methods
+	@ExceptionHandler(FacultyHandlingException.class)
+	public ResponseEntity<?> facultyExceptionHandler(FacultyHandlingException e){
+		return new ResponseEntity<>(new ErrorResponse("Faculty fetching failed!", e.getMessage()), HttpStatus.NOT_FOUND);
+
+	@ExceptionHandler(CategoryNotFoundException.class)
+	public ResponseEntity<?> categoryExceptionHandler(CategoryNotFoundException e) {
+		return new ResponseEntity<>(new ErrorResponse("Category not found", e.getMessage()), HttpStatus.NOT_FOUND);
+	}
+    
+  @ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<?> contactDetailsExceptionHandler(RuntimeException e){
 		return new ResponseEntity<>(new ErrorResponse("Something went wrong", e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+
 }
