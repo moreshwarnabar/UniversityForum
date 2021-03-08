@@ -1,6 +1,8 @@
 package com.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,29 +28,31 @@ public class StudentController {
 	
 	//get all student details
 	@GetMapping("/{id}")
-	public Student fetchStudents(@PathVariable int id){
+	public ResponseEntity<?> fetchStudents(@PathVariable int id){
 		Student students = StudentService.fetchStudents(id);
 		System.out.println(students);
-		return students;
+		return ResponseEntity.ok(students);
 	}
 	
 	@PostMapping("/{id}")
-	public Student addStudentDetails(@RequestBody Student details,@PathVariable int id) {
+	public ResponseEntity<?>  addStudentDetails(@RequestBody Student details,@PathVariable int id) {
 		
-		return StudentService.saveStudentDetails(details,id);
+		return new ResponseEntity<>(StudentService.saveStudentDetails(details,id), HttpStatus.CREATED);
+		
 	}
 	
+	
 	@PutMapping("/")
-	public Student updateStudentDetails(@RequestBody Student details) {
+	public ResponseEntity<?>  updateStudentDetails(@RequestBody Student details) {
 		System.out.println("in controller -"+ details);
 		Student c= StudentService.updateStudentDetails(details);
 		System.out.println(c);
-		return c;
+		return ResponseEntity.ok(c);
 	}
 	
 	@DeleteMapping("/{id}")
-	public String deleteStudentDetails(@PathVariable int id) {
-		return StudentService.deleteStudentDetails(id);
+	public ResponseEntity<?>  deleteStudentDetails(@PathVariable int id) {
+		return ResponseEntity.ok(StudentService.deleteStudentDetails(id));
 		
 	}
 }
