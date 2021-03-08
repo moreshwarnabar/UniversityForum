@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.customexception.ContactDetailsNotFoundException;
+import com.app.customexception.UserNotFoundException;
 import com.app.pojos.ContactDetails;
 import com.app.pojos.User;
 import com.app.repository.ContactDetailsRepository;
@@ -20,42 +22,44 @@ public class ContactDetailsServiceImpl implements IContactDetailsService {
 	private ContactDetailsRepository contactDetailsRepo;
 	@Autowired
 	private UserRepository userRepo;
+	
+	
 	@Override
 	public ContactDetails fetchContactDetails(int id) {
 		ContactDetails c = contactDetailsRepo.findById(id)
-				.orElseThrow(() -> new RuntimeException("No contact details found"));
+				.orElseThrow(() -> new ContactDetailsNotFoundException("Contact details not found"));
 		return c;
 	}
 
 	@Override
 	public List<ContactDetails> fetchAllContactDetails() {
 		List<ContactDetails> contacts = contactDetailsRepo.findAll();
+		
+		if(contacts.isEmpty()) {
+			throw new ContactDetailsNotFoundException("No Contact details found");
+		}
 		return contacts;
 	}
 
 	@Override
 	public ContactDetails saveContactDetails(ContactDetails details, int id) {
-		System.out.println(id);
-		System.out.println(details);
-		
-		User u = userRepo.findById(id)			//UserRepo used here
-				.orElseThrow(() -> new RuntimeException("User not found to add contact details"));
-		
-		System.out.println(u);
-		
+
+		User u = userRepo.findById(id)
+				.orElseThrow(() -> new UserNotFoundException("No user registered for id " + id));
+
 		details.setUser(u);
-		
+
 		ContactDetails c = contactDetailsRepo.save(details);
+		
 		return c;
 	}
 
 	@Override
 	public ContactDetails updateContactDetails(ContactDetails details) {
 		System.out.println("in service "+details);
-//		System.out.println(details.getUser().getId());
-
 		
 		contactDetailsRepo.save(details);
+		
 		return details;
 	}
 
