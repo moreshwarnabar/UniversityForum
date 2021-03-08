@@ -1,8 +1,8 @@
 package com.app.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.app.pojos.Question;
 import com.app.pojos.User;
 import com.app.service.IUserService;
 
@@ -23,28 +22,28 @@ public class UserController {
 	private IUserService userService;
 	
 	@GetMapping
-	public List<User> fetchUsers() {
-		return userService.fetchAllUsers();
+	public ResponseEntity<?> fetchUsers() {
+		return ResponseEntity.ok(userService.fetchAllUsers());
 	}
 	
 	@GetMapping("/{username}/{password}")
-	public User authenticateLogin(@PathVariable String username, @PathVariable String password) {
-		return userService.authenticateUser(username, password);
+	public ResponseEntity<?> authenticateLogin(@PathVariable String username, @PathVariable String password) {
+		return ResponseEntity.ok(userService.authenticateUser(username, password));
 	}
 	
 	@GetMapping("/{userId}")
-	public List<Question> fetchUserQuestions(@PathVariable int userId) {
-		return userService.fetchUserQuestions(userId);
+	public ResponseEntity<?> fetchUserQuestions(@PathVariable int userId) {
+		return ResponseEntity.ok(userService.fetchUserQuestions(userId));
 	}
 	
 	@PostMapping
-	public User addUser(@RequestBody User user) {
-		return userService.save(user);
+	public ResponseEntity<?> addUser(@RequestBody User user) {
+		return new ResponseEntity<>(userService.save(user), HttpStatus.CREATED);
 	}	
 	
 	@PutMapping
-	public User updateUser(@RequestBody User user) {
-		return userService.update(user);
+	public ResponseEntity<?> updateUser(@RequestBody User user) {
+		return ResponseEntity.ok(userService.update(user));
 	}
 	
 }
