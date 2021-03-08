@@ -7,13 +7,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.app.customexception.AnswerNotFoundException;
 import com.app.customexception.CategoryNotFoundException;
-import com.app.customexception.QuestionNotFoundException;
-
 import com.app.customexception.ContactDetailsNotFoundException;
 import com.app.customexception.FacultyHandlingException;
-import com.app.customexception.CategoryNotFoundException;
+import com.app.customexception.QuestionNotFoundException;
 import com.app.customexception.StudentNotFoundException;
-
 import com.app.customexception.UserAuthorizationException;
 import com.app.customexception.UserNotFoundException;
 import com.app.dto.ErrorResponse;
