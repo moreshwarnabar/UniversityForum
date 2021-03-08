@@ -1,8 +1,8 @@
 package com.app.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,18 +21,18 @@ public class QuestionController {
 	private IQuestionService questionService;
 	
 	@GetMapping("/all/{categoryId}")
-	public List<Question> fetchAllFromCategory(@PathVariable int categoryId) {
-		return questionService.fetchQuestionForCategory(categoryId);
+	public ResponseEntity<?> fetchAllFromCategory(@PathVariable int categoryId) {
+		return ResponseEntity.ok(questionService.fetchQuestionForCategory(categoryId));
 	}
 	
 	@GetMapping("/filter/{description}/{categoryId}")
-	public List<Question> fetchQuestionsContaining(@PathVariable String description, @PathVariable int categoryId) {
-		return questionService.fetchQuestionsContaining(description, categoryId);
+	public ResponseEntity<?> fetchQuestionsContaining(@PathVariable String description, @PathVariable int categoryId) {
+		return ResponseEntity.ok(questionService.fetchQuestionsContaining(description, categoryId));
 	}
 
 	@PostMapping
-	public Question saveQuestion(@RequestBody Question q) {
-		return questionService.persistQuestion(q);
+	public ResponseEntity<?> saveQuestion(@RequestBody Question q) {
+		return new ResponseEntity<>(questionService.persistQuestion(q), HttpStatus.CREATED);
 	}
 	
 }

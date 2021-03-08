@@ -7,6 +7,8 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.app.customexception.CategoryNotFoundException;
+import com.app.customexception.UserNotFoundException;
 import com.app.pojos.Category;
 import com.app.pojos.User;
 import com.app.repository.CategoryRepository;
@@ -25,7 +27,7 @@ public class SubscriptionService implements ISubscriptionService {
 	@Override
 	public User updateSubscription(int userId, int categoryId) {
 		User u = userRepo.findById(userId)
-					.orElseThrow(() -> new RuntimeException("no user"));
+					.orElseThrow(() -> new UserNotFoundException("No user registered for id " + userId));
 		
 		Optional<Category> cat = u.getCategoriesSubscribed()
 									.stream()
@@ -40,7 +42,7 @@ public class SubscriptionService implements ISubscriptionService {
 		} 
 		
 		Category category = catRepo.findById(categoryId)
-								.orElseThrow(() -> new RuntimeException("no category"));
+								.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
 		u.addSubscription(category);
 		userRepo.save(u);
 		return u;
