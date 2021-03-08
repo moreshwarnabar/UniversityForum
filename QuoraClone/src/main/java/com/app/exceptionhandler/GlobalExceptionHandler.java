@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import com.app.customexception.ContactDetailsNotFoundException;
 import com.app.customexception.FacultyHandlingException;
 import com.app.customexception.CategoryNotFoundException;
+import com.app.customexception.StudentNotFoundException;
 import com.app.customexception.UserAuthorizationException;
 import com.app.customexception.UserNotFoundException;
 import com.app.dto.ErrorResponse;
@@ -28,6 +29,11 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new ErrorResponse("User not found", e.getMessage()), HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(StudentNotFoundException.class)
+	public ResponseEntity<?> studentExceptionHandler(StudentNotFoundException e) {
+		return new ResponseEntity<>(new ErrorResponse("Student not found", e.getMessage()), HttpStatus.NOT_FOUND);
+	}
+
 	// exception handler methods : contact_Details
 	@ExceptionHandler(ContactDetailsNotFoundException.class)
 	public ResponseEntity<?> contactDetailsExceptionHandler(ContactDetailsNotFoundException e){
