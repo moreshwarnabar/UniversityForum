@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.app.customexception.CategoryNotFoundException;
+import com.app.customexception.StudentNotFoundException;
 import com.app.customexception.UserAuthorizationException;
 import com.app.customexception.UserNotFoundException;
 import com.app.dto.ErrorResponse;
@@ -24,9 +25,14 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(new ErrorResponse("User not found", e.getMessage()), HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(StudentNotFoundException.class)
+	public ResponseEntity<?> studentExceptionHandler(StudentNotFoundException e) {
+		return new ResponseEntity<>(new ErrorResponse("Student not found", e.getMessage()), HttpStatus.NOT_FOUND);
+	}
+
 	@ExceptionHandler(CategoryNotFoundException.class)
 	public ResponseEntity<?> categoryExceptionHandler(CategoryNotFoundException e) {
 		return new ResponseEntity<>(new ErrorResponse("Category not found", e.getMessage()), HttpStatus.NOT_FOUND);
 	}
-
+	
 }
