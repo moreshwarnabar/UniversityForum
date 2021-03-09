@@ -7,27 +7,30 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 
 @Table(name = "students")
 
 public class Student extends BaseEntity {
-	
+
 	// one to one unidirectional with user
 	@Column(name = "stream", length = 25)
 	private String stream;
-	
+
 	@Column(name = "branch", length = 25)
 	private String branch;
-	
+
 	@Column(name = "year", length = 25)
 	private String year;
-	
+
 	// one to one unidirectional with user
-		@OneToOne
-		@JoinColumn(name = "user_id", nullable = false)
-		@MapsId						//shared primary key
-		private User user;
+	@OneToOne
+	@JoinColumn(name = "user_id", nullable = false)
+	@MapsId // shared primary key
+	@JsonIgnore
+	private User user;
 
 	public String getStream() {
 		return stream;
@@ -61,10 +64,9 @@ public class Student extends BaseEntity {
 		this.user = user;
 	}
 
-
 	@Override
 	public String toString() {
 		return "Student [stream=" + stream + ", branch=" + branch + ", year=" + year + ", user_id=" + user + "]";
 	}
-	
+
 }

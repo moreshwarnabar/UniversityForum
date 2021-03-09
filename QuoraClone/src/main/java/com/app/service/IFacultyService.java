@@ -4,12 +4,12 @@ import com.app.pojos.Faculty;
 
 public interface IFacultyService {
 	
-	Faculty fetchFacultyDetails(int id);
+	Faculty fetchFacultyDetails(int facultyId);
 	
-	Faculty addFaculty(Faculty f, int id);
+	Faculty addFaculty(Faculty f, int facultyId);
 	
 	Faculty updateFacultyDetails(Faculty f); 
 	
-	String deleteFaculty(int id);
+	String deleteFaculty(int facultyId);
 
 }
