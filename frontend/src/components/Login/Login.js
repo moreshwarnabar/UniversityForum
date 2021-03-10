@@ -19,16 +19,25 @@ const login = props => (
         label="Username"
         name="username"
         placeholder="Your username"
+        changed={props.username}
+        value={props.value.username}
       />
       <Input
         type="password"
         label="Password"
         name="password"
         placeholder="Your password"
+        changed={props.password}
+        value={props.value.password}
       />
       <div className="d-flex justify-content-between align-items-center">
         <small className="text-muted">Forgot Password?</small>
-        <button className="btn btn-secondary rounded-pill">Login</button>
+        <button
+          className="btn btn-secondary rounded-pill"
+          onClick={props.submit}
+        >
+          Login
+        </button>
       </div>
     </div>
 
