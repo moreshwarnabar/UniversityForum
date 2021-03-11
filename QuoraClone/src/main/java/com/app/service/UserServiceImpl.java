@@ -23,6 +23,7 @@ public class UserServiceImpl implements IUserService {
 	@Override
 	public List<User> fetchAllUsers() {
 		List<User> users = userRepo.findAll();
+		users.forEach((u) -> u.getCategoriesSubscribed().size());
 		System.out.println(users);
 		return users;
 	}
@@ -58,7 +59,7 @@ public class UserServiceImpl implements IUserService {
 	public User update(User user) {
 		User u = userRepo.findById(user.getId())
 					.orElseThrow(() -> new UserNotFoundException("No user registered for id " + user.getId()));
-
+		System.out.println(u +" "+u.getId());
 		u.setIsBlocked(user.getIsBlocked());
 		if (user.getPassword() != null)
 			u.setPassword(user.getPassword());

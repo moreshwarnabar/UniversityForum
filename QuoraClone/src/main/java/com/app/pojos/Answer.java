@@ -27,7 +27,7 @@ public class Answer extends BaseEntity {
 			"categoriesSubscribed" })
 	private User answerBy;
 
-	@Column(name = "answer", length = 100)
+	@Column(columnDefinition = "TEXT")		//to save answers added Datatype : TEXT
 	private String answer;
 
 	@Column(name = "votes")
@@ -40,6 +40,7 @@ public class Answer extends BaseEntity {
 	@Column(name = "is_reported")
 	private boolean isReported;
 
+	
 	public User getAnswerBy() {
 		return answerBy;
 	}

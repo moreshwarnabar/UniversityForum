@@ -1,5 +1,6 @@
 package com.app.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -39,6 +40,8 @@ public class QuestionServiceImpl implements IQuestionService {
 
 	@Override
 	public Question persistQuestion(Question question) {
+		question.setAskedOn(LocalDate.now());	//date of asking question
+		//question.setAnswered(false);			//while 1st asking que isAnswered will false 
 		questionRepo.save(question);
 		return question;
 	}

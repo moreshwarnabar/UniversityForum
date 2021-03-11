@@ -68,6 +68,7 @@ public class User extends BaseEntity {
 			   joinColumns = @JoinColumn(name = "user_id"),
 			   inverseJoinColumns = @JoinColumn(name = "category_id")
 			   )
+	
 	@JsonIgnoreProperties(value = {"subscribers", "questions"})
 	private Set<Category> categoriesSubscribed = new HashSet<>();
 	
