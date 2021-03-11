@@ -6,16 +6,41 @@ import Login from '../../components/Login/Login';
 
 class LoginPage extends Component {
   state = {
-    username: '',
-    password: '',
+    loginData: {
+      username: {
+        elementType: 'input',
+        label: 'Username',
+        value: '',
+        config: {
+          type: 'text',
+          id: 'username',
+          placeholder: 'Your username',
+          name: 'username',
+        },
+      },
+      password: {
+        elementType: 'input',
+        label: 'Password',
+        value: '',
+        config: {
+          type: 'password',
+          id: 'password',
+          placeholder: 'Your password',
+          name: 'password',
+        },
+      },
+    },
     user: null,
   };
 
-  UsernameChangedHandler = event =>
-    this.setState({ username: event.target.value });
+  valueChangedHandler = event => {
+    const { name, value } = event.target;
 
-  PasswordChangedHandler = event =>
-    this.setState({ password: event.target.value });
+    const updatedLoginData = { ...this.state.loginData };
+    updatedLoginData[name].value = value;
+    
+    this.setState({ loginData: updatedLoginData });
+  };
 
   LoginHandler = event => {
     event.preventDefault();
@@ -40,9 +65,8 @@ class LoginPage extends Component {
         }
       >
         <Login
-          username={this.UsernameChangedHandler}
-          password={this.PasswordChangedHandler}
-          value={this.state}
+          change={this.valueChangedHandler}
+          data={this.state.loginData}
           submit={this.LoginHandler}
         />
       </div>
