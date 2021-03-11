@@ -66,7 +66,7 @@ public class Student extends BaseEntity {
 
 	@Override
 	public String toString() {
-		return "Student [stream=" + stream + ", branch=" + branch + ", year=" + year + ", user_id=" + user + "]";
+		return "Student [stream=" + stream + ", branch=" + branch + ", year=" + year + "]";		//removed User prop. from toString()
 	}
 
 }

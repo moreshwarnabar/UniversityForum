@@ -48,7 +48,7 @@ return student;
 	@Override
 	public Student updateStudentDetails(Student details) {
 		System.out.println("in service "+details);
-		System.out.println(details.getUser().getId());
+		System.out.println(details.getId());
 
 		studentRepo.save(details);
 		return details;
