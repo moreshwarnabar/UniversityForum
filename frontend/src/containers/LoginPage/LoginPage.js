@@ -2,27 +2,18 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import styles from './LoginPage.module.css';
+import logo from '../../resources/images/logo.png';
 import Login from '../../components/Login/Login';
 
 class LoginPage extends Component {
   state = {
-    username: '',
-    password: '',
     user: null,
   };
 
-  UsernameChangedHandler = event =>
-    this.setState({ username: event.target.value });
-
-  PasswordChangedHandler = event =>
-    this.setState({ password: event.target.value });
-
-  LoginHandler = event => {
+  LoginHandler = (event, username, password) => {
     event.preventDefault();
     axios
-      .get(
-        `http://localhost:8080/forum/users/${this.state.username}/${this.state.password}`
-      )
+      .get(`http://localhost:8080/forum/users/${username}/${password}`)
       .then(response => {
         this.setState({ user: response.data });
       });
@@ -39,12 +30,32 @@ class LoginPage extends Component {
           styles.LoginPage + ' d-flex justify-content-center align-items-center'
         }
       >
-        <Login
-          username={this.UsernameChangedHandler}
-          password={this.PasswordChangedHandler}
-          value={this.state}
-          submit={this.LoginHandler}
-        />
+        <div
+          className="p-3 d-flex flex-column flex-sm-row flex-wrap bg-light rounded shadow"
+          style={{ opacity: '0.9' }}
+        >
+          <div className="col d-flex align-items-center justify-content-center border-right">
+            <img src={logo} alt="" />
+          </div>
+
+          <Login
+            change={this.valueChangedHandler}
+            data={this.state.loginData}
+            submit={this.LoginHandler}
+          />
+
+          <div className="mt-3 w-100 d-flex justify-content-center">
+            <small className="text-muted">
+              <a className="text-muted mr-1" href="about">
+                About
+              </a>
+              |
+              <a className="text-muted ml-1" href="contact">
+                Contact Us
+              </a>
+            </small>
+          </div>
+        </div>
       </div>
     );
   }
