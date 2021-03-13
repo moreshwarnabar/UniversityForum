@@ -34,7 +34,7 @@ class UserRegistration extends Component {
 
   render() {
     return (
-      <div className="p-2 col-lg-7 border rounded shadow">
+      <div className="p-2 border rounded shadow">
         <div className="pl-2 w-100">
           <h3>User Registration</h3>
         </div>
