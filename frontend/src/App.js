@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 
 import './App.css';
-import LoginPage from './containers/LoginPage/LoginPage';
-import UserRegistration from './components/Admin/UserRegistration/UserRegistration';
+// import LoginPage from './containers/LoginPage/LoginPage';
+import AdminPage from './containers/AdminPage/AdminPage';
 
 class App extends Component {
   render() {
     return (
       <div className="container-fluid App">
         {/* <LoginPage /> */}
-        <UserRegistration />
+        <AdminPage />
       </div>
     );
   }
