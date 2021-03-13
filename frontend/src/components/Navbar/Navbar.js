@@ -2,38 +2,39 @@ import React from 'react';
 
 const Navbar = () => {
   return (
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <div class="navbar-header">
+    <nav className="navbar navbar-default">
+      <div className="container-fluid">
+        <div className="navbar-header">
           <a href="#">
             University{' '}
-            <span class="glyphicon glyphicon-education w3-xxlarge "></span>Forum{' '}
+            <span className="glyphicon glyphicon-education w3-xxlarge "></span>
+            Forum{' '}
           </a>
         </div>
 
-        <ul class="nav navbar-nav">
+        <ul className="nav navbar-nav">
           <li>
             {' '}
-            <a class="w3-xxlarge nav-item nav-link active" href="#home">
-              <span class="glyphicon glyphicon-home "></span>
+            <a className="w3-xxlarge nav-item nav-link active" href="#home">
+              <span className="glyphicon glyphicon-home "></span>
             </a>
           </li>
-          <li class="category">
+          <li className="category">
             <h3>
-              <a href="#" class="col-md-12 text-center">
+              <a href="#" className="col-md-12 text-center">
                 <b>CATEGORY</b>
               </a>
             </h3>
           </li>
         </ul>
 
-        <ul class="nav navbar-nav navbar-right">
+        <ul className="nav navbar-nav navbar-right">
           <li>
-            <form class="navbar-form ">
-              <div class="form-group col-md-100 text-center">
+            <form className="navbar-form ">
+              <div className="form-group col-md-100 text-center">
                 <input
                   type="text"
-                  class="form-control"
+                  className="form-control"
                   placeholder="Search..."
                   name="search"
                 />
@@ -41,8 +42,8 @@ const Navbar = () => {
             </form>
           </li>
           <li>
-            <a class="w3-xxlarge  " href="#">
-              <span class="glyphicon glyphicon-user"></span>{' '}
+            <a className="w3-xxlarge" href="#">
+              <span className="glyphicon glyphicon-user"></span>{' '}
             </a>
           </li>
         </ul>
