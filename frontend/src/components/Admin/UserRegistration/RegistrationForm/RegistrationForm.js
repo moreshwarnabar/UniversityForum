@@ -33,7 +33,7 @@ const registrationForm = props => (
       </div>
     </div>
     <div className="form-row">
-      <div className="form-group col-6">
+      <div className="form-group col-md-6">
         <p style={{ fontSize: '13px' }}>Gender</p>
         <div>
           {props.radio.map(choice => (
@@ -55,7 +55,7 @@ const registrationForm = props => (
           ))}
         </div>
       </div>
-      <div className="form-group col-6">
+      <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="dob">
           Date of Birth
         </label>
@@ -70,7 +70,7 @@ const registrationForm = props => (
       </div>
     </div>
     <div className="form-row">
-      <div className="form-group col-6">
+      <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="uname">
           Username
         </label>
@@ -84,7 +84,7 @@ const registrationForm = props => (
           value={props.username}
         />
       </div>
-      <div className="form-group col-6">
+      <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="pwd">
           Password
         </label>
@@ -99,8 +99,8 @@ const registrationForm = props => (
         />
       </div>
     </div>
-    <div className="form-row justify-content-between pr-2">
-      <div className="form-group col-6">
+    <div className="form-row justify-content-between pr-md-2">
+      <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="role">
           Role
         </label>
@@ -118,7 +118,7 @@ const registrationForm = props => (
           ))}
         </select>
       </div>
-      <button className="btn btn-secondary align-self-center">Register</button>
+      <button className="ml-1 btn btn-secondary align-self-center">Register</button>
     </div>
   </form>
 );
