@@ -11,11 +11,13 @@ class LoginPage extends Component {
   };
 
   LoginHandler = (event, username, password) => {
+    console.log(username, password);
     event.preventDefault();
     axios
       .get(`http://localhost:8080/forum/users/${username}/${password}`)
       .then(response => {
-        this.setState({ user: response.data });
+        console.log(response.data);
+        this.setState({ user: response.data.result });
       });
 
     // if (this.state.user.role === 'ADMIN') {
