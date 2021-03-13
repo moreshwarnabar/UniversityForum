@@ -12,7 +12,7 @@ const loginForm = props => (
         name="username"
         placeholder="Your username"
         onChange={props.changed}
-        value={props.value.username}
+        value={props.username}
       />
     </div>
     <div className="form-group">
@@ -25,16 +25,17 @@ const loginForm = props => (
         name="password"
         placeholder="Your password"
         onChange={props.changed}
-        value={props.value.password}
+        value={props.password}
       />
     </div>
     <div className="d-flex justify-content-between align-items-center">
       <small className="text-muted">Forgot Password?</small>
       <button
         className="btn btn-secondary rounded-pill"
-        onClick={event =>
-          this.props.submit(event, props.value.username, props.value.password)
-        }
+        onClick={event => {
+          console.log(props.username, props.password);
+          props.submit(event, props.username, props.password);
+        }}
       >
         Login
       </button>

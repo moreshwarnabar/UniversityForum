@@ -10,7 +10,7 @@ class Login extends Component {
 
   valueChangedHandler = event => {
     const { name, value } = event.target;
-
+    console.log(name, value);
     this.setState({ [name]: value });
   };
 
@@ -19,7 +19,11 @@ class Login extends Component {
       <div className="col">
         <p className="text-muted border-bottom">Login</p>
         <div className="">
-          <LoginForm value={this.state} changed={this.valueChangedHandler} />
+          <LoginForm
+            {...this.state}
+            changed={this.valueChangedHandler}
+            submit={this.props.submit}
+          />
         </div>
       </div>
     );
