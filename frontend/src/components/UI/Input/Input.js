@@ -21,7 +21,7 @@ const input = props => {
       break;
 
     case 'radio':
-      const radios = props.config.map(ch => (
+      const radios = props.choices.map(ch => (
         <div key={ch.id} className="form-check form-check-inline">
           <input
             className="form-check-label"
@@ -49,7 +49,7 @@ const input = props => {
       break;
 
     case 'select':
-      const options = props.config.map(opt => (
+      const options = props.options.map(opt => (
         <option key={opt.value} value={opt.value}>
           {opt.displayValue}
         </option>

@@ -1,86 +1,50 @@
 import React, { Component } from 'react';
 
+import * as factories from '../../../configurations/FormFields/formFields';
 import Input from '../../UI/Input/Input';
 
 class UserRegistration extends Component {
   state = {
-    firstName: {
-      elementType: 'input',
-      label: 'First Name',
-      value: '',
-      config: {
-        id: 'fname',
-        type: 'text',
-        name: 'firstName',
-        placeholder: 'First name',
-      },
-    },
-    lastName: {
-      elementType: 'input',
-      label: 'Last Name',
-      value: '',
-      config: {
-        id: 'lname',
-        type: 'text',
-        name: 'lastName',
-        placeholder: 'Last name',
-      },
-    },
-    gender: {
-      elementType: 'radio',
-      group: 'Gender',
-      name: 'gender',
-      config: [
-        { label: 'Male', id: 'male', value: 'male' },
-        { label: 'Female', id: 'female', value: 'female' },
-        { label: 'Other', id: 'other', value: 'other' },
-      ],
-    },
-    dateOfBirth: {
-      elementType: 'input',
-      label: 'Date of Birth',
-      value: '',
-      config: {
-        id: 'dob',
-        type: 'date',
-        name: 'dateOfBirth',
-      },
-    },
-    username: {
-      elementType: 'input',
-      label: 'Username',
-      value: '',
-      config: {
-        id: 'uname',
-        type: 'email',
-        name: 'username',
-        placeholder: 'Your username',
-      },
-    },
-    password: {
-      elementType: 'input',
-      label: 'Password',
-      value: '',
-      config: {
-        id: 'pwd',
-        type: 'password',
-        name: 'password',
-        placeholder: 'Your password',
-      },
-    },
-    role: {
-      elementType: 'select',
-      label: 'Role',
-      value: 'Choose a Role',
-      id: 'role',
-      name: 'role',
-      config: [
-        { value: '', displayValue: 'Choose a Role' },
-        { value: 'ADMIN', displayValue: 'Admin' },
-        { value: 'STUDENT', displayValue: 'Student' },
-        { value: 'FACULTY', displayValue: 'Faculty' },
-      ],
-    },
+    firstName: factories.inputFactory('First Name', {
+      id: 'fname',
+      type: 'text',
+      name: 'firstName',
+      placeholder: 'First Name',
+    }),
+    lastName: factories.inputFactory('Last Name', {
+      id: 'lname',
+      type: 'text',
+      name: 'lastName',
+      placeholder: 'Last Name',
+    }),
+    gender: factories.radioFactory('Gender', [
+      { label: 'Male', id: 'male', value: 'male' },
+      { label: 'Female', id: 'female', value: 'female' },
+      { label: 'Other', id: 'other', value: 'other' },
+    ]),
+    dateOfBirth: factories.inputFactory('Date of Birth', {
+      id: 'dob',
+      type: 'date',
+      name: 'dateOfBirth',
+    }),
+    username: factories.inputFactory('Username', {
+      id: 'uname',
+      type: 'text',
+      name: 'username',
+      placeholder: 'Username',
+    }),
+    password: factories.inputFactory('Password', {
+      id: 'pwd',
+      type: 'password',
+      name: 'password',
+      placeholder: 'Password',
+    }),
+    role: factories.selectFactory('Role', [
+      { value: '', displayValue: 'Choose a Role' },
+      { value: 'ADMIN', displayValue: 'Admin' },
+      { value: 'STUDENT', displayValue: 'Student' },
+      { value: 'FACULTY', displayValue: 'Faculty' },
+    ]),
   };
 
   valueChangedHandler = event => {
