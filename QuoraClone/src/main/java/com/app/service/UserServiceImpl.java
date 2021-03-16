@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.app.customexception.UserAuthorizationException;
 import com.app.customexception.UserNotFoundException;
 import com.app.pojos.Question;
+import com.app.pojos.Role;
 import com.app.pojos.User;
 import com.app.repository.UserRepository;
 
@@ -60,6 +61,7 @@ public class UserServiceImpl implements IUserService {
 		User u = userRepo.findById(user.getId())
 					.orElseThrow(() -> new UserNotFoundException("No user registered for id " + user.getId()));
 		System.out.println(u +" "+u.getId());
+		System.out.println("isBlocked: " + user.getIsBlocked());
 		u.setIsBlocked(user.getIsBlocked());
 		if (user.getPassword() != null)
 			u.setPassword(user.getPassword());
@@ -68,6 +70,13 @@ public class UserServiceImpl implements IUserService {
 		
 		u.getCategoriesSubscribed().size();
 		return userRepo.save(u);
+	}
+
+	@Override
+	public List<User> filteredUsers(List<Role> roles) {
+		List<User> users = userRepo.fetchByRole(roles);
+		users.forEach((u) -> u.getCategoriesSubscribed().size());
+		return users;
 	}
 
 }

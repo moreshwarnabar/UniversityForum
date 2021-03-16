@@ -56,4 +56,20 @@ public class AnswerServiceImpl implements IAnswerService {
 
 	}
 
+	@Override
+	public List<Answer> fetchReportedAnswers() {
+		return ansRepo.findByIsReported(true);
+	}
+
+	@Override
+	public Answer removeReport(Answer answer) {
+		Answer a = ansRepo.findById(answer.getId())
+				.orElseThrow(() -> new AnswerNotFoundException("No one Answered for this question....Sorry!!!!"));
+		
+		if (a.getIsReported() != answer.getIsReported())
+			a.setIsReported(answer.getIsReported());
+		
+		return ansRepo.save(a);
+	}
+
 }
