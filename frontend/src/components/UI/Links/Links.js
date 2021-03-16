@@ -1,14 +1,23 @@
 import React from 'react';
-import { Nav } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 
 const links = props => (
-  <Nav fill variant="tabs" defaultActiveKey="/">
-    {props.links.map(({ goTo, label }) => (
-      <Nav.Item key={goTo}>
-        <Nav.Link href={`#${goTo}`}>{label}</Nav.Link>
-      </Nav.Item>
-    ))}
-  </Nav>
+  <div className="bg-light w-100 align-self-start">
+    <ul className="nav nav-tabs nav-fill">
+      {props.links.map(({ goTo, label }) => (
+        <li key={goTo} className="nav-item">
+          <NavLink
+            to={`${props.url}${goTo}`}
+            exact
+            activeClassName="active"
+            className="nav-link"
+          >
+            {label}
+          </NavLink>
+        </li>
+      ))}
+    </ul>
+  </div>
 );
 
 export default links;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import CategoryForm from './CategoryForm/CategoryForm';
-import * as validations from '../../../validation/validation';
+import * as validations from '../../../../validation/validation';
 
 class CreateCategory extends Component {
   state = {
@@ -24,11 +24,11 @@ class CreateCategory extends Component {
     event.preventDefault();
 
     const errors = validations.validateCategory(this.state.formData);
-
-    if (errors) {
+    if (Object.keys(errors).length) {
       this.setState({ errors });
       return;
     }
+
     const data = {
       ...this.state.formData,
       facultyAccess: this.state.formData.facultyAccess === 'yes',

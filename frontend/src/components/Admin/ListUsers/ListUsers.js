@@ -144,32 +144,34 @@ class ListUsers extends Component {
     ));
 
     return (
-      <div className="p-2 border rounded shadow bg-light">
-        <div>
-          <h3>List of Users</h3>
-        </div>
-        <div className="form-group pt-3 pl-2 border-top">
-          {filters}
-          <button
-            type="button"
-            className="btn btn-primary btn-sm"
-            onClick={this.resetFilterHandler}
-          >
-            Reset
-          </button>
-        </div>
-        <div className="table-responsive">
-          <UsersTable
-            users={this.state.toDisplay}
-            error={this.state.isUsersEmpty}
-            clicked={this.blockUserHandler}
-          />
-        </div>
-        <div className="d-flex justify-content-between">
-          <Pagination
-            {...this.state.pagination}
-            clicked={this.pageChangeHandler}
-          />
+      <div className="row m-0 align-self-start align-items-center justify-content-center w-100">
+        <div className="container p-3 border rounded shadow bg-light">
+          <div>
+            <h3>List of Users</h3>
+          </div>
+          <div className="form-group pt-3 pl-2 border-top">
+            {filters}
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={this.resetFilterHandler}
+            >
+              Reset
+            </button>
+          </div>
+          <div className="table-responsive">
+            <UsersTable
+              users={this.state.toDisplay}
+              error={this.state.isUsersEmpty}
+              clicked={this.blockUserHandler}
+            />
+          </div>
+          <div className="d-flex justify-content-between">
+            <Pagination
+              {...this.state.pagination}
+              clicked={this.pageChangeHandler}
+            />
+          </div>
         </div>
       </div>
     );

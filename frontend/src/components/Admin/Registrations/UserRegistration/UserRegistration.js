@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import RegistrationForm from './RegistrationForm/RegistrationForm';
-import * as validations from '../../../validation/validation';
+import * as validations from '../../../../validation/validation';
 
 class UserRegistration extends Component {
   state = {

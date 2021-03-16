@@ -12,7 +12,7 @@ const categoryForm = props => (
         name="name"
         id="name"
         placeholder="Name"
-        value={props.name.value}
+        value={props.name}
         onChange={props.changed}
         aria-describedby="nameValidation"
       />
@@ -36,7 +36,7 @@ const categoryForm = props => (
               className="form-check-input"
               type="radio"
               {...choice}
-              checked={props.facultyAccess.value === choice.value}
+              checked={props.facultyAccess === choice.value}
               onChange={props.changed}
             />
             <label
