@@ -8,7 +8,9 @@ const registrationForm = props => (
           First Name
         </label>
         <input
-          className="form-control form-control-sm"
+          className={`form-control form-control-sm ${
+            props.errors?.firstName ? 'is-invalid' : null
+          }`}
           id="fname"
           type="text"
           name="firstName"
@@ -16,13 +18,16 @@ const registrationForm = props => (
           onChange={props.changed}
           value={props.firstName}
         />
+        <div className="invalid-feedback">{props.errors?.firstName}</div>
       </div>
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="lname">
           Last Name
         </label>
         <input
-          className="form-control form-control-sm"
+          className={`form-control form-control-sm ${
+            props.errors?.lastName ? 'is-invalid' : null
+          }`}
           id="lname"
           type="text"
           name="lastName"
@@ -30,18 +35,24 @@ const registrationForm = props => (
           onChange={props.changed}
           value={props.lastName}
         />
+        <div className="invalid-feedback">{props.errors?.lastName}</div>
       </div>
     </div>
     <div className="form-row">
       <div className="form-group col-md-6">
         <p style={{ fontSize: '13px' }}>Gender</p>
-        <div>
+        <div
+          className={`form-control form-control-sm p-0 border-0 ${
+            props.errors?.gender ? 'is-invalid' : null
+          }`}
+        >
           {props.radio.map(choice => (
             <div key={choice.id} className="form-check form-check-inline">
               <input
                 className="form-check-input"
                 type="radio"
                 {...choice}
+                checked={props.gender === choice.value}
                 onChange={props.changed}
               />
               <label
@@ -54,19 +65,23 @@ const registrationForm = props => (
             </div>
           ))}
         </div>
+        <div className="invalid-feedback">{props.errors?.gender}</div>
       </div>
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="dob">
           Date of Birth
         </label>
         <input
-          className="form-control form-control-sm"
+          className={`form-control form-control-sm ${
+            props.errors?.dateOfBirth ? 'is-invalid' : null
+          }`}
           id="dob"
           type="date"
           name="dateOfBirth"
           onChange={props.changed}
           value={props.dateOfBirth}
         />
+        <div className="invalid-feedback">{props.errors?.dateOfBirth}</div>
       </div>
     </div>
     <div className="form-row">
@@ -75,7 +90,9 @@ const registrationForm = props => (
           Username
         </label>
         <input
-          className="form-control form-control-sm"
+          className={`form-control form-control-sm ${
+            props.errors?.username ? 'is-invalid' : null
+          }`}
           id="uname"
           type="email"
           name="username"
@@ -83,13 +100,16 @@ const registrationForm = props => (
           onChange={props.changed}
           value={props.username}
         />
+        <div className="invalid-feedback">{props.errors?.username}</div>
       </div>
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="pwd">
           Password
         </label>
         <input
-          className="form-control form-control-sm"
+          className={`form-control form-control-sm ${
+            props.errors?.password ? 'is-invalid' : null
+          }`}
           id="pwd"
           type="password"
           name="password"
@@ -97,15 +117,18 @@ const registrationForm = props => (
           onChange={props.changed}
           value={props.password}
         />
+        <div className="invalid-feedback">{props.errors?.password}</div>
       </div>
     </div>
-    <div className="form-row justify-content-between pr-md-2">
+    <div className="form-row justify-content-between align-items-center pr-md-2">
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="role">
           Role
         </label>
         <select
-          className="form-control form-control-sm"
+          className={`form-control form-control-sm ${
+            props.errors?.role ? 'is-invalid' : null
+          }`}
           id="role"
           name="role"
           onChange={props.changed}
@@ -117,8 +140,22 @@ const registrationForm = props => (
             </option>
           ))}
         </select>
+        <div className="invalid-feedback">{props.errors?.role}</div>
       </div>
-      <button className="ml-1 btn btn-secondary align-self-center">Register</button>
+      <div>
+        <button
+          className="mr-2 btn btn-secondary align-self-center"
+          onClick={props.reset}
+        >
+          Reset
+        </button>
+        <button
+          className="ml-2 btn btn-secondary align-self-center"
+          onClick={props.submit}
+        >
+          Register
+        </button>
+      </div>
     </div>
   </form>
 );

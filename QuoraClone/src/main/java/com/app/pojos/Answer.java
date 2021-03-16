@@ -23,7 +23,7 @@ public class Answer extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
-	@JsonIgnoreProperties(value = { "dateOfBirth", "gender", "isBlocked", "username", "password", "questionsAsked",
+	@JsonIgnoreProperties(value = { "dateOfBirth", "gender", "isBlocked", "password", "questionsAsked",
 			"categoriesSubscribed" })
 	private User answerBy;
 
@@ -73,11 +73,11 @@ public class Answer extends BaseEntity {
 		this.answeredOn = answeredOn;
 	}
 
-	public boolean isReported() {
+	public boolean getIsReported() {
 		return isReported;
 	}
 
-	public void setReported(boolean isReported) {
+	public void setIsReported(boolean isReported) {
 		this.isReported = isReported;
 	}
 

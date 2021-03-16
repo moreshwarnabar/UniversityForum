@@ -5,7 +5,7 @@ const Navbar = () => {
     <nav className="navbar navbar-default">
       <div className="container-fluid">
         <div className="navbar-header">
-          <a href="#">
+          <a href="abc">
             University{' '}
             <span className="glyphicon glyphicon-education w3-xxlarge "></span>
             Forum{' '}
@@ -21,7 +21,7 @@ const Navbar = () => {
           </li>
           <li className="category">
             <h3>
-              <a href="#" className="col-md-12 text-center">
+              <a href="abc" className="col-md-12 text-center">
                 <b>CATEGORY</b>
               </a>
             </h3>
@@ -42,7 +42,7 @@ const Navbar = () => {
             </form>
           </li>
           <li>
-            <a className="w3-xxlarge" href="#">
+            <a className="w3-xxlarge" href="abc">
               <span className="glyphicon glyphicon-user"></span>{' '}
             </a>
           </li>

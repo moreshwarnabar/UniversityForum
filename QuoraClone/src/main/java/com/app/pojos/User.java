@@ -41,7 +41,7 @@ public class User extends BaseEntity {
 	private Gender gender;
 	
 	@Column(name = "is_blocked")
-	@JsonIgnore
+//	@JsonIgnore
 	private boolean isBlocked;
 	
 	@Column(length = 20, unique = true)
@@ -108,12 +108,10 @@ public class User extends BaseEntity {
 		this.gender = gender;
 	}
 
-	@JsonIgnore
 	public boolean getIsBlocked() {
 		return isBlocked;
 	}
 
-	@JsonProperty
 	public void setIsBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
 	}
