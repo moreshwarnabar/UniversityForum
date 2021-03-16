@@ -1,33 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import LoginForm from './LoginForm/LoginForm';
 
-class Login extends Component {
-  state = {
-    username: '',
-    password: '',
-  };
+const login = props => (
+  <div className="col">
+    <p className="text-muted border-bottom">Login</p>
+    <div className="">
+      <LoginForm
+        {...props.data}
+        changed={props.change}
+        submit={props.submit}
+        errors={props.errors}
+      />
+    </div>
+  </div>
+);
 
-  valueChangedHandler = event => {
-    const { name, value } = event.target;
-    console.log(name, value);
-    this.setState({ [name]: value });
-  };
-
-  render() {
-    return (
-      <div className="col">
-        <p className="text-muted border-bottom">Login</p>
-        <div className="">
-          <LoginForm
-            {...this.state}
-            changed={this.valueChangedHandler}
-            submit={this.props.submit}
-          />
-        </div>
-      </div>
-    );
-  }
-}
-
-export default Login;
+export default login;
