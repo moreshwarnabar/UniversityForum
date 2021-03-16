@@ -114,30 +114,32 @@ class ReportedAnswers extends Component {
 
   render() {
     return (
-      <div className="p-2 border rounded shadow bg-light">
-        <ModalWindow
-          showModal={this.state.showModal}
-          closeModal={this.modalCloseHandler}
-          removeReport={this.removeReportHandler}
-          delete={this.deleteAnswerHandler}
-          answer={this.state.selectedAnswer}
-        />
+      <div className="row m-0 justify-content-center align-self-start align-items-center w-100">
+        <div className="container p-2 border rounded shadow bg-light">
+          <ModalWindow
+            showModal={this.state.showModal}
+            closeModal={this.modalCloseHandler}
+            removeReport={this.removeReportHandler}
+            delete={this.deleteAnswerHandler}
+            answer={this.state.selectedAnswer}
+          />
 
-        <div>
-          <h3>Reported Answers</h3>
-        </div>
-        <div className="pt-3 border-top table-responsive">
-          <AnswersTable
-            answers={this.state.toDisplay}
-            clicked={this.modalViewHandler}
-            isNoReports={this.state.isNoReports}
-          />
-        </div>
-        <div className="d-flex justify-content-between">
-          <Pagination
-            {...this.state.pagination}
-            clicked={this.pageChangeHandler}
-          />
+          <div>
+            <h3>Reported Answers</h3>
+          </div>
+          <div className="pt-3 border-top table-responsive">
+            <AnswersTable
+              answers={this.state.toDisplay}
+              clicked={this.modalViewHandler}
+              isNoReports={this.state.isNoReports}
+            />
+          </div>
+          <div className="d-flex justify-content-between">
+            <Pagination
+              {...this.state.pagination}
+              clicked={this.pageChangeHandler}
+            />
+          </div>
         </div>
       </div>
     );

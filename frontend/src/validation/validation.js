@@ -49,3 +49,25 @@ export const validateUserRegistration = formData => {
 
   return errors;
 };
+
+export const validateLogin = formData => {
+  const errors = {};
+
+  if (!formData.username.trim().length) {
+    errors.username = 'Please enter a valid username';
+  }
+  if (!errors.username && !formData.username.endsWith('university.com')) {
+    errors.username = 'Username must belong to university domain';
+  }
+  if (formData.username.length > 20) {
+    errors.username = 'Username must be less than 20 characters';
+  }
+  if (!formData.password.trim().length) {
+    errors.password = 'Please enter a valid password';
+  }
+  if (formData.password.length > 15) {
+    errors.password = 'Password must be less than 15 characters';
+  }
+
+  return errors;
+};
