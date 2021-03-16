@@ -4,7 +4,7 @@ import { Nav } from 'react-bootstrap';
 const links = props => (
   <Nav fill variant="tabs" defaultActiveKey="/">
     {props.links.map(({ goTo, label }) => (
-      <Nav.Item>
+      <Nav.Item key={goTo}>
         <Nav.Link href={`#${goTo}`}>{label}</Nav.Link>
       </Nav.Item>
     ))}

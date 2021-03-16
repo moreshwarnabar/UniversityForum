@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import UsersTable from './UsersTable/UsersTable';
-import Links from '../../UI/Links/Links';
 import Pagination from '../../UI/Pagination/Pagination';
 
 class ListUsers extends Component {

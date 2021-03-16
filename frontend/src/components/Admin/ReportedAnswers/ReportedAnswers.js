@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import AnswersTable from './AnswersTable/AnswersTable';
-import Links from '../../UI/Links/Links';
 import Pagination from '../../UI/Pagination/Pagination';
 import ModalWindow from '../../UI/ModalWindow/ModalWindow';
 
