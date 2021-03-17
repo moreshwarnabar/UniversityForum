@@ -13,6 +13,7 @@ import com.app.customexception.FacultyHandlingException;
 import com.app.customexception.QuestionNotFoundException;
 import com.app.customexception.StudentNotFoundException;
 import com.app.customexception.UserAuthorizationException;
+import com.app.customexception.UserExistsException;
 import com.app.customexception.UserNotFoundException;
 import com.app.dto.ErrorResponse;
 
@@ -30,10 +31,15 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> userExceptionHandler(UserNotFoundException e) {
 		return new ResponseEntity<>(new ErrorResponse("User not found", e.getMessage()), HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(UserExistsException.class)
+	public ResponseEntity<?> userExceptionHandler(UserExistsException e) {
+		return new ResponseEntity<>(new ErrorResponse("Username taken", e.getMessage()), HttpStatus.CONFLICT);
+	}
 
 	@ExceptionHandler(CategoryExistsException.class)
 	public ResponseEntity<?> categoryExceptionHandler(CategoryExistsException e) {
-		return new ResponseEntity<>(new ErrorResponse("Category exists", e.getMessage()), HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(new ErrorResponse("Category exists", e.getMessage()), HttpStatus.CONFLICT);
 	}
 
 	@ExceptionHandler(CategoryNotFoundException.class)

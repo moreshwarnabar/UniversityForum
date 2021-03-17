@@ -1,6 +1,7 @@
 package com.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.customexception.UserAuthorizationException;
+import com.app.customexception.UserExistsException;
 import com.app.customexception.UserNotFoundException;
 import com.app.pojos.Question;
 import com.app.pojos.Role;
@@ -53,6 +55,11 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User save(User user) {
+		Optional<User> optUser = userRepo.findByUsername(user.getUsername());
+		if (optUser.isPresent()) {
+			throw new UserExistsException("User with username " + user.getUsername() + " already exists");
+		}
+		
 		return userRepo.save(user);
 	}
 

@@ -53,19 +53,27 @@ class UserRegistration extends Component {
 
     const errors = validations.validateUserRegistration(this.state.formData);
 
-    if (errors) {
+    if (Object.keys(errors).length) {
       this.setState({ errors });
-    } else {
-      axios
-        .post('http://localhost:8080/forum/users', this.state.formData)
-        .then(response => {
-          this.setState({
-            formData: this.resetForm(),
-            isRegisteringUser: false,
-            success: true,
-          });
-        });
+      return;
     }
+    axios
+      .post('http://localhost:8080/forum/users', this.state.formData)
+      .then(response => {
+        this.setState({
+          formData: this.resetForm(),
+          isRegisteringUser: false,
+          success: true,
+        });
+      })
+      .catch(({ response }) =>
+        this.setState({
+          errors: {
+            ...this.state.errors,
+            username: response.data.errorMessage,
+          },
+        })
+      );
   };
 
   showRegistrationFormHandler = () => {

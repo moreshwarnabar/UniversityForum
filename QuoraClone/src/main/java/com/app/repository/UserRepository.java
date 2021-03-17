@@ -13,7 +13,7 @@ import com.app.pojos.User;
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
 	Optional<User> findByUsernameAndPassword(String username, String password);
-	
+		
 	@Query("select u from User u where u.role in :roles")
 	List<User> fetchByRole(List<Role> roles);
 	
