@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 
+import axios from '../../axios-base';
 import styles from './LoginPage.module.css';
 import logo from '../../resources/images/logo.png';
 import Login from '../../components/Login/Login';
@@ -35,16 +35,13 @@ class LoginPage extends Component {
       return;
     }
 
-    axios
-      .get(`http://localhost:8080/forum/users/single/${username}/${password}`)
-      .then(response => {
-        const user = response.data.result;
-        console.log(user);
-        this.setState({ user, errors: null });
-        if (user.role === 'ADMIN') {
-          this.props.history.push('/admin');
-        }
-      });
+    axios.get(`users/single/${username}/${password}`).then(response => {
+      const user = response.data.result;
+      this.setState({ user, errors: null });
+      if (user.role === 'ADMIN') {
+        this.props.history.push('/admin');
+      }
+    });
   };
 
   render() {

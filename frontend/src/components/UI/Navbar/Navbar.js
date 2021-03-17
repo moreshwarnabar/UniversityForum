@@ -58,7 +58,6 @@ const navbar = () => {
       bg="dark"
       variant="dark"
       animation="false"
-      fixed="top"
     >
       <RB.Navbar.Brand href="#home" style={{ marginRight: '32px' }}>
         University Forum
