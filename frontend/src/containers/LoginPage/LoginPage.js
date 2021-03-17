@@ -50,8 +50,7 @@ class LoginPage extends Component {
   render() {
     return (
       <div
-        className={`position-relative min-vh-100 d-flex justify-content-center align-items-center ${styles.LoginPage}`}
-        style={{ top: '56px' }}
+        className={`min-vh-100 d-flex justify-content-center align-items-center ${styles.LoginPage}`}
       >
         <div
           className="p-3 d-flex flex-column flex-sm-row flex-wrap bg-light rounded shadow"
