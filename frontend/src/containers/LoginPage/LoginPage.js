@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import axios from 'axios'
 
 import styles from './LoginPage.module.css';
 import Login from '../../components/Login/Login';
