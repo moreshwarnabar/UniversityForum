@@ -18,6 +18,7 @@ class ReportedAnswers extends Component {
       current: 1,
     },
     showModal: false,
+    modalData: null,
     selectedAnswer: null,
     isNoReports: false,
   };
@@ -62,7 +63,39 @@ class ReportedAnswers extends Component {
   modalViewHandler = event => {
     const id = +event.target.dataset.answerid;
     const selectedAnswer = { ...this.state.answers.find(ans => ans.id === id) };
-    this.setState({ showModal: true, selectedAnswer });
+
+    const modalData = {};
+    modalData.title = (
+      <React.Fragment>
+        <h4 style={{ fontFamily: 'Montserrat' }}>
+          {selectedAnswer.question.description}
+        </h4>
+        <p
+          className="m-0"
+          style={{ fontSize: '10px', fontFamily: 'Montserrat' }}
+        >
+          <strong>Posted On: </strong>
+          {selectedAnswer.question.askedOn}
+        </p>
+      </React.Fragment>
+    );
+    modalData.content = (
+      <React.Fragment>
+        <p style={{ fontFamily: 'Montserrat' }}>{selectedAnswer.answer}</p>
+        <div style={{ fontFamily: 'Montserrat', fontSize: '13px' }}>
+          <p className="m-0">
+            {selectedAnswer.answerBy.firstName +
+              ' ' +
+              selectedAnswer.answerBy.lastName}
+            , {selectedAnswer.answerBy.role}
+          </p>
+          <p className="m-0">{selectedAnswer.answeredOn}</p>
+        </div>
+      </React.Fragment>
+    );
+    modalData.btnLabels = { cancel: 'Remove Report', proceed: 'Delete' };
+
+    this.setState({ showModal: true, modalData, selectedAnswer });
   };
 
   modalCloseHandler = () => {
@@ -119,9 +152,9 @@ class ReportedAnswers extends Component {
           <ModalWindow
             showModal={this.state.showModal}
             closeModal={this.modalCloseHandler}
-            removeReport={this.removeReportHandler}
-            delete={this.deleteAnswerHandler}
-            answer={this.state.selectedAnswer}
+            cancel={this.removeReportHandler}
+            proceed={this.deleteAnswerHandler}
+            {...this.state.modalData}
           />
 
           <div>

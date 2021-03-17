@@ -6,42 +6,20 @@ const modalWindow = props => {
     <Modal
       size="lg"
       centered
-      // animation={false}
+      animation={false}
       show={props.showModal}
       onHide={props.closeModal}
     >
       <Modal.Header closeButton>
-        <Modal.Title>
-          <h4 style={{ fontFamily: 'Montserrat' }}>
-            {props.answer?.question.description}
-          </h4>
-          <p
-            className="m-0"
-            style={{ fontSize: '10px', fontFamily: 'Montserrat' }}
-          >
-            <strong>Posted On: </strong>
-            {props.answer?.question.askedOn}
-          </p>
-        </Modal.Title>
+        <Modal.Title>{props.title}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <p style={{ fontFamily: 'Montserrat' }}>{props.answer?.answer}</p>
-        <div style={{ fontFamily: 'Montserrat', fontSize: '13px' }}>
-          <p className="m-0">
-            {props.answer?.answerBy.firstName +
-              ' ' +
-              props.answer?.answerBy.lastName}
-            , {props.answer?.answerBy.role}
-          </p>
-          <p className="m-0">{props.answer?.answeredOn}</p>
-        </div>
-      </Modal.Body>
+      <Modal.Body>{props.content}</Modal.Body>
       <Modal.Footer>
-        <Button variant="success" onClick={props.removeReport}>
-          Remove Report
+        <Button variant="success" onClick={props.cancel}>
+          {props.btnLabels?.cancel}
         </Button>
-        <Button variant="danger" onClick={props.delete}>
-          Delete
+        <Button variant="danger" onClick={props.proceed}>
+          {props.btnLabels?.proceed}
         </Button>
       </Modal.Footer>
     </Modal>
