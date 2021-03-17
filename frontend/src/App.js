@@ -8,7 +8,7 @@ import AdminPage from './containers/AdminPage/AdminPage';
 class App extends Component {
   render() {
     return (
-      <div className="container-fluid px-0 App" style={{height: '706px'}}>
+      <div className="container-fluid px-0 App">
         <Switch>
           <Route path="/admin" component={AdminPage} />
           <Route path="/" component={LoginPage} />
