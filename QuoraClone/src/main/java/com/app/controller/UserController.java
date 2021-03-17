@@ -1,7 +1,6 @@
 package com.app.controller;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +53,19 @@ public class UserController {
 		return new ResponseEntity<>(new ResponseDTO<>(userService.save(user)), HttpStatus.CREATED);
 	}	
 	
+	
 	@PutMapping
 	public ResponseEntity<?> updateUser(@RequestBody User user) {
+		System.out.println(user);
 		return ResponseEntity.ok(new ResponseDTO<>(userService.update(user)));
+	}
+	
+	@PutMapping("/password/{userId}")
+	public ResponseEntity<?> updatePassword(@PathVariable int userId, @RequestBody User u) {
+		System.out.println(u.getPassword());
+		
+		return ResponseEntity.ok(new ResponseDTO<>(userService.updatePassword(userId, u.getPassword())));
+		
 	}
 	
 }

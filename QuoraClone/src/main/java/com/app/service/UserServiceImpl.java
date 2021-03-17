@@ -75,9 +75,32 @@ public class UserServiceImpl implements IUserService {
 		if(user.getRole() != null)
 			u.setRole(user.getRole());
 		
+		if(user.getFirstName() != null)
+		u.setFirstName(user.getFirstName());
+		if(user.getLastName() != null)
+			u.setLastName(user.getLastName());
+		if(user.getDateOfBirth() != null)
+			u.setDateOfBirth(user.getDateOfBirth());
+		if(user.getGender() != null)
+			u.setGender(user.getGender());
+		
 		u.getCategoriesSubscribed().size();
-		return userRepo.save(u);
+		return userRepo.save(u);					
 	}
+
+	@Override
+	public String updatePassword(int userId, String password) {
+		if(!password.isEmpty()) {
+			User u = userRepo.findById(userId)
+					.orElseThrow(() -> new UserNotFoundException("No user registered for id " + userId));
+			u.setPassword(password);
+			userRepo.save(u);
+			return "password changed successfully";
+		}
+		return "password change failed";
+	}
+	
+	
 
 	@Override
 	public List<User> filteredUsers(List<Role> roles) {
