@@ -1,0 +1,9 @@
+.Links {
+  font-size: 14px;
+}
+
+@media (max-width: 400px) {
+  .Links {
+    font-size: 12px;
+  }
+}

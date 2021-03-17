@@ -23,7 +23,10 @@ class AdminPage extends Component {
     return (
       <React.Fragment>
         <Navbar />
-        <div className="position-relative container pt-2 bg-light min-vh-100 d-flex flex-wrap justify-content-center">
+        <div
+          className="position-relative container pt-2 bg-light min-vh-100 d-flex flex-wrap justify-content-center"
+          style={{ top: '56px' }}
+        >
           <Links links={this.state.linkData} url={this.props.match.url} />
           <Switch>
             <Route path="/admin/users" component={ListUsers} />
