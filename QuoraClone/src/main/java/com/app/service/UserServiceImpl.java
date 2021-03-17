@@ -1,6 +1,7 @@
 package com.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.app.customexception.UserAuthorizationException;
+import com.app.customexception.UserExistsException;
 import com.app.customexception.UserNotFoundException;
 import com.app.pojos.Question;
+import com.app.pojos.Role;
 import com.app.pojos.User;
 import com.app.repository.UserRepository;
 
@@ -52,6 +55,11 @@ public class UserServiceImpl implements IUserService {
 
 	@Override
 	public User save(User user) {
+		Optional<User> optUser = userRepo.findByUsername(user.getUsername());
+		if (optUser.isPresent()) {
+			throw new UserExistsException("User with username " + user.getUsername() + " already exists");
+		}
+		
 		return userRepo.save(user);
 	}
 
@@ -60,6 +68,7 @@ public class UserServiceImpl implements IUserService {
 		User u = userRepo.findById(user.getId())
 					.orElseThrow(() -> new UserNotFoundException("No user registered for id " + user.getId()));
 		System.out.println(u +" "+u.getId());
+		System.out.println("isBlocked: " + user.getIsBlocked());
 		u.setIsBlocked(user.getIsBlocked());
 		if (user.getPassword() != null)
 			u.setPassword(user.getPassword());
@@ -92,5 +101,12 @@ public class UserServiceImpl implements IUserService {
 	}
 	
 	
+
+	@Override
+	public List<User> filteredUsers(List<Role> roles) {
+		List<User> users = userRepo.fetchByRole(roles);
+		users.forEach((u) -> u.getCategoriesSubscribed().size());
+		return users;
+	}
 
 }

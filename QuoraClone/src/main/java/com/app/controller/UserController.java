@@ -1,7 +1,6 @@
 package com.app.controller;
 
-import java.time.LocalDate;
-
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.dto.ResponseDTO;
+import com.app.pojos.Role;
 import com.app.pojos.User;
 import com.app.service.IUserService;
 
@@ -26,17 +27,23 @@ public class UserController {
 	@Autowired
 	private IUserService userService;
 	
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<?> fetchUsers() {
 		return ResponseEntity.ok(new ResponseDTO<>(userService.fetchAllUsers()));
 	}
 	
-	@GetMapping("/{username}/{password}")
+	@GetMapping("/filters")
+	public ResponseEntity<?> fetchFilteredUsers(@RequestParam("role") List<Role> roles) {
+		System.out.println(roles);
+		return ResponseEntity.ok(new ResponseDTO<>(userService.filteredUsers(roles)));
+	}
+	
+	@GetMapping("/single/{username}/{password}")
 	public ResponseEntity<?> authenticateLogin(@PathVariable String username, @PathVariable String password) {
 		return ResponseEntity.ok(new ResponseDTO<>(userService.authenticateUser(username, password)));
 	}
-	
-	@GetMapping("/{userId}")
+
+	@GetMapping("/single/{userId}")
 	public ResponseEntity<?> fetchUserQuestions(@PathVariable int userId) {
 		return ResponseEntity.ok(new ResponseDTO<>(userService.fetchUserQuestions(userId)));
 	}

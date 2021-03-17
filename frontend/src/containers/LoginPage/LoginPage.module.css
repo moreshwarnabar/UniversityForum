@@ -1,6 +1,6 @@
 .LoginPage {
-  min-height: 100vh;
   background: url('../../resources/images/login-page-background.jpg');
   background-size: cover !important;
   background-position: center;
 }
+
