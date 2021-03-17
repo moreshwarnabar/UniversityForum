@@ -1,5 +1,5 @@
 export const validateCategory = formData => {
-  const errors = {};
+  const errors = { isValid: true };
 
   if (!formData.name.trim().length) {
     errors.name = 'Please enter a valid name';
@@ -15,7 +15,7 @@ export const validateCategory = formData => {
 };
 
 export const validateUserRegistration = formData => {
-  const errors = {};
+  const errors = { isValid: true };
 
   Object.keys(formData).forEach(key => {
     if (!formData[key].trim().length) {
@@ -51,7 +51,7 @@ export const validateUserRegistration = formData => {
 };
 
 export const validateLogin = formData => {
-  const errors = {};
+  const errors = { isValid: true };
 
   if (!formData.username.trim().length) {
     errors.username = 'Please enter a valid username';
@@ -70,4 +70,34 @@ export const validateLogin = formData => {
   }
 
   return errors;
+};
+
+export const usernameValidation = username => {
+  const { value } = username;
+  let errorMsg = null;
+
+  if (!value.trim().length) {
+    errorMsg = 'Please enter a valid username';
+  } else if (!value.endsWith('university.com')) {
+    errorMsg = 'Username must belong to university domain';
+  } else if (value.length > 20) {
+    errorMsg = 'Username must be less than 20 characters';
+  }
+  username.isValid = !errorMsg;
+
+  return { username, errorMsg };
+};
+
+export const passwordValidation = password => {
+  const { value } = password;
+  let errorMsg = null;
+
+  if (!value.trim().length) {
+    errorMsg = 'Please enter a valid password';
+  } else if (value.length > 15) {
+    errorMsg = 'Password must be less than 15 characters';
+  }
+  password.isValid = !errorMsg;
+
+  return { password, errorMsg };
 };

@@ -10,7 +10,8 @@ const login = props => (
         {...props.data}
         changed={props.change}
         submit={props.submit}
-        errors={props.errors}
+        formErrors={props.formErrors}
+        blur={props.blur}
       />
     </div>
   </div>

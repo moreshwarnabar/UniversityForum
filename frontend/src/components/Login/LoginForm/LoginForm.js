@@ -8,16 +8,17 @@ const loginForm = props => (
       </label>
       <input
         className={`form-control form-control-sm ${
-          props.errors?.username ? 'is-invalid' : null
+          props.formErrors?.username ? 'is-invalid' : null
         }`}
         id="uname"
         name="username"
         type="email"
         placeholder="Your username"
+        value={props.username.value}
         onChange={props.changed}
-        value={props.username}
+        onBlur={props.blur}
       />
-      <div className="invalid-feedback">{props.errors?.username}</div>
+      <div className="invalid-feedback">{props.formErrors?.username}</div>
     </div>
     <div className="form-group">
       <label style={{ fontSize: '13px' }} htmlFor="pwd">
@@ -25,16 +26,17 @@ const loginForm = props => (
       </label>
       <input
         className={`form-control form-control-sm ${
-          props.errors?.password ? 'is-invalid' : null
+          props.formErrors?.password ? 'is-invalid' : null
         }`}
         id="pwd"
         name="password"
         type="password"
         placeholder="Your password"
+        value={props.password.value}
         onChange={props.changed}
-        value={props.password}
+        onBlur={props.blur}
       />
-      <div className="invalid-feedback">{props.errors?.password}</div>
+      <div className="invalid-feedback">{props.formErrors?.password}</div>
     </div>
     <div className="d-flex justify-content-between align-items-center">
       <small className="text-muted">Forgot Password?</small>

@@ -1,47 +1,61 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import axios from '../../axios-base';
 import styles from './LoginPage.module.css';
 import logo from '../../resources/images/logo.png';
 import Login from '../../components/Login/Login';
-import { validateLogin } from '../../validation/validation';
+import * as actions from '../../store/actions/actions';
+import * as validators from '../../validation/validation';
 
 class LoginPage extends Component {
   state = {
-    user: null,
-    formData: {
-      username: '',
-      password: '',
+    loginData: {
+      username: { value: '', isValid: false },
+      password: { value: '', isValid: false },
     },
-    errors: null,
+    formErrors: null,
+    isFormValid: false,
+    isTouched: false,
   };
 
   valueChangedHandler = event => {
     const { name, value } = event.target;
-    const updatedFormData = { ...this.state.formData, [name]: value };
-    this.setState({ formData: updatedFormData });
+
+    const updatedLoginData = { ...this.state.loginData };
+    const updatedElData = {
+      ...updatedLoginData[name],
+      value,
+    };
+    updatedLoginData[name] = updatedElData;
+
+    this.setState({ loginData: updatedLoginData });
+  };
+
+  onBlurHandler = event => {
+    const { name } = event.target;
+    const { formErrors, loginData } = this.state;
+
+    const result = validators[`${name}Validation`]({ ...loginData[name] });
+    const validatedLoginData = { ...loginData, [name]: result[name] };
+    const updatedFormErrors = { ...formErrors, [name]: result.errorMsg };
+
+    // check if valid detail
+    let isFormValid = true;
+    Object.values(validatedLoginData).forEach(
+      ({ isValid }) => (isFormValid = isFormValid && isValid)
+    );
+
+    this.setState({
+      loginData: validatedLoginData,
+      formErrors: updatedFormErrors,
+      isFormValid,
+    });
   };
 
   LoginHandler = event => {
     event.preventDefault();
-    const {
-      formData: { username, password },
-    } = this.state;
-
-    const errors = validateLogin({ username, password });
-    if (Object.keys(errors).length) {
-      console.log(errors);
-      this.setState({ errors });
-      return;
-    }
-
-    axios.get(`users/single/${username}/${password}`).then(response => {
-      const user = response.data.result;
-      this.setState({ user, errors: null });
-      if (user.role === 'ADMIN') {
-        this.props.history.push('/admin');
-      }
-    });
+    const { loginData } = this.state;
+    if (this.state.isFormValid) this.props.userLogin(loginData);
   };
 
   render() {
@@ -59,12 +73,16 @@ class LoginPage extends Component {
 
           <Login
             change={this.valueChangedHandler}
-            data={this.state.formData}
+            data={this.state.loginData}
             submit={this.LoginHandler}
-            errors={this.state.errors}
+            formErrors={this.state.formErrors}
+            blur={this.onBlurHandler}
           />
 
-          <div className="mt-3 w-100 d-flex justify-content-center">
+          <div className="mt-3 w-100 d-flex flex-column align-items-center justify-content-center">
+            <p className="text-danger" style={{ fontSize: '14px' }}>
+              {this.props.error}
+            </p>
             <small className="text-muted">
               <a className="text-muted mr-1" href="about">
                 About
@@ -81,4 +99,16 @@ class LoginPage extends Component {
   }
 }
 
-export default LoginPage;
+const mapStateToProps = state => {
+  return {
+    ...state,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    userLogin: loginData => dispatch(actions.authenticateUser(loginData)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
