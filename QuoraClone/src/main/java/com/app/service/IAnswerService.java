@@ -11,5 +11,9 @@ public interface IAnswerService {
 	Answer addAnswer(Answer ans);
 
 	String deleteAnswer(int id);
+	
+	List<Answer> fetchReportedAnswers();
+	
+	Answer removeReport(Answer answer);
 
 }
