@@ -17,4 +17,6 @@ public interface IUserService {
 
 	User update(User user);
 	
+	String updatePassword(int userId, String password);
+	
 }
