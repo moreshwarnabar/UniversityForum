@@ -7,8 +7,8 @@ import * as validations from '../../../../validation/validation';
 class CreateCategory extends Component {
   state = {
     formData: {
-      name: '',
-      facultyAccess: '',
+      name: { value: '', isValid: false },
+      facultyAccess: { value: '', isValid: false },
     },
     radioChoices: [
       { id: 'yes', name: 'facultyAccess', value: 'yes' },
@@ -18,6 +18,7 @@ class CreateCategory extends Component {
     isCreatingCategory: false,
     success: false,
     errors: null,
+    formErrors: null,
   };
 
   createCategoryHandler = event => {

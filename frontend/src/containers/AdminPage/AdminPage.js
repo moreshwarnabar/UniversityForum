@@ -16,7 +16,6 @@ class AdminPage extends Component {
       { goTo: '/users', label: 'Users' },
       { goTo: '/answers', label: 'Answers' },
     ],
-    index: 0,
   };
 
   logoutHandler = () => {
