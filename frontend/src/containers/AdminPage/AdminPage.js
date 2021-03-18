@@ -45,7 +45,7 @@ class AdminPage extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.login.user,
 });
 
 const mapDispatchToProps = dispatch => ({

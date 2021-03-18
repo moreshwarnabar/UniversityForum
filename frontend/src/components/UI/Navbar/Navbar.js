@@ -140,7 +140,7 @@ const navbar = props => {
 };
 
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.login.user,
 });
 
 const mapDispatchToProps = dispatch => ({

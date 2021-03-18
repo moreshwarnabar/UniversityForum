@@ -4,7 +4,7 @@ const usersTable = props => {
   const { users, error } = props;
   if (error)
     return <p>No results for the requested filter. Please click reset!</p>;
-  const userRows = users.map(user => {
+  const userRows = users?.map(user => {
     const { id, isBlocked, firstName, lastName, username, role, gender } = user;
     return (
       <tr key={username} data-id={id}>

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import CategoryForm from './CategoryForm/CategoryForm';
 import * as validators from '../../../../validation/validation';
+import * as categoryActions from '../../../../store/actions/actions';
 
 class CreateCategory extends Component {
   state = {
@@ -14,10 +15,7 @@ class CreateCategory extends Component {
       { id: 'yes', name: 'facultyAccess', value: 'true' },
       { id: 'no', name: 'facultyAccess', value: 'false' },
     ],
-    isValid: false,
-    isCreatingCategory: false,
-    success: false,
-    errors: null,
+    isFormValid: false,
     formErrors: null,
   };
 
@@ -89,22 +87,8 @@ class CreateCategory extends Component {
       data[key] = value;
     }
 
-    axios
-      .post('http://localhost:8080/forum/category', data)
-      .then(response => {
-        console.log(response.data.result);
-        this.setState({
-          formData: this.resetForm(),
-          isCreatingCategory: false,
-          success: true,
-        });
-      })
-      .catch(({ response }) => {
-        console.log(response.data.errorMessage);
-        this.setState({
-          errors: response.data.errorMessage,
-        });
-      });
+    this.props.onSubmit(data);
+    this.setState({ formData: this.resetForm() });
   };
 
   resetForm = () => {
@@ -117,19 +101,16 @@ class CreateCategory extends Component {
 
   resetFormHandler = event => {
     event.preventDefault();
-    this.setState({ formData: this.resetForm(), errors: null });
-  };
-
-  showCategoryFormHandler = () => {
-    this.setState({ isCreatingCategory: true, success: false });
+    this.setState({ formData: this.resetForm() });
+    this.props.onReset();
   };
 
   render() {
-    const successMessage = this.state.success ? (
-      <p>Successfully Created Category</p>
+    const successMessage = this.props.isSuccess ? (
+      <p className="text-success mb-3">Successfully Created Category</p>
     ) : null;
 
-    return this.state.isCreatingCategory ? (
+    return this.props.isCreatingCategory ? (
       <div
         className="p-2 col border rounded shadow bg-light"
         style={{ height: 'fit-content' }}
@@ -150,7 +131,7 @@ class CreateCategory extends Component {
         </div>
         <div className="mt-3">
           <p className="text-danger text-center" style={{ fontSize: '14px' }}>
-            {this.state.errors}
+            {this.props.errors}
           </p>
         </div>
       </div>
@@ -163,7 +144,7 @@ class CreateCategory extends Component {
         <button
           className="btn btn-primary btn-lg"
           type="button"
-          onClick={this.showCategoryFormHandler}
+          onClick={() => this.props.onShow()}
         >
           Create Category
         </button>
@@ -172,4 +153,14 @@ class CreateCategory extends Component {
   }
 }
 
-export default CreateCategory;
+const mapStateToProps = state => ({
+  ...state.createCategory,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onShow: () => dispatch(categoryActions.showCategoryForm()),
+  onReset: () => dispatch(categoryActions.resetCategoryForm()),
+  onSubmit: data => dispatch(categoryActions.categoryCreation(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateCategory);

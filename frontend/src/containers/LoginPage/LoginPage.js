@@ -110,7 +110,7 @@ class LoginPage extends Component {
 
 const mapStateToProps = state => {
   return {
-    ...state,
+    ...state.login,
   };
 };
 
