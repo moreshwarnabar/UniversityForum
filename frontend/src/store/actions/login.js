@@ -29,3 +29,7 @@ export const authenticateUser = loginData => {
       );
   };
 };
+
+export const logoutUser = () => ({
+  type: actionTypes.LOGOUT_USER,
+});
