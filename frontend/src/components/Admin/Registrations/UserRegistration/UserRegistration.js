@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import RegistrationForm from './RegistrationForm/RegistrationForm';
 import * as validators from '../../../../validation/validation';
+import * as userActions from '../../../../store/actions/actions';
 
 class UserRegistration extends Component {
   state = {
@@ -27,9 +28,7 @@ class UserRegistration extends Component {
       { value: 'FACULTY', displayValue: 'Faculty' },
     ],
     formErrors: null,
-    isRegisteringUser: false,
     isFormValid: false,
-    success: false,
   };
 
   valueChangedHandler = event => {
@@ -81,7 +80,12 @@ class UserRegistration extends Component {
 
   resetFormHandler = event => {
     event.preventDefault();
-    this.setState({ formData: this.resetForm(), formErrors: null });
+    this.setState({
+      formData: this.resetForm(),
+      formErrors: null,
+      isFormValid: false,
+    });
+    this.props.onReset();
   };
 
   registerUserHandler = event => {
@@ -107,41 +111,24 @@ class UserRegistration extends Component {
       return;
     }
 
-    console.log('is form valid: ', isFormValid);
     const data = {};
     for (let [key, { value }] of Object.entries(formData)) {
       data[key] = value;
     }
 
-    console.log(data);
-
-    axios
-      .post('http://localhost:8080/forum/users', data)
-      .then(response => {
-        this.setState({
-          formData: this.resetForm(),
-          isRegisteringUser: false,
-          success: true,
-        });
-      })
-      .catch(({ response }) => {
-        console.log(response);
-        this.setState({
-          errors: response.data.errorMessage,
-        });
-      });
+    this.props.onSubmit(data);
   };
 
   showRegistrationFormHandler = () => {
-    this.setState({ isRegisteringUser: true, success: false });
+    this.props.onShow();
   };
 
   render() {
-    const successMessage = this.state.success ? (
-      <p>Successfully Registered User</p>
+    const successMessage = this.props.isSuccess ? (
+      <p className="text-success mb-3">Successfully Registered User</p>
     ) : null;
 
-    return this.state.isRegisteringUser ? (
+    return this.props.isRegisteringUser ? (
       <div className="p-2 w-100 border rounded shadow bg-light">
         <div className="pl-2 w-100">
           <h3>User Registration</h3>
@@ -159,15 +146,17 @@ class UserRegistration extends Component {
             isFormValid={this.state.isFormValid}
           />
         </div>
-        <div>
-          <p className="text-danger text-center" style={{ fontSize: '14px' }}>
-            {this.state.errors}
-          </p>
-        </div>
+        {this.state.isFormValid ? (
+          <div>
+            <p className="text-danger text-center" style={{ fontSize: '14px' }}>
+              {this.props.errors}
+            </p>
+          </div>
+        ) : null}
       </div>
     ) : (
       <div
-        className="d-flex flex-column justify-content-around align-items-center bg-light border rounded shadow-lg"
+        className="d-flex flex-column justify-content-center align-items-center bg-light border rounded shadow-lg"
         style={{ width: '100%' }}
       >
         {successMessage}
@@ -183,4 +172,14 @@ class UserRegistration extends Component {
   }
 }
 
-export default UserRegistration;
+const mapStateToProps = state => ({
+  ...state.userRegistration,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onShow: () => dispatch(userActions.showUserForm()),
+  onReset: () => dispatch(userActions.resetForm()),
+  onSubmit: data => dispatch(userActions.userRegistration(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserRegistration);
