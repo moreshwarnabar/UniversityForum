@@ -1,7 +1,11 @@
 import React from 'react';
 import * as RB from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-const navbar = () => {
+import { logoutUser } from '../../../store/actions/actions';
+
+const navbar = props => {
   // return (
   //   <nav className="navbar navbar-default bg-dark">
   //     <div className="container-fluid">
@@ -51,6 +55,7 @@ const navbar = () => {
   //     </div>
   //   </nav>
   // );
+
   return (
     <RB.Navbar
       collapseOnSelect
@@ -65,42 +70,81 @@ const navbar = () => {
       <RB.Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <RB.Navbar.Collapse
         id="responsive-navbar-nav"
-        style={{ justifyContent: 'space-between' }}
+        style={{
+          justifyContent:
+            props.user?.role === 'ADMIN' ? 'flex-end' : 'space-between',
+        }}
       >
-        <RB.Form className="ml-lg-3" inline>
-          <RB.FormControl
-            type="text"
-            placeholder="Search"
-            className="form-control-sm mr-2 col-8 col-lg"
-          />
-          <RB.Button className="btn-sm" type="submit">
-            Submit
-          </RB.Button>
-        </RB.Form>
-        <RB.Nav className="mr-lg-5">
-          <RB.NavDropdown title="Category" id="collasible-nav-dropdown">
-            <RB.NavDropdown.Item href="#action/3.1">Action</RB.NavDropdown.Item>
-          </RB.NavDropdown>
-        </RB.Nav>
+        {props.user?.role === 'ADMIN' ? null : (
+          <React.Fragment>
+            <RB.Form className="ml-lg-3" inline>
+              <RB.FormControl
+                type="text"
+                placeholder="Search"
+                className="form-control-sm mr-2 col-8 col-lg"
+              />
+              <RB.Button className="btn-sm" type="submit">
+                Submit
+              </RB.Button>
+            </RB.Form>
+
+            <RB.Nav className="mr-lg-5">
+              <RB.NavDropdown title="Category" id="collasible-nav-dropdown">
+                <RB.NavDropdown.Item href="#action/3.1">
+                  Action
+                </RB.NavDropdown.Item>
+              </RB.NavDropdown>
+            </RB.Nav>
+          </React.Fragment>
+        )}
 
         <RB.Nav className="ml-lg-5">
-          <RB.Dropdown>
-            <RB.Dropdown.Toggle
-              className="btn-sm"
-              variant="success"
-              id="dropdown-basic"
-            >
-              User Profile
-            </RB.Dropdown.Toggle>
+          {props.user?.role === 'ADMIN' ? (
+            <button className="btn btn-sm btn-success" onClick={props.logout}>
+              Logout
+            </button>
+          ) : (
+            <RB.Dropdown>
+              <RB.Dropdown.Toggle
+                className="btn-sm"
+                variant="success"
+                id="dropdown-basic"
+              >
+                User Profile
+              </RB.Dropdown.Toggle>
 
-            <RB.Dropdown.Menu align="right">
-              <RB.Dropdown.Item href="#/action-1">Action</RB.Dropdown.Item>
-            </RB.Dropdown.Menu>
-          </RB.Dropdown>
+              <RB.Dropdown.Menu align="right">
+                <NavLink
+                  to="/profile"
+                  className="dropdown-item"
+                  activeClassName="active"
+                >
+                  View Profile
+                </NavLink>
+                <NavLink
+                  to="/"
+                  exact
+                  className="dropdown-item"
+                  activeClassName="active"
+                  onClick={props.onLogout}
+                >
+                  Logout
+                </NavLink>
+              </RB.Dropdown.Menu>
+            </RB.Dropdown>
+          )}
         </RB.Nav>
       </RB.Navbar.Collapse>
     </RB.Navbar>
   );
 };
 
-export default navbar;
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onLogout: () => dispatch(logoutUser()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(navbar);

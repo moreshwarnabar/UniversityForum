@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 import Navbar from '../../components/UI/Navbar/Navbar';
 import Registrations from '../../components/Admin/Registrations/Registrations';
 import ListUsers from '../../components/Admin/ListUsers/ListUsers';
 import ReportedAnswers from '../../components/Admin/ReportedAnswers/ReportedAnswers';
 import Links from '../../components/UI/Links/Links';
+import { logoutUser } from '../../store/actions/actions';
 
 class AdminPage extends Component {
   state = {
@@ -17,12 +19,19 @@ class AdminPage extends Component {
     index: 0,
   };
 
-  selectHandler = selectedIndex => console.log(selectedIndex);
+  logoutHandler = () => {
+    this.props.history.replace('/');
+    this.props.onLogout();
+  };
+
+  componentDidMount() {
+    if (!this.props.user) this.props.history.replace('/');
+  }
 
   render() {
     return (
       <React.Fragment>
-        <Navbar />
+        <Navbar logout={this.logoutHandler} />
         <div className="container pt-2 bg-light min-vh-100 d-flex flex-wrap justify-content-center">
           <Links links={this.state.linkData} url={this.props.match.url} />
           <Switch>
@@ -36,4 +45,12 @@ class AdminPage extends Component {
   }
 }
 
-export default AdminPage;
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onLogout: () => dispatch(logoutUser()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AdminPage);

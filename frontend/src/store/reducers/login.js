@@ -14,6 +14,9 @@ export const reducer = (state = initialState, action) => {
     case actionTypes.LOGIN_USER_FAIL:
       return { ...state, error: action.payload, isLoggedIn: false };
 
+    case actionTypes.LOGOUT_USER:
+      return { user: null, error: null, isLoggedIn: false };
+
     default:
       console.log('in default');
       return state;
