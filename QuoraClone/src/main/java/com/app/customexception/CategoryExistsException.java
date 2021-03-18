@@ -1,0 +1,10 @@
+package com.app.customexception;
+
+@SuppressWarnings("serial")
+public class CategoryExistsException extends RuntimeException {
+
+	public CategoryExistsException(String message) {
+		super(message);
+	}
+
+}
