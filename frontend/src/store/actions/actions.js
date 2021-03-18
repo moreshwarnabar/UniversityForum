@@ -11,3 +11,5 @@ export {
   resetCategoryForm,
   showCategoryForm,
 } from './createCategory';
+
+export { fetchAllUsers } from './listUsers';

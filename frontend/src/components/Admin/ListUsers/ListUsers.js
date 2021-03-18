@@ -1,44 +1,24 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import UsersTable from './UsersTable/UsersTable';
 import Pagination from '../../UI/Pagination/Pagination';
+import * as actions from '../../../store/actions/listUsers';
 
 class ListUsers extends Component {
   state = {
-    users: null,
-    toDisplay: [],
-    pagination: {
-      per: 1,
-      current: 1,
-      last: 1,
-    },
     roles: [
       { name: 'ADMIN', isChecked: false },
       { name: 'STUDENT', isChecked: false },
       { name: 'FACULTY', isChecked: false },
     ],
-    isUsersEmpty: false,
   };
 
-  // pageChange, filterChange, resetFilter, pageContent, blockUser
   blockUserHandler = (event, isBlocked) => {
     const id = +event.target.closest('tr').dataset.id;
     const user = { id, isBlocked: !isBlocked };
 
-    axios.put('http://localhost:8080/forum/users', user).then(response => {
-      const updatedUser = response.data.result;
-      const users = this.updateUser([...this.state.users], updatedUser);
-      const toDisplay = this.updateUser([...this.state.toDisplay], updatedUser);
-
-      this.setState({ users, toDisplay });
-    });
-  };
-
-  updateUser = (users, updatedUser) => {
-    const userIndex = users.findIndex(user => user.id === updatedUser.id);
-    users[userIndex] = updatedUser;
-    return users;
+    this.props.onBlockUnblockUser(user);
   };
 
   resetFilterHandler = () => {
@@ -46,9 +26,8 @@ class ListUsers extends Component {
       return { ...role, isChecked: false };
     });
 
-    axios
-      .get('http://localhost:8080/forum/users/all')
-      .then(response => this.initPagination(response, updatedRoles));
+    this.props.onFetchAll();
+    this.setState({ roles: updatedRoles });
   };
 
   filterChangeHandler = event => {
@@ -63,58 +42,19 @@ class ListUsers extends Component {
       .map(role => `role=${role.name}`)
       .join('&');
 
-    axios
-      .get(
-        `http://localhost:8080/forum/users/${
-          search === '' ? '/all' : `/filters?${search}`
-        }`
-      )
-      .then(response => this.initPagination(response));
-
+    this.props.onFilteredFetch(search);
     this.setState({ roles: updatedRoles });
   };
 
-  initPagination = (response, roles = this.state.roles) => {
-    const users = response.data.result;
-
-    const { pagination } = this.state;
-    const { current, per } = pagination;
-
-    const last = users.length / per;
-    const toDisplay = this.pageContentSlicer(users, current, per);
-
-    const isUsersEmpty = users.length === 0;
-
-    this.setState({
-      users,
-      toDisplay,
-      pagination: { ...pagination, last },
-      isUsersEmpty,
-      roles,
-    });
-  };
-
   pageChangeHandler = event => {
-    const { users, pagination } = this.state;
-
     const parent = event.target.closest('.btn');
     const next = +parent.dataset.goto;
-    const toDisplay = this.pageContentSlicer(users, next, pagination.per);
 
-    this.setState({ toDisplay, pagination: { ...pagination, current: next } });
-  };
-
-  pageContentSlicer = (users, page, per) => {
-    const start = per * (page - 1);
-    const end = per * page;
-
-    return users.slice(start, end);
+    this.props.onPageChange(next);
   };
 
   componentDidMount() {
-    axios
-      .get('http://localhost:8080/forum/users/all')
-      .then(response => this.initPagination(response));
+    this.props.onFetchAll();
   }
 
   render() {
@@ -157,14 +97,14 @@ class ListUsers extends Component {
           </div>
           <div className="table-responsive">
             <UsersTable
-              users={this.state.toDisplay}
-              error={this.state.isUsersEmpty}
+              users={this.props.toDisplay}
+              error={this.props.isUsersEmpty}
               clicked={this.blockUserHandler}
             />
           </div>
           <div className="d-flex justify-content-between">
             <Pagination
-              {...this.state.pagination}
+              {...this.props.pagination}
               clicked={this.pageChangeHandler}
             />
           </div>
@@ -174,4 +114,15 @@ class ListUsers extends Component {
   }
 }
 
-export default ListUsers;
+const mapStateToProps = state => ({
+  ...state.listUsers,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onFetchAll: () => dispatch(actions.fetchAllUsers()),
+  onFilteredFetch: search => dispatch(actions.fetchFilteredUsers(search)),
+  onPageChange: page => dispatch(actions.changePage(page)),
+  onBlockUnblockUser: user => dispatch(actions.aysncBlockUnblockUser(user)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListUsers);
