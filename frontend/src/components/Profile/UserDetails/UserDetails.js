@@ -12,30 +12,31 @@ class UserDetails extends Component{
         userDetails : null,
         showUserDetailsForm : false,
         
+        userFormDetails : null,
+
         password : '',
         reTypedPassword : '',
         showPasswordForm : false,
-        message : ''
+        message : '',
+
+        error : {
+            fName : "",
+            lName : ""
+        }
     }
 
     componentDidMount(){
-        axios.get("http://localhost:8080/forum/users/ganesh123/ganesh123")
+        axios.get("http://localhost:8080/forum/users/single/nik123/nik123")
         .then(
             (response) => {
                 console.log(response.data)
                 this.setState({
-                    userDetails : response.data.result
+                    userDetails : response.data.result,
+                    userFormDetails : response.data.result
                 })
             }
         )
-        .catch(
-            (error) => {
-                console.log(error)
-                this.setState({
-                    erroMsg: "Error Something went Wrong"
-                })
-            }
-        )
+       
     }
 
 
@@ -59,17 +60,42 @@ class UserDetails extends Component{
         })
     }
 
-    updatePassword = (event) => {
-        console.log("clicked update Password")
-        console.log(this.state.password +" "+ this.state.reTypedPassword)
 
-        if(this.state.password === this.state.reTypedPassword){
-            if(this.state.password.length > 6){
-                console.log(this.state.password +" == "+ this.state.reTypedPassword)
-                const userpass ={
-                    password : this.state.password
-                }
-                axios.put("http://localhost:8080/forum/users/password/1", userpass)
+validatePassword(){
+    if(!(this.state.password.trim().length > 6 && this.state.password.trim().length < 15)){
+        console.log("password error1")
+        this.setState({
+            message : "password must be contain at between 6 to 15 character "
+        })
+    }
+    else if(!(this.state.password === this.state.reTypedPassword)){
+        console.log("password error2")
+        this.setState({
+            message : "Both the Password fields must be same"
+        })
+    }
+    else{
+        console.log("password error3")
+        this.setState({
+            message : ""
+        })
+        return true;
+    }
+}
+
+
+    updatePassword = (event) => {
+
+        if(this.validatePassword()){
+
+            console.log("clicked update Password")
+            console.log(this.state.password +" == "+ this.state.reTypedPassword)
+           
+            const userpass ={
+                password : this.state.password
+            }
+                
+            axios.put("http://localhost:8080/forum/users/password/1", userpass)
                 .then(
                     (response) => {
                         console.log(response.data)
@@ -81,21 +107,8 @@ class UserDetails extends Component{
                             message : response.data.result
                         })
                     } 
-                )
-                
-            }else{
-                this.setState({
-                    showPasswordForm : true,
-                    message : "Password must contain more than 6 character"
-                })
-            }
-        }else{
-            this.setState({
-                showPasswordForm : true,
-                message : "Password must be same in both fields"
-            })
-        }
-        
+            )   
+        }      
     }
 
 
@@ -109,35 +122,51 @@ class UserDetails extends Component{
 
     changeUserDetailsHandler = (event) =>{
         const {name,value} = event.target
-        const updatedUser = {...this.state.userDetails, [name]:value}
+        const updatedUser = {...this.state.userFormDetails, [name]:value}
         this.setState({
-            userDetails : updatedUser   
+            userFormDetails : updatedUser   
         }) 
     }
 
+    validate = () =>{
+    //    console.log( this.state.userDetails);
+       if(!(this.state.userFormDetails.firstName.trim().length>=3 && this.state.userFormDetails.firstName.trim().length <15)){
+           this.setState({error : {fName : "First Name must be contain between 3 to 15 character"}})
+       }
+       else if(!(this.state.userFormDetails.lastName.trim().length>3 && this.state.userFormDetails.lastName.trim().length <15)){
+        this.setState({ error : { lName : "Last Name must be contain between 3 to 15 character"}})
+       }
+       else{
+        this.setState({ error : { fName : "",lName : "" } })
+        return true
+       }
+    }
+
     updateUserDetails = (event) => {
-        console.log("clicked updateUserDetails")
-        console.log(this.state.userDetails)
-        axios.put("http://localhost:8080/forum/users", this.state.userDetails)
-        .then(
-            (response) => {
-                console.log(response.data)
-                this.setState({
-                    showUserDetailsForm : false
-                })
-            } 
-        )
+        if(this.validate()){
+            
+            console.log("clicked updateUserDetails")
+            axios.put("http://localhost:8080/forum/users", this.state.userFormDetails)
+            .then(
+                (response) => {
+                    console.log(response.data)
+                    this.setState({
+                        showUserDetailsForm : false,
+                        userDetails : response.data.result
+                    })
+                } 
+            )
+        }
     }
 
     render(){
         
         if(this.state.userDetails != null){
             return(
-
         <div>
-            
              
-            <EditUser  value={this.state.userDetails}
+            <EditUser  {...this.state.userFormDetails}
+            {...this.state.error}
             showUserDetailsForm={this.state.showUserDetailsForm}
             showEditUserDetailsForm={this.showEditUserDetailsForm}
             updateUserDetails={this.updateUserDetails}

@@ -11,13 +11,15 @@ class App extends Component {
   render() {
     return (
       <div className="container-fluid px-0 App">
-        <Switch>
+        {/* <Switch>
           <Route path="/admin" component={AdminPage} />
           <Route path="/categories" component={CategoryPage} />
           <Route path="/profile" component={ProfilePage} />
           <Route path="/" component={LoginPage} />
-        </Switch>
-        {/* <ProfilePage /> */}
+        </Switch> */}
+
+        <ProfilePage />
+        
       </div>
     );
   }

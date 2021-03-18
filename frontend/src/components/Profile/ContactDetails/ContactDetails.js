@@ -7,8 +7,15 @@ import EditContactDetails from '../../Edit/EditContactDetails/EditContactDetails
 class ContactDetails extends Component{
     state = {
         contactDetails: null,
-        showContactDetailsForm : false
+        showContactDetailsForm : false,
         
+        contactFormDetails : null,
+
+        error :{
+        phoneNo: "",
+        PinCode: ""
+        }
+         
     }
 
     componentDidMount(){
@@ -17,15 +24,8 @@ class ContactDetails extends Component{
             (response) => {
                 console.log(response.data)
                 this.setState({
-                    contactDetails : response.data.result
-                })
-            }
-        )
-        .catch(
-            (error) => {
-                console.log(error)
-                this.setState({
-                    erroMsg: "Error Something went Wrong"
+                    contactDetails : response.data.result,
+                    contactFormDetails :  response.data.result
                 })
             }
         )
@@ -41,25 +41,49 @@ class ContactDetails extends Component{
 
     changeContactDetailsHandler = (event) =>{
         const {name,value} = event.target
-        const updatedContact = {...this.state.contactDetails, [name]:value}
+        const updatedContact = {...this.state.contactFormDetails, [name]:value}
         this.setState({
-            contactDetails : updatedContact   
+            contactFormDetails : updatedContact   
         }) 
     }
 
+    validate = () =>{
+        if(this.state.contactFormDetails.phoneNo.trim().length != 10){
+            this.setState({error : {
+                phoneNo : "Mobile No. must contain 10 digit"
+            }
+        })
+        }
+        else  if(this.state.contactFormDetails.pinCode.trim().length != 6){
+            this.setState({error : {pinCode : "pincode must contain 6 digit"}})
+          }
+        else
+        {
+            this.setState({
+                error : {
+                phoneNo : "",
+                pinCode : ""
+                }
+            })
+            return true
+        } 
+
+    }
 
     updateContactDetails = (event) => {
-        console.log("clicked updateContactDetails")
-
-        axios.put("http://localhost:8080/forum/contacts/", this.state.contactDetails)
-        .then(
-            (response) => {
-                console.log(response.data)
-                this.setState({
-                    showContactDetailsForm : false
-                })
-            } 
-        )
+        if(this.validate()){
+            console.log("clicked updateContactDetails")
+            axios.put("http://localhost:8080/forum/contacts/", this.state.contactFormDetails)
+            .then(
+                (response) => {
+                    console.log(response.data)
+                    this.setState({
+                        showContactDetailsForm : false,
+                        contactDetails : response.data.result
+                    })
+                } 
+            )
+        }
     }
 
     render(){
@@ -68,9 +92,10 @@ class ContactDetails extends Component{
             return(
 
         <div className="card-body shadow-lg p-3 mb-5 bg-white rounded">       
-           
+           <div>{this.initialContactDetails}</div>
 
-                    <EditContactDetails  value={this.state}
+                    <EditContactDetails  {...this.state.contactFormDetails}
+                    error={this.state.error}
                     showContactDetailsForm={this.state.showContactDetailsForm}
                     showEditContactDetailsForm={this.showEditContactDetailsForm}
                     updateContactDetails={this.updateContactDetails}
