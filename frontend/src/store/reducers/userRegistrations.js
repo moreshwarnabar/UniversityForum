@@ -12,7 +12,7 @@ export const userRegistrationReducer = (state = initialState, action) => {
     case actionTypes.SHOW_USER_FORM:
       return { ...state, isRegisteringUser: true };
 
-    case actionTypes.RESET_FORM:
+    case actionTypes.RESET_USER_FORM:
       return { ...state, errors: null };
 
     case actionTypes.USER_REGISTRATION_START:

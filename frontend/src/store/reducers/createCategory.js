@@ -1,0 +1,31 @@
+import * as actionTypes from '../actions/actionTypes';
+
+const initialState = {
+  isCreatingCategory: false,
+  isSending: false,
+  isSuccess: false,
+  errors: null,
+};
+
+export const categoryCreationReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case actionTypes.SHOW_CATEGORY_FORM:
+      return { ...state, isCreatingCategory: true };
+
+    case actionTypes.RESET_CATEGORY_FORM:
+      return { ...state, errors: null };
+
+    case actionTypes.CATEGORY_CREATION_START:
+      return { ...state, isSending: true };
+
+    case actionTypes.CATEGORY_CREATION_FAIL:
+      return { ...state, errors: action.payload };
+
+    case actionTypes.CATEGORY_CREATION_SUCCESS:
+      return { ...state, isSuccess: true, isCreatingCategory: false };
+
+    default:
+      console.log('in category creation default');
+      return state;
+  }
+};

@@ -117,10 +117,7 @@ class UserRegistration extends Component {
     }
 
     this.props.onSubmit(data);
-  };
-
-  showRegistrationFormHandler = () => {
-    this.props.onShow();
+    this.setState({ formData: this.resetForm() });
   };
 
   render() {
@@ -163,7 +160,7 @@ class UserRegistration extends Component {
         <button
           className="btn btn-primary btn-lg"
           type="button"
-          onClick={this.showRegistrationFormHandler}
+          onClick={() => this.props.onShow()}
         >
           Register User
         </button>

@@ -14,6 +14,7 @@ import * as reducers from './store/reducers/reducers';
 const rootReducer = combineReducers({
   login: reducers.userLoginReducer,
   userRegistration: reducers.userRegistrationReducer,
+  createCategory: reducers.categoryCreationReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));
