@@ -58,6 +58,15 @@ class LoginPage extends Component {
     if (this.state.isFormValid) this.props.userLogin(loginData);
   };
 
+  componentDidUpdate() {
+    if (this.props.isLoggedIn) {
+      const nextPath =
+        this.props.user.role === 'ADMIN' ? 'admin' : 'categories';
+      console.log(nextPath);
+      this.props.history.push(`/${nextPath}`);
+    }
+  }
+
   render() {
     return (
       <div
