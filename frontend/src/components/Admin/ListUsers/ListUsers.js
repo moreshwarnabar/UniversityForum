@@ -8,10 +8,6 @@ class ListUsers extends Component {
   state = {
     users: null,
     toDisplay: [],
-    linkData: [
-      { goTo: 'registrations', label: 'Registrations' },
-      { goTo: 'answers', label: 'Answers' },
-    ],
     pagination: {
       per: 1,
       current: 1,

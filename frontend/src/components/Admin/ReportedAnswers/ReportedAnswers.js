@@ -9,13 +9,10 @@ class ReportedAnswers extends Component {
   state = {
     answers: [],
     toDisplay: [],
-    linkData: [
-      { goTo: 'registrations', label: 'Registrations' },
-      { goTo: 'users', label: 'Users' },
-    ],
     pagination: {
       per: 2,
       current: 1,
+      last: 1,
     },
     showModal: false,
     modalData: null,
