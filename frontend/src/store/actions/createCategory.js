@@ -27,7 +27,7 @@ export const categoryCreation = data => {
   return dispatch => {
     dispatch(categoryCreationStart());
     axios
-      .post('http://localhost:8080/forum/category', data)
+      .post('category', data)
       .then(response => {
         dispatch(categoryCreationSuccess());
       })

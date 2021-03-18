@@ -27,7 +27,7 @@ export const userRegistration = data => {
   return dispatch => {
     dispatch(userRegistrationStart());
     axios
-      .post('http://localhost:8080/forum/users', data)
+      .post('users', data)
       .then(response => {
         dispatch(userRegistrationSuccess());
       })
