@@ -178,7 +178,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onShow: () => dispatch(userActions.showUserForm()),
-  onReset: () => dispatch(userActions.resetForm()),
+  onReset: () => dispatch(userActions.resetUserForm()),
   onSubmit: data => dispatch(userActions.userRegistration(data)),
 });
 
