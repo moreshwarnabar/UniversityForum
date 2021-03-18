@@ -7,17 +7,20 @@ const categoryForm = props => (
         Name
       </label>
       <input
-        className={`form-control ${props.errors?.name ? 'is-invalid' : null}`}
+        className={`form-control ${
+          props.formErrors?.name ? 'is-invalid' : null
+        }`}
         type="text"
         name="name"
         id="name"
         placeholder="Name"
-        value={props.name}
+        value={props.name.value}
         onChange={props.changed}
+        onBlur={props.blur}
         aria-describedby="nameValidation"
       />
       <div id="nameValidation" className="invalid-feedback">
-        {props.errors?.name}
+        {props.formErrors?.name}
       </div>
     </div>
     <div className="form-group">
@@ -26,7 +29,7 @@ const categoryForm = props => (
       </p>
       <div
         className={`form-control border-0 ${
-          props.errors?.facultyAccess ? 'is-invalid' : null
+          props.formErrors?.facultyAccess ? 'is-invalid' : null
         }`}
         aria-describedby="facultyAccessValidation"
       >
@@ -36,7 +39,7 @@ const categoryForm = props => (
               className="form-check-input"
               type="radio"
               {...choice}
-              checked={props.facultyAccess === choice.value}
+              checked={props.facultyAccess.value === choice.value}
               onChange={props.changed}
             />
             <label
@@ -50,7 +53,7 @@ const categoryForm = props => (
         ))}
       </div>
       <div id="facultyAccessValidation" className="invalid-feedback">
-        {props.errors?.facultyAccess}
+        {props.formErrors?.facultyAccess}
       </div>
     </div>
     <button className="ml-1 btn btn-secondary" onClick={props.reset}>

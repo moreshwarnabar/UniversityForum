@@ -9,16 +9,17 @@ const registrationForm = props => (
         </label>
         <input
           className={`form-control form-control-sm ${
-            props.errors?.firstName ? 'is-invalid' : null
+            props.formErrors?.firstName ? 'is-invalid' : null
           }`}
           id="fname"
           type="text"
           name="firstName"
           placeholder="First Name"
           onChange={props.changed}
-          value={props.firstName}
+          value={props.firstName.value}
+          onBlur={props.blur}
         />
-        <div className="invalid-feedback">{props.errors?.firstName}</div>
+        <div className="invalid-feedback">{props.formErrors?.firstName}</div>
       </div>
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="lname">
@@ -26,16 +27,17 @@ const registrationForm = props => (
         </label>
         <input
           className={`form-control form-control-sm ${
-            props.errors?.lastName ? 'is-invalid' : null
+            props.formErrors?.lastName ? 'is-invalid' : null
           }`}
           id="lname"
           type="text"
           name="lastName"
           placeholder="Last Name"
           onChange={props.changed}
-          value={props.lastName}
+          value={props.lastName.value}
+          onBlur={props.blur}
         />
-        <div className="invalid-feedback">{props.errors?.lastName}</div>
+        <div className="invalid-feedback">{props.formErrors?.lastName}</div>
       </div>
     </div>
     <div className="form-row">
@@ -43,7 +45,9 @@ const registrationForm = props => (
         <p style={{ fontSize: '13px' }}>Gender</p>
         <div
           className={`form-control form-control-sm p-0 border-0 ${
-            props.errors?.gender ? 'is-invalid' : null
+            props.formErrors?.gender && !props.gender.isValid
+              ? 'is-invalid'
+              : null
           }`}
         >
           {props.radio.map(choice => (
@@ -52,7 +56,7 @@ const registrationForm = props => (
                 className="form-check-input"
                 type="radio"
                 {...choice}
-                checked={props.gender === choice.value}
+                checked={props.gender.value === choice.value}
                 onChange={props.changed}
               />
               <label
@@ -65,7 +69,7 @@ const registrationForm = props => (
             </div>
           ))}
         </div>
-        <div className="invalid-feedback">{props.errors?.gender}</div>
+        <div className="invalid-feedback">{props.formErrors?.gender}</div>
       </div>
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="dob">
@@ -73,15 +77,16 @@ const registrationForm = props => (
         </label>
         <input
           className={`form-control form-control-sm ${
-            props.errors?.dateOfBirth ? 'is-invalid' : null
+            props.formErrors?.dateOfBirth ? 'is-invalid' : null
           }`}
           id="dob"
           type="date"
           name="dateOfBirth"
           onChange={props.changed}
-          value={props.dateOfBirth}
+          value={props.dateOfBirth.value}
+          onBlur={props.blur}
         />
-        <div className="invalid-feedback">{props.errors?.dateOfBirth}</div>
+        <div className="invalid-feedback">{props.formErrors?.dateOfBirth}</div>
       </div>
     </div>
     <div className="form-row">
@@ -91,16 +96,17 @@ const registrationForm = props => (
         </label>
         <input
           className={`form-control form-control-sm ${
-            props.errors?.username ? 'is-invalid' : null
+            props.formErrors?.username ? 'is-invalid' : null
           }`}
           id="uname"
           type="email"
           name="username"
           placeholder="Username"
           onChange={props.changed}
-          value={props.username}
+          value={props.username.value}
+          onBlur={props.blur}
         />
-        <div className="invalid-feedback">{props.errors?.username}</div>
+        <div className="invalid-feedback">{props.formErrors?.username}</div>
       </div>
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="pwd">
@@ -108,16 +114,17 @@ const registrationForm = props => (
         </label>
         <input
           className={`form-control form-control-sm ${
-            props.errors?.password ? 'is-invalid' : null
+            props.formErrors?.password ? 'is-invalid' : null
           }`}
           id="pwd"
           type="password"
           name="password"
           placeholder="Password"
           onChange={props.changed}
-          value={props.password}
+          value={props.password.value}
+          onBlur={props.blur}
         />
-        <div className="invalid-feedback">{props.errors?.password}</div>
+        <div className="invalid-feedback">{props.formErrors?.password}</div>
       </div>
     </div>
     <div className="form-row justify-content-between align-items-center pr-md-2">
@@ -127,12 +134,13 @@ const registrationForm = props => (
         </label>
         <select
           className={`form-control form-control-sm ${
-            props.errors?.role ? 'is-invalid' : null
+            props.formErrors?.role ? 'is-invalid' : null
           }`}
           id="role"
           name="role"
           onChange={props.changed}
-          value={props.role}
+          value={props.role.value}
+          onBlur={props.blur}
         >
           {props.option.map(opt => (
             <option key={opt.value} value={opt.value}>
@@ -140,7 +148,7 @@ const registrationForm = props => (
             </option>
           ))}
         </select>
-        <div className="invalid-feedback">{props.errors?.role}</div>
+        <div className="invalid-feedback">{props.formErrors?.role}</div>
       </div>
       <div>
         <button

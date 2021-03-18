@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import RegistrationForm from './RegistrationForm/RegistrationForm';
-import * as validations from '../../../../validation/validation';
+import * as validators from '../../../../validation/validation';
 
 class UserRegistration extends Component {
   state = {
     formData: {
-      firstName: '',
-      lastName: '',
-      gender: '',
-      dateOfBirth: '',
-      username: '',
-      password: '',
-      role: '',
+      firstName: { value: '', isValid: false },
+      lastName: { value: '', isValid: false },
+      gender: { value: '', isValid: false },
+      dateOfBirth: { value: '', isValid: false },
+      username: { value: '', isValid: false },
+      password: { value: '', isValid: false },
+      role: { value: '', isValid: false },
     },
     radioChoices: [
       { id: 'male', name: 'gender', value: 'MALE' },
@@ -26,39 +26,97 @@ class UserRegistration extends Component {
       { value: 'STUDENT', displayValue: 'Student' },
       { value: 'FACULTY', displayValue: 'Faculty' },
     ],
-    errors: null,
+    formErrors: null,
     isRegisteringUser: false,
+    isFormValid: false,
     success: false,
   };
 
   valueChangedHandler = event => {
     const { name, value } = event.target;
-    const updatedFormData = { ...this.state.formData, [name]: value };
+
+    const updatedFormData = { ...this.state.formData };
+    const updatedElData = {
+      value,
+      isValid: name === 'gender',
+    };
+    updatedFormData[name] = updatedElData;
+
     this.setState({ formData: updatedFormData });
+  };
+
+  onBlurHandler = event => {
+    const { name } = event.target;
+    const { formErrors, formData } = this.state;
+    const validationResult = this.validateField(name, formErrors, formData);
+    this.setState({ ...validationResult });
+  };
+
+  validateField = (name, formErrors, formData) => {
+    const result = validators[`${name}Validation`]({ ...formData[name] });
+    const validatedFormData = { ...formData, [name]: result[name] };
+    const updatedFormErrors = { ...formErrors, [name]: result.errorMsg };
+
+    // check if valid detail
+    const isFormValid = this.checkFormValidity(validatedFormData);
+
+    return {
+      formData: validatedFormData,
+      formErrors: updatedFormErrors,
+      isFormValid,
+    };
+  };
+
+  checkFormValidity = formData => {
+    return Object.values(formData).every(({ isValid }) => isValid);
   };
 
   resetForm = () => {
     const resetFormData = {};
-    Object.keys(this.state.formData).forEach(key => (resetFormData[key] = ''));
+    Object.keys(this.state.formData).forEach(
+      key => (resetFormData[key] = { value: '', isValid: false })
+    );
     return resetFormData;
   };
 
   resetFormHandler = event => {
     event.preventDefault();
-    this.setState({ formData: this.resetForm(), errors: null });
+    this.setState({ formData: this.resetForm(), formErrors: null });
   };
 
   registerUserHandler = event => {
     event.preventDefault();
+    const { formData, formErrors } = this.state;
+    const finalFormErrors = {},
+      updatedFormData = {};
 
-    const errors = validations.validateUserRegistration(this.state.formData);
+    let isFormValid = true;
+    Object.keys(formData).forEach(key => {
+      const validationResult = this.validateField(key, formErrors, formData);
+      finalFormErrors[key] = validationResult.formErrors[key];
+      updatedFormData[key] = validationResult.formData[key];
+      isFormValid = validationResult.isFormValid;
+    });
 
-    if (Object.keys(errors).length) {
-      this.setState({ errors });
+    if (!isFormValid) {
+      this.setState({
+        formData: updatedFormData,
+        formErrors: finalFormErrors,
+        isFormValid,
+      });
       return;
     }
+
+    console.log('is form valid: ', isFormValid);
+    const data = {};
+    for (let [key, { value }] of Object.entries(formData)) {
+      data[key] = value;
+    }
+
+    console.log(data);
+
     axios
-      .post('http://localhost:8080/forum/users', this.state.formData)
+      .post('http://localhost:8080/forum/users', data)
       .then(response => {
         this.setState({
           formData: this.resetForm(),
@@ -66,14 +124,12 @@ class UserRegistration extends Component {
           success: true,
         });
       })
-      .catch(({ response }) =>
+      .catch(({ response }) => {
+        console.log(response);
         this.setState({
-          errors: {
-            ...this.state.errors,
-            username: response.data.errorMessage,
-          },
-        })
-      );
+          errors: response.data.errorMessage,
+        });
+      });
   };
 
   showRegistrationFormHandler = () => {
@@ -98,8 +154,15 @@ class UserRegistration extends Component {
             changed={this.valueChangedHandler}
             reset={this.resetFormHandler}
             submit={this.registerUserHandler}
-            errors={this.state.errors}
+            formErrors={this.state.formErrors}
+            blur={this.onBlurHandler}
+            isFormValid={this.state.isFormValid}
           />
+        </div>
+        <div>
+          <p className="text-danger text-center" style={{ fontSize: '14px' }}>
+            {this.state.errors}
+          </p>
         </div>
       </div>
     ) : (
