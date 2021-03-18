@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import './App.css';
-import CategoryPage from './container/CategoryPage/CategoryPage';
+import CategoryPage from './containers/CategoryPage/CategoryPage';
 
 
 class App extends Component {
@@ -13,6 +13,6 @@ class App extends Component {
       </div>
     );
   }
-}
+} 
 
 export default App;
