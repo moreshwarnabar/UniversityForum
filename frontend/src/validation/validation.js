@@ -165,3 +165,29 @@ export const roleValidation = role => {
 
   return { role, errorMsg };
 };
+
+export const nameValidation = name => {
+  const { value } = name;
+  let errorMsg = null;
+
+  if (!value.trim().length) {
+    errorMsg = 'Please enter a valid name';
+  } else if (value.length > 25) {
+    errorMsg = 'Name must be less than 25 characters';
+  }
+  name.isValid = !errorMsg;
+
+  return { name, errorMsg };
+};
+
+export const facultyAccessValidation = facultyAccess => {
+  const { value } = facultyAccess;
+  let errorMsg = null;
+
+  if (!value.trim().length) {
+    errorMsg = 'Please enter a valid name';
+  }
+  facultyAccess.isValid = !errorMsg;
+
+  return { facultyAccess, errorMsg };
+};

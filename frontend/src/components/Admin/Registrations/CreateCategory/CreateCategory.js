@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import CategoryForm from './CategoryForm/CategoryForm';
-import * as validations from '../../../../validation/validation';
+import * as validators from '../../../../validation/validation';
 
 class CreateCategory extends Component {
   state = {
@@ -11,8 +11,8 @@ class CreateCategory extends Component {
       facultyAccess: { value: '', isValid: false },
     },
     radioChoices: [
-      { id: 'yes', name: 'facultyAccess', value: 'yes' },
-      { id: 'no', name: 'facultyAccess', value: 'no' },
+      { id: 'yes', name: 'facultyAccess', value: 'true' },
+      { id: 'no', name: 'facultyAccess', value: 'false' },
     ],
     isValid: false,
     isCreatingCategory: false,
@@ -21,19 +21,74 @@ class CreateCategory extends Component {
     formErrors: null,
   };
 
+  valueChangedHandler = event => {
+    const { name, value } = event.target;
+
+    const updatedFormData = { ...this.state.formData };
+    const updatedElData = {
+      value,
+      isValid: name === 'gender',
+    };
+    updatedFormData[name] = updatedElData;
+
+    this.setState({ formData: updatedFormData });
+  };
+
+  onBlurHandler = event => {
+    const { name } = event.target;
+    console.log(name);
+    const { formErrors, formData } = this.state;
+    const validationResult = this.validateField(name, formErrors, formData);
+    this.setState({ ...validationResult });
+  };
+
+  validateField = (name, formErrors, formData) => {
+    const result = validators[`${name}Validation`]({ ...formData[name] });
+    const validatedFormData = { ...formData, [name]: result[name] };
+    const updatedFormErrors = { ...formErrors, [name]: result.errorMsg };
+
+    // check if valid detail
+    const isFormValid = this.checkFormValidity(validatedFormData);
+
+    return {
+      formData: validatedFormData,
+      formErrors: updatedFormErrors,
+      isFormValid,
+    };
+  };
+
+  checkFormValidity = formData => {
+    return Object.values(formData).every(({ isValid }) => isValid);
+  };
+
   createCategoryHandler = event => {
     event.preventDefault();
+    const { formData, formErrors } = this.state;
+    const finalFormErrors = {},
+      updatedFormData = {};
 
-    const errors = validations.validateCategory(this.state.formData);
-    if (Object.keys(errors).length) {
-      this.setState({ errors });
+    let isFormValid = true;
+    Object.keys(formData).forEach(key => {
+      const validationResult = this.validateField(key, formErrors, formData);
+      finalFormErrors[key] = validationResult.formErrors[key];
+      updatedFormData[key] = validationResult.formData[key];
+      isFormValid = validationResult.isFormValid;
+    });
+
+    if (!isFormValid) {
+      this.setState({
+        formData: updatedFormData,
+        formErrors: finalFormErrors,
+        isFormValid,
+      });
       return;
     }
 
-    const data = {
-      ...this.state.formData,
-      facultyAccess: this.state.formData.facultyAccess === 'yes',
-    };
+    const data = {};
+    for (let [key, { value }] of Object.entries(formData)) {
+      data[key] = value;
+    }
+
     axios
       .post('http://localhost:8080/forum/category', data)
       .then(response => {
@@ -44,28 +99,25 @@ class CreateCategory extends Component {
           success: true,
         });
       })
-      .catch(({ response }) =>
+      .catch(({ response }) => {
+        console.log(response.data.errorMessage);
         this.setState({
-          errors: { ...this.state.errors, name: response.data.errorMessage },
-        })
-      );
+          errors: response.data.errorMessage,
+        });
+      });
   };
 
   resetForm = () => {
     const resetFormData = {};
-    Object.keys(this.state.formData).forEach(key => (resetFormData[key] = ''));
+    Object.keys(this.state.formData).forEach(
+      key => (resetFormData[key] = { value: '', isValid: false })
+    );
     return resetFormData;
   };
 
   resetFormHandler = event => {
     event.preventDefault();
     this.setState({ formData: this.resetForm(), errors: null });
-  };
-
-  valueChangedHandler = event => {
-    const { name, value } = event.target;
-    const updatedFormData = { ...this.state.formData, [name]: value.trim() };
-    this.setState({ formData: updatedFormData });
   };
 
   showCategoryFormHandler = () => {
@@ -92,8 +144,14 @@ class CreateCategory extends Component {
             changed={this.valueChangedHandler}
             reset={this.resetFormHandler}
             submit={this.createCategoryHandler}
-            errors={this.state.errors}
+            formErrors={this.state.formErrors}
+            blur={this.onBlurHandler}
           />
+        </div>
+        <div className="mt-3">
+          <p className="text-danger text-center" style={{ fontSize: '14px' }}>
+            {this.state.errors}
+          </p>
         </div>
       </div>
     ) : (
