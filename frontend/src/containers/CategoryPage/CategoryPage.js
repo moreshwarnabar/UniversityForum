@@ -40,7 +40,7 @@ class CategoryPage extends Component {
       <React.Fragment>
         <Navbar />
         <div className="container bg-light">
-          <h3 className="shadow p-3 mb-5 bg-white rounded text-center text-secondary">
+          <h3 className="p-3 mb-5 bg-white text-center text-secondary">
             Choose from the below categories
           </h3>
           <div className="row-shadow p-3 mb-5 bg-white rounded text-center text-secondary align-center">
