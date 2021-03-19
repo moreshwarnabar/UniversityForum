@@ -24,7 +24,7 @@ class CategoryPage extends Component {
   }
 
   clickHandler = catName => {
-    alert(`${catName} clicked`);
+    console.log(this.state.categories);
   };
 
   render() {
@@ -39,12 +39,13 @@ class CategoryPage extends Component {
     return (
       <React.Fragment>
         <Navbar />
-        <div className="container bg-light">
-          <h3 className="p-3 mb-5 bg-white text-center text-secondary">
+        <div className="container min-vh-100 bg-light d-flex flex-column justify-content-center">
+          <h3 className="p-3 my-3 bg-white text-center text-secondary text-uppercase">
             Choose from the below categories
           </h3>
-          <div className="row-shadow p-3 mb-5 bg-white rounded text-center text-secondary align-center">
-            <div className="col">{categoryList}</div>
+
+          <div className="col d-flex flex-wrap align-items-center">
+            {categoryList}
           </div>
         </div>
       </React.Fragment>
