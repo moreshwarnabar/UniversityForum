@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import RegistrationForm from './RegistrationForm/RegistrationForm';
-import * as validators from '../../../../validation/validation';
 import * as userActions from '../../../../store/actions/actions';
+import * as formConfigs from '../../../../config/formConfigs';
 
 class UserRegistration extends Component {
   state = {
@@ -34,54 +34,25 @@ class UserRegistration extends Component {
   valueChangedHandler = event => {
     const { name, value } = event.target;
 
-    const updatedFormData = { ...this.state.formData };
-    const updatedElData = {
-      value,
-      isValid: name === 'gender',
-    };
-    updatedFormData[name] = updatedElData;
+    const updatedFormData = formConfigs.changeValue(
+      { ...this.state.formData },
+      name,
+      value
+    );
 
     this.setState({ formData: updatedFormData });
   };
 
   onBlurHandler = event => {
     const { name } = event.target;
-    const { formErrors, formData } = this.state;
-    const validationResult = this.validateField(name, formErrors, formData);
+    const validationResult = formConfigs.validateField(name, this.state);
     this.setState({ ...validationResult });
-  };
-
-  validateField = (name, formErrors, formData) => {
-    const result = validators[`${name}Validation`]({ ...formData[name] });
-    const validatedFormData = { ...formData, [name]: result[name] };
-    const updatedFormErrors = { ...formErrors, [name]: result.errorMsg };
-
-    // check if valid detail
-    const isFormValid = this.checkFormValidity(validatedFormData);
-
-    return {
-      formData: validatedFormData,
-      formErrors: updatedFormErrors,
-      isFormValid,
-    };
-  };
-
-  checkFormValidity = formData => {
-    return Object.values(formData).every(({ isValid }) => isValid);
-  };
-
-  resetForm = () => {
-    const resetFormData = {};
-    Object.keys(this.state.formData).forEach(
-      key => (resetFormData[key] = { value: '', isValid: false })
-    );
-    return resetFormData;
   };
 
   resetFormHandler = event => {
     event.preventDefault();
     this.setState({
-      formData: this.resetForm(),
+      formData: formConfigs.resetForm(this.state.formData),
       formErrors: null,
       isFormValid: false,
     });
@@ -90,31 +61,15 @@ class UserRegistration extends Component {
 
   registerUserHandler = event => {
     event.preventDefault();
-    const { formData, formErrors } = this.state;
-    const finalFormErrors = {},
-      updatedFormData = {};
 
-    let isFormValid = true;
-    Object.keys(formData).forEach(key => {
-      const validationResult = this.validateField(key, formErrors, formData);
-      finalFormErrors[key] = validationResult.formErrors[key];
-      updatedFormData[key] = validationResult.formData[key];
-      isFormValid = validationResult.isFormValid;
-    });
+    const result = formConfigs.validateFormBeforeSubmit(this.state);
 
-    if (!isFormValid) {
-      this.setState({
-        formData: updatedFormData,
-        formErrors: finalFormErrors,
-        isFormValid,
-      });
+    if (!result.isFormValid) {
+      this.setState({ ...result });
       return;
     }
 
-    const data = {};
-    for (let [key, { value }] of Object.entries(formData)) {
-      data[key] = value;
-    }
+    const data = formConfigs.dataFactory(this.state.formData);
 
     this.props.onSubmit(data);
     this.setState({ formData: this.resetForm() });
