@@ -25,7 +25,6 @@ export const categoryCreationReducer = (state = initialState, action) => {
       return { ...state, isSuccess: true, isCreatingCategory: false };
 
     default:
-      console.log('in category creation default');
       return state;
   }
 };

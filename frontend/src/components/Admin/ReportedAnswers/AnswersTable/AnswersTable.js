@@ -1,7 +1,7 @@
 import React from 'react';
 
 const answersTable = props => {
-  const answerRows = props.answers.map(ans => {
+  const answerRows = props.answers?.map(ans => {
     const {
       id,
       question: {

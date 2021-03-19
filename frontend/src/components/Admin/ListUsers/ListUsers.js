@@ -121,7 +121,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onFetchAll: () => dispatch(actions.fetchAllUsers()),
   onFilteredFetch: search => dispatch(actions.fetchFilteredUsers(search)),
-  onPageChange: page => dispatch(actions.changePage(page)),
+  onPageChange: page => dispatch(actions.changeUsersPage(page)),
   onBlockUnblockUser: user => dispatch(actions.aysncBlockUnblockUser(user)),
 });
 
