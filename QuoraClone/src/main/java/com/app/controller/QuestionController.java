@@ -32,6 +32,11 @@ public class QuestionController {
 	public ResponseEntity<?> fetchQuestionsContaining(@PathVariable String description, @PathVariable int categoryId) {
 		return ResponseEntity.ok(new ResponseDTO<>(questionService.fetchQuestionsContaining(description, categoryId)));
 	}
+	
+	@GetMapping("/recentlyask/{categoryId}")
+	public ResponseEntity<?> fetchRecentlyAskQuestion(@PathVariable int categoryId) {
+		return ResponseEntity.ok(new ResponseDTO<>(questionService.FetchfindByAskedOnAfter(categoryId)));
+	}
 
 	@PostMapping
 	public ResponseEntity<?> saveQuestion(@RequestBody Question q) {
