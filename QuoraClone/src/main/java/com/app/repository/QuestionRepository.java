@@ -1,5 +1,6 @@
 package com.app.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
 	List<Question> findByDescriptionContainingAndCategory(String description, Category c);
 	
 	List<Question> findByAskedBy(User u);
+	
+	List<Question> findByAskedOnAfterAndCategory(LocalDate askedAfter ,Category c);
 
 }
