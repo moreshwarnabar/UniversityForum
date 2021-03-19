@@ -19,7 +19,7 @@ export const authenticateUser = loginData => {
   return dispatch => {
     const { username, password } = loginData;
     axios
-      .get(`users/single/${username.value}/${password.value}`)
+      .get(`users/single/${username}/${password}`)
       .then(response => {
         const user = response.data.result;
         dispatch(loginUserSuccess(user));
