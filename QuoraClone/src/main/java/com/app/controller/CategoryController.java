@@ -25,8 +25,8 @@ public class CategoryController {
 	private ICategoryService catService;
 	
 	@GetMapping("/{role}")
-	public ResponseEntity<?> fetchCategoryTitles(@PathVariable("role") Role role) {		
-		return ResponseEntity.ok(new ResponseDTO<>(catService.fetchAllCategoryNames(role)));
+	public ResponseEntity<?> fetchCategories(@PathVariable("role") Role role) {		
+		return ResponseEntity.ok(new ResponseDTO<>(catService.fetchAllCategories(role)));
 	}
 	
 	@PostMapping

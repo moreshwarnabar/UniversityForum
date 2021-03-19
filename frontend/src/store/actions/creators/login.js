@@ -22,6 +22,7 @@ export const authenticateUser = loginData => {
       .get(`users/single/${username}/${password}`)
       .then(response => {
         const user = response.data.result;
+        console.log(user);
         dispatch(loginUserSuccess(user));
       })
       .catch(({ response }) => {

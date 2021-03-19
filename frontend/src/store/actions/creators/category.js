@@ -1,0 +1,26 @@
+import * as actionTypes from '../actionTypes';
+import axios from '../../../axios-base';
+
+const fetchCategoriesStart = () => ({
+  type: actionTypes.FETCH_CATEGORIES_START,
+});
+
+const fetchCategoriesFail = error => ({
+  type: actionTypes.FETCH_CATEGORIES_FAIL,
+  payload: error,
+});
+
+const fetchCategoriesSuccess = data => ({
+  type: actionTypes.FETCH_CATEGORIES_SUCCESS,
+  payload: data,
+});
+
+export const fetchCategories = data => {
+  return dispatch => {
+    dispatch(fetchCategoriesStart());
+    axios
+      .get(`category/${data}`)
+      .then(response => dispatch(fetchCategoriesSuccess(response.data.result)))
+      .catch(({ response }) => dispatch(fetchCategoriesFail(response.data)));
+  };
+};

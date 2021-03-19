@@ -17,6 +17,7 @@ const rootReducer = combineReducers({
   createCategory: reducers.categoryCreationReducer,
   listUsers: reducers.listUsersReducer,
   reportedAnswers: reducers.reportedAnswersReducer,
+  category: reducers.categoriesReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(thunk));

@@ -1,37 +1,30 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Category from '../../components/Category/Category';
 import Navbar from '../../components/UI/Navbar/Navbar';
-import axios from '../../axios-base';
+import { fetchCategories } from '../../store/actions/creators/category';
 
 class CategoryPage extends Component {
-  state = {
-    categories: [],
-  };
-
   componentDidMount() {
-    axios.get('category/STUDENT').then(response => {
-      this.setState({
-        categories: response.data.result,
-      });
-    });
-  }
+    if (!this.props.user || this.props.user.role === 'ADMIN') {
+      this.props.history.replace('/');
+      return;
+    }
 
-  componentWillUnmount() {
-    this.setState({
-      categories: [],
-    });
+    const role = this.props.user.role;
+    this.props.onPageLoad(role);
   }
 
   clickHandler = catName => {
-    console.log(this.state.categories);
+    console.log(this.props.categories);
   };
 
   render() {
-    const categoryList = this.state.categories.map(category => (
+    const categoryList = this.props.categories?.map(category => (
       <Category
-        key={category}
-        categoryName={category}
+        key={category.id}
+        categoryName={category.name}
         click={this.clickHandler}
       />
     ));
@@ -53,4 +46,13 @@ class CategoryPage extends Component {
   }
 }
 
-export default CategoryPage;
+const mapStateToProps = state => ({
+  ...state.category,
+  user: state.login.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onPageLoad: role => dispatch(fetchCategories(role)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryPage);

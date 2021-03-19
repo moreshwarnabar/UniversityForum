@@ -7,7 +7,7 @@ import com.app.pojos.Role;
 
 public interface ICategoryService {
 	
-	List<String> fetchAllCategoryNames(Role role);
+	List<Category> fetchAllCategories(Role role);
 	
 	Category createCategory(Category c);
 
