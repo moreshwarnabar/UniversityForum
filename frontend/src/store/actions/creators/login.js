@@ -1,5 +1,5 @@
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-base';
+import * as actionTypes from '../actionTypes';
+import axios from '../../../axios-base';
 
 const loginUserSuccess = user => {
   return {

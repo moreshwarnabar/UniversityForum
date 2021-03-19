@@ -3,7 +3,7 @@ import * as RB from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { logoutUser } from '../../../store/actions/actions';
+import { logoutUser } from '../../../store/actions/creators/login';
 
 const navbar = props => {
   // return (

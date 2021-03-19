@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import AnswersTable from './AnswersTable/AnswersTable';
 import Pagination from '../../UI/Pagination/Pagination';
 import ModalWindow from '../../UI/ModalWindow/ModalWindow';
-import * as actions from '../../../store/actions/reportedAnswers';
+import * as actions from '../../../store/actions/creators/reportedAnswers';
 
 class ReportedAnswers extends Component {
   state = {

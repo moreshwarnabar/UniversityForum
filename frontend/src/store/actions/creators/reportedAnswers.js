@@ -1,5 +1,5 @@
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-base';
+import * as actionTypes from '../actionTypes';
+import axios from '../../../axios-base';
 
 const fetchReportsStart = () => ({
   type: actionTypes.FETCH_REPORTS_START,

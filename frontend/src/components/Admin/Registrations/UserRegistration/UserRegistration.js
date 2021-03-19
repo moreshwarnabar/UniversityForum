@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import RegistrationForm from './RegistrationForm/RegistrationForm';
-import * as userActions from '../../../../store/actions/actions';
+import * as userActions from '../../../../store/actions/creators/userRegistrations';
 import * as formConfigs from '../../../../config/formConfigs';
 
 class UserRegistration extends Component {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import CategoryForm from './CategoryForm/CategoryForm';
-import * as categoryActions from '../../../../store/actions/actions';
+import * as categoryActions from '../../../../store/actions/creators/createCategory';
 import * as formConfigs from '../../../../config/formConfigs';
 
 class CreateCategory extends Component {

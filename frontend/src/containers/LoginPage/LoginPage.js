@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import styles from './LoginPage.module.css';
 import logo from '../../resources/images/logo.png';
 import Login from '../../components/Login/Login';
-import * as actions from '../../store/actions/actions';
+import * as actions from '../../store/actions/creators/login';
 import * as formConfigs from '../../config/formConfigs';
 
 class LoginPage extends Component {

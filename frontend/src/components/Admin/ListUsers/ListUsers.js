@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import UsersTable from './UsersTable/UsersTable';
 import Pagination from '../../UI/Pagination/Pagination';
-import * as actions from '../../../store/actions/listUsers';
+import * as actions from '../../../store/actions/creators/listUsers';
 
 class ListUsers extends Component {
   state = {
