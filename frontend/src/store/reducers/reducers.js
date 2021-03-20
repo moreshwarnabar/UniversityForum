@@ -4,3 +4,4 @@ export { categoryCreationReducer } from './createCategory';
 export { listUsersReducer } from './listUsers';
 export { reportedAnswersReducer } from './reportedAnsers';
 export { categoriesReducer } from './category';
+export { questionsReducer } from './questions';

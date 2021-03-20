@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 class RecentlyAsked extends React.Component {
   state = {
@@ -52,4 +53,4 @@ class RecentlyAsked extends React.Component {
   }
 }
 
-export default RecentlyAsked;
+export default connect()(RecentlyAsked);
