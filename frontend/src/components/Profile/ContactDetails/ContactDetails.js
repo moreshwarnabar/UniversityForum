@@ -48,13 +48,13 @@ class ContactDetails extends Component{
     }
 
     validate = () =>{
-        if(this.state.contactFormDetails.phoneNo.trim().length != 10){
+        if(this.state.contactFormDetails.phoneNo.trim().length !== 10){
             this.setState({error : {
                 phoneNo : "Mobile No. must contain 10 digit"
             }
         })
         }
-        else  if(this.state.contactFormDetails.pinCode.trim().length != 6){
+        else  if(this.state.contactFormDetails.pinCode.trim().length !== 6){
             this.setState({error : {pinCode : "pincode must contain 6 digit"}})
           }
         else
@@ -91,7 +91,7 @@ class ContactDetails extends Component{
         if(this.state.contactDetails != null){
             return(
 
-        <div className="card-body shadow-lg p-3 mb-5 bg-white rounded">       
+        <div className="card-body-profile shadow-lg p-3 mb-5 bg-white rounded">       
            <div>{this.initialContactDetails}</div>
 
                     <EditContactDetails  {...this.state.contactFormDetails}
