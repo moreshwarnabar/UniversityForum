@@ -18,6 +18,7 @@ class CategoryPage extends Component {
 
   clickHandler = catName => {
     console.log(this.props.categories);
+    this.props.history.push(`/categories/${catName}`);
   };
 
   render() {

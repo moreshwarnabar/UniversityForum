@@ -20,7 +20,10 @@ const category = ({ categoryName, click }) => (
     className="col-4 d-flex justify-content-center"
     style={{ height: '150px' }}
   >
-    <button className="btn btn-lg btn-primary btn-block" onClick={click}>
+    <button
+      className="btn btn-lg btn-primary btn-block"
+      onClick={() => click(categoryName)}
+    >
       {categoryName}
     </button>
   </div>
