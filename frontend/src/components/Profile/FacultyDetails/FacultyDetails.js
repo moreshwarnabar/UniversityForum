@@ -97,7 +97,7 @@ class FacultyDetails extends Component{
         if(this.state.facultyDetails != null){
             return(
             
-                <div className="card-body shadow-lg p-3 mb-5 bg-white rounded">
+                <div className="card-body-profile shadow-lg p-3 mb-5 bg-white rounded">
                     {this.state.showFacultyDetailsForm ? 
                     <EditFacultyDetails  {...this.state.facultyFormDetails}
                     error={this.state.error}

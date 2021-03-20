@@ -88,7 +88,7 @@ class StudentDetails extends Component{
     render(){
         if(this.state.studentDetails != null){
             return(
-            <div className="card-body shadow-lg p-3 mb-5 bg-white rounded">
+            <div className="card-body-profile shadow-lg p-3 mb-5 bg-white rounded">
 
                         <div className="row ml-4 justify-content-between">
                             <h5 className=" ml-3">Student Details :</h5>
