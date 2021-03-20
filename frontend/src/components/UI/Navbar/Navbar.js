@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as RB from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -55,7 +55,6 @@ const navbar = props => {
   //     </div>
   //   </nav>
   // );
-
   return (
     <RB.Navbar
       collapseOnSelect
@@ -147,4 +146,4 @@ const mapDispatchToProps = dispatch => ({
   onLogout: () => dispatch(logoutUser()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(navbar);
+export default memo(connect(mapStateToProps, mapDispatchToProps)(navbar));
