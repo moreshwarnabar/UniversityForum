@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
-import RecentlyAsked from '../../components/Questions/RecentlyAsked';
+// import RecentlyAsked from '../../components/Questions/RecentlyAsked';
+import * as actions from '../../store/actions/creators/questions';
+import Navbar from '../../components/UI/Navbar/Navbar';
 
 class QuestionsPage extends Component {
   state = {
@@ -13,21 +14,12 @@ class QuestionsPage extends Component {
     searchRelatedQue: [],
     postQuestion: '',
     resetButton: '',
+    showSearchQuestions: false,
   };
 
   componentDidMount() {
     const id = this.props.categoryId;
-    console.log(id);
-    axios
-      .get(`http://localhost:8080/forum/questions/all/${id}`)
-      .then(response => {
-        console.log(response);
-        this.setState({
-          questions: response.data.result,
-          isLoaded: true,
-        });
-      });
-    console.log(this.state.questions);
+    this.props.onPageLoad(id);
   }
 
   handleClick() {
@@ -38,24 +30,15 @@ class QuestionsPage extends Component {
     this.setState({
       searchQuestion: event.target.value,
     });
-    console.log(this.state.searchQuestion);
   };
 
   searchQuestionSubmitHandler = event => {
     event.preventDefault();
     const id = this.props.categoryId;
-    axios
-      .get(
-        `http://localhost:8080/forum/questions/filter/${this.state.searchQuestion}/${id}`
-      )
-      .then(response => {
-        console.log(response);
-        this.setState({
-          searchRelatedQue: response.data.result,
-          isLoaded: true,
-        });
-      });
-    console.log(this.state.searchRelatedQue);
+    const data = { id, search: this.state.searchQuestion };
+
+    this.props.onSearch(data);
+    this.setState({ showSearchQuestions: true });
   };
 
   postQuestionChangeHandler = event => {
@@ -67,178 +50,188 @@ class QuestionsPage extends Component {
 
   postQuestionSubmitHandler = event => {
     event.preventDefault();
-    console.log('Submit button click');
-    const questionRelatedData = {
+    const data = {
       description: this.state.postQuestion,
-      askedBy: {
-        id: 2,
-      },
+      askedBy: this.props.user,
       category: {
         id: this.props.categoryId,
       },
     };
-    axios
-      .post('http://localhost:8080/forum/questions', questionRelatedData)
-      .then(response => {
-        console.log(response);
-        this.setState({ postQuestion: '' });
-      });
+
+    this.props.onPost(data);
+    this.setState({ postQuestion: '' });
   };
 
   resetSubmitHandler = event => {
-    this.setState({ searchRelatedQue: '' });
+    this.setState({ showSearchQuestions: false });
   };
 
   render() {
-    const { isLoaded, questions, searchRelatedQue } = this.state;
+    const { isFetching, questions, searchQuestions } = this.props;
 
-    if (!isLoaded) {
-      return <div>Loading...</div>;
-    } else {
-      return (
-        <div>
-          <br />
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-sm-4 ">
-                <div className="form-group card">
+    return (
+      <React.Fragment>
+        <Navbar />
+
+        {isFetching ? (
+          <div>Loading...</div>
+        ) : (
+          <div>
+            <br />
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-sm-4 ">
+                  {/* <div className="form-group card">
                   <div className=" card-header">
                     <label>Recently ask Question</label>
                   </div>
                   <RecentlyAsked categoryId={this.props.categoryId} />
+                </div> */}
+
+                  <div className="form-group card">
+                    <div className="card-header">
+                      <label>UnAnswered Question</label>
+                    </div>
+                    {questions
+                      .filter(item => !item.answered)
+                      .map(item => {
+                        return (
+                          <div
+                            key={item.id}
+                            className=" list-group-item"
+                            onClick={this.handleClick}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <h6 className="card-text">{item.description}</h6>
+                            <footer className="blockquote-footer text-right">
+                              {item.askedBy.firstName} {item.askedBy.lastName}
+                            </footer>
+                          </div>
+                        );
+                      })}
+                  </div>
                 </div>
 
-                <div className="form-group card">
-                  <div className="card-header">
-                    <label>UnAnswered Question</label>
-                  </div>
-                  {questions
-                    .filter(item => !item.answered)
-                    .map(item => {
-                      return (
-                        <div key={item.id} className=" list-group-item">
-                          <h6 className="card-text" onClick={this.handleClick}>
-                            {' '}
-                            {item.description} {item.id.answered}
-                          </h6>
-                          <footer className="blockquote-footer text-right">
-                            {item.askedBy.firstName} {item.askedBy.lastName}
-                          </footer>
-                        </div>
-                      );
-                    })}
-                </div>
-              </div>
-
-              <div className="col-sm-8">
-                <form className=" card card-body">
-                  <div className="row">
-                    <input
-                      className="col-sm-10 form-control input-sm panel-body"
-                      id="search"
-                      type="text"
-                      value={this.state.searchQuestion}
-                      placeholder="Search a Question......"
-                      onChange={this.searchQuestionChangeHandler}
-                      name="postQue"
-                    />
-                    <button
-                      className="col-sm-2 btn btn-outline-success"
-                      onClick={this.searchQuestionSubmitHandler}
-                    >
-                      Search
-                    </button>
-                  </div>
-                </form>
-                <br></br>
-
-                <div className="form-group postQuestion card">
-                  <div className="card-header ">
-                    <label>Post a Question</label>
-                  </div>
-                  <div className=" card-body ">
+                <div className="col-sm-8">
+                  <form className=" card card-body">
                     <div className="row">
                       <input
                         className="col-sm-10 form-control input-sm panel-body"
-                        id="post"
+                        id="search"
                         type="text"
-                        placeholder="post a question...."
-                        value={this.state.postQuestion}
-                        onChange={this.postQuestionChangeHandler}
+                        value={this.state.searchQuestion}
+                        placeholder="Search a Question......"
+                        onChange={this.searchQuestionChangeHandler}
                         name="postQue"
                       />
                       <button
                         className="col-sm-2 btn btn-outline-success"
-                        onClick={this.postQuestionSubmitHandler}
+                        onClick={this.searchQuestionSubmitHandler}
                       >
-                        Submit
+                        Search
                       </button>
                     </div>
-                  </div>
-                </div>
+                  </form>
+                  <br></br>
 
-                <div className="form-group questionAns card">
-                  <div>
-                    {searchRelatedQue.length ? (
-                      <div>
-                        <div className="card-header ">
-                          <label>Search Related Question</label>
-                          <button
-                            className="col-sm-2 btn btn-outline-success float-right"
-                            onClick={this.resetSubmitHandler}
-                          >
-                            Reset
-                          </button>
-                        </div>
-                        {searchRelatedQue.map(item => (
-                          <div key={item.id} className=" list-group-item">
-                            <h6
-                              className="card-text"
-                              onClick={this.handleClick}
-                            >
-                              {' '}
-                              {item.description} {item.id.answered}
-                            </h6>
-                            <footer className="blockquote-footer text-right">
-                              {item.askedBy.firstName} {item.askedBy.lastName}
-                            </footer>
-                          </div>
-                        ))}
+                  <div className="form-group postQuestion card">
+                    <div className="card-header ">
+                      <label>Post a Question</label>
+                    </div>
+                    <div className=" card-body ">
+                      <div className="row">
+                        <input
+                          className="col-sm-10 form-control input-sm panel-body"
+                          id="post"
+                          type="text"
+                          placeholder="post a question...."
+                          value={this.state.postQuestion}
+                          onChange={this.postQuestionChangeHandler}
+                          name="postQue"
+                        />
+                        <button
+                          className="col-sm-2 btn btn-outline-success"
+                          onClick={this.postQuestionSubmitHandler}
+                        >
+                          Submit
+                        </button>
                       </div>
-                    ) : (
-                      <div>
-                        <div className="card-header ">
-                          <label>Category Related Question</label>
-                        </div>
-                        {questions.map(item => (
-                          <div key={item.id} className=" list-group-item">
-                            <h6
-                              className="card-text"
-                              onClick={this.handleClick}
+                    </div>
+                  </div>
+
+                  <div className="form-group questionAns card">
+                    <div>
+                      {this.state.showSearchQuestions ? (
+                        <div>
+                          <div className="card-header ">
+                            <label>Search Related Question</label>
+                            <button
+                              className="col-sm-2 btn btn-outline-success float-right"
+                              onClick={this.resetSubmitHandler}
                             >
-                              {' '}
-                              {item.description} {item.id.answered}
-                            </h6>
-                            <footer className="blockquote-footer text-right">
-                              {item.askedBy.firstName} {item.askedBy.lastName}
-                            </footer>
+                              Reset
+                            </button>
                           </div>
-                        ))}
-                      </div>
-                    )}
+                          {searchQuestions.map(item => (
+                            <div
+                              key={item.id}
+                              className=" list-group-item"
+                              onClick={this.handleClick}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <h6 className="card-text">
+                                {item.description} {item.id.answered}
+                              </h6>
+                              <footer className="blockquote-footer text-right">
+                                {item.askedBy.firstName} {item.askedBy.lastName}
+                              </footer>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div>
+                          <div className="card-header ">
+                            <label>Category Related Question</label>
+                          </div>
+                          {this.props.questions.map(item => (
+                            <div
+                              key={item.id}
+                              className=" list-group-item"
+                              onClick={this.handleClick}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <h6 className="card-text">
+                                {item.description} {item.id.answered}
+                              </h6>
+                              <footer className="blockquote-footer text-right">
+                                {item.askedBy.firstName} {item.askedBy.lastName}
+                              </footer>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      );
-    }
+        )}
+      </React.Fragment>
+    );
   }
 }
 
 const mapStateToProps = state => ({
+  user: state.login.user,
   categoryId: state.category.selectedCategory,
+  ...state.questions,
 });
 
-export default connect(mapStateToProps)(QuestionsPage);
+const mapDispatchToProps = dispatch => ({
+  onPageLoad: id => dispatch(actions.fetchQuestions(id)),
+  onSearch: data => dispatch(actions.fetchSearch(data)),
+  onPost: data => dispatch(actions.postQuestion(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionsPage);

@@ -21,6 +21,7 @@ const rootReducer = combineReducers({
   listUsers: reducers.listUsersReducer,
   reportedAnswers: reducers.reportedAnswersReducer,
   category: reducers.categoriesReducer,
+  questions: reducers.questionsReducer,
 });
 
 const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
