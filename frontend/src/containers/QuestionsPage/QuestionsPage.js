@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 import RecentlyAsked from '../../components/Questions/RecentlyAsked';
@@ -15,13 +16,17 @@ class QuestionsPage extends Component {
   };
 
   componentDidMount() {
-    axios.get('http://localhost:8080/forum/questions/all/1').then(response => {
-      console.log(response);
-      this.setState({
-        questions: response.data.result,
-        isLoaded: true,
+    const id = this.props.categoryId;
+    console.log(id);
+    axios
+      .get(`http://localhost:8080/forum/questions/all/${id}`)
+      .then(response => {
+        console.log(response);
+        this.setState({
+          questions: response.data.result,
+          isLoaded: true,
+        });
       });
-    });
     console.log(this.state.questions);
   }
 
@@ -38,9 +43,10 @@ class QuestionsPage extends Component {
 
   searchQuestionSubmitHandler = event => {
     event.preventDefault();
+    const id = this.props.categoryId;
     axios
       .get(
-        `http://localhost:8080/forum/questions/filter/${this.state.searchQuestion}/1`
+        `http://localhost:8080/forum/questions/filter/${this.state.searchQuestion}/${id}`
       )
       .then(response => {
         console.log(response);
@@ -68,7 +74,7 @@ class QuestionsPage extends Component {
         id: 2,
       },
       category: {
-        id: 1,
+        id: this.props.categoryId,
       },
     };
     axios
@@ -99,7 +105,7 @@ class QuestionsPage extends Component {
                   <div className=" card-header">
                     <label>Recently ask Question</label>
                   </div>
-                  <RecentlyAsked />
+                  <RecentlyAsked categoryId={this.props.categoryId} />
                 </div>
 
                 <div className="form-group card">
@@ -231,4 +237,8 @@ class QuestionsPage extends Component {
   }
 }
 
-export default QuestionsPage;
+const mapStateToProps = state => ({
+  categoryId: state.category.selectedCategory,
+});
+
+export default connect(mapStateToProps)(QuestionsPage);
