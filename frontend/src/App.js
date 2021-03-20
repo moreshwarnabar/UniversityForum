@@ -6,20 +6,21 @@ import ProfilePage from './containers/ProfilePage/ProfilePage';
 import LoginPage from './containers/LoginPage/LoginPage';
 import CategoryPage from './containers/CategoryPage/CategoryPage';
 import AdminPage from './containers/AdminPage/AdminPage';
+import QuestionsPage from './containers/QuestionsPage/QuestionsPage';
 
 class App extends Component {
   render() {
     return (
       <div className="container-fluid px-0 App">
-        {/* <Switch>
+        <Switch>
           <Route path="/admin" component={AdminPage} />
-          <Route path="/categories" component={CategoryPage} />
           <Route path="/profile" component={ProfilePage} />
+          <Route path="/categories/:name" component={QuestionsPage} />
+          <Route path="/categories" component={CategoryPage} />
           <Route path="/" component={LoginPage} />
-        </Switch> */}
-
-        <ProfilePage />
-        
+        </Switch>
+        {/* <QuestionsPage /> */}
+        {/* <CategoryPage /> */}
       </div>
     );
   }

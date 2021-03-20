@@ -1,50 +1,47 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Category from '../../components/Category/Category';
 import Navbar from '../../components/UI/Navbar/Navbar';
-import axios from '../../axios-base';
+import * as actions from '../../store/actions/creators/category';
 
 class CategoryPage extends Component {
-  state = {
-    categories: [],
-  };
-
   componentDidMount() {
-    axios.get('category/STUDENT').then(response => {
-      this.setState({
-        categories: response.data.result,
-      });
-    });
+    if (!this.props.user || this.props.user.role === 'ADMIN') {
+      this.props.history.replace('/');
+      return;
+    }
+
+    const role = this.props.user.role;
+    this.props.onPageLoad(role);
   }
 
-  componentWillUnmount() {
-    this.setState({
-      categories: [],
-    });
-  }
-
-  clickHandler = catName => {
-    alert(`${catName} clicked`);
+  clickHandler = (event, catName) => {
+    const categoryId = event.target.dataset.id;
+    this.props.onSelectCategory(categoryId);
+    this.props.history.push(`/categories/${catName}`);
   };
 
   render() {
-    const categoryList = this.state.categories.map(category => (
+    const categoryList = this.props.categories?.map(category => (
       <Category
-        key={category}
-        categoryName={category}
+        key={category.id}
+        categoryName={category.name}
         click={this.clickHandler}
+        id={category.id}
       />
     ));
 
     return (
       <React.Fragment>
         <Navbar />
-        <div className="container bg-light">
-          <h3 className="shadow p-3 mb-5 bg-white rounded text-center text-secondary">
+        <div className="container min-vh-100 bg-light d-flex flex-column justify-content-center">
+          <h3 className="p-3 my-3 bg-white text-center text-secondary text-uppercase">
             Choose from the below categories
           </h3>
-          <div className="row-shadow p-3 mb-5 bg-white rounded text-center text-secondary align-center">
-            <div className="col">{categoryList}</div>
+
+          <div className="col d-flex flex-wrap align-items-center">
+            {categoryList}
           </div>
         </div>
       </React.Fragment>
@@ -52,4 +49,14 @@ class CategoryPage extends Component {
   }
 }
 
-export default CategoryPage;
+const mapStateToProps = state => ({
+  ...state.category,
+  user: state.login.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onPageLoad: role => dispatch(actions.fetchCategories(role)),
+  onSelectCategory: categoryId => dispatch(actions.selectCategory(categoryId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryPage);

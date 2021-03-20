@@ -18,7 +18,6 @@ export const userLoginReducer = (state = initialState, action) => {
       return { user: null, error: null, isLoggedIn: false };
 
     default:
-      console.log('in default');
       return state;
   }
 };

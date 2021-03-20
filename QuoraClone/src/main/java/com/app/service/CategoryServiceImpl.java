@@ -21,11 +21,11 @@ public class CategoryServiceImpl implements ICategoryService {
 	private CategoryRepository catRepo;
 	
 	@Override
-	public List<String> fetchAllCategoryNames(Role role) {
+	public List<Category> fetchAllCategories(Role role) {
 		if (role == Role.valueOf("FACULTY")) 
-			return catRepo.fetchAllNamesForRole(true);
+			return catRepo.findByFacultyAccess(true);
 
-		return catRepo.fetchAllNames();
+		return catRepo.findAll();
 	}
 
 	@Override

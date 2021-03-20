@@ -7,7 +7,7 @@ import Registrations from '../../components/Admin/Registrations/Registrations';
 import ListUsers from '../../components/Admin/ListUsers/ListUsers';
 import ReportedAnswers from '../../components/Admin/ReportedAnswers/ReportedAnswers';
 import Links from '../../components/UI/Links/Links';
-import { logoutUser } from '../../store/actions/actions';
+import { logoutUser } from '../../store/actions/creators/login';
 
 class AdminPage extends Component {
   state = {
