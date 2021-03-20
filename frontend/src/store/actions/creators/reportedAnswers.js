@@ -21,7 +21,7 @@ export const fetchReports = () => {
     axios
       .get('answers/reports')
       .then(response => dispatch(fetchReportsSuccess(response.data.result)))
-      .catch(({ response }) => dispatch(fetchReportsFail(response.data)));
+      .catch(error => dispatch(fetchReportsFail(error.response)));
   };
 };
 

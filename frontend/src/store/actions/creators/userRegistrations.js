@@ -31,9 +31,8 @@ export const userRegistration = data => {
       .then(response => {
         dispatch(userRegistrationSuccess());
       })
-      .catch(({ response }) => {
-        console.log(response);
-        dispatch(userRegistrationFail(response.data.errorDetails));
+      .catch(error => {
+        dispatch(userRegistrationFail(error.response));
       });
   };
 };

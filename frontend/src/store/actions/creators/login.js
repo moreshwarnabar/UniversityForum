@@ -24,8 +24,8 @@ export const authenticateUser = loginData => {
         const user = response.data.result;
         dispatch(loginUserSuccess(user));
       })
-      .catch(({ response }) => {
-        dispatch(loginUserFail(response.data.errorDetails));
+      .catch(error => {
+        dispatch(loginUserFail(error.response));
       });
   };
 };

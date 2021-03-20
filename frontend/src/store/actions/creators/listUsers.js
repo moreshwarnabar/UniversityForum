@@ -21,7 +21,7 @@ export const fetchAllUsers = () => {
     axios
       .get('users/all')
       .then(response => dispatch(fetchUsersSuccess(response.data.result)))
-      .catch(({ response }) => dispatch(fetchUsersFail(response.data)));
+      .catch(error => dispatch(fetchUsersFail(error.response)));
   };
 };
 
@@ -31,7 +31,7 @@ export const fetchFilteredUsers = search => {
     axios
       .get(`users${search === '' ? '/all' : `/filters?${search}`}`)
       .then(response => dispatch(fetchUsersSuccess(response.data.result)))
-      .catch(({ response }) => dispatch(fetchUsersFail(response.data)));
+      .catch(error => dispatch(fetchUsersFail(error.response)));
   };
 };
 

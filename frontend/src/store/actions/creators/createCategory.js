@@ -31,9 +31,8 @@ export const categoryCreation = data => {
       .then(response => {
         dispatch(categoryCreationSuccess());
       })
-      .catch(({ response }) => {
-        console.log(response);
-        dispatch(categoryCreationFail(response.data.errorDetails));
+      .catch(error => {
+        dispatch(categoryCreationFail(error.response));
       });
   };
 };
