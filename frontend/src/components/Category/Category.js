@@ -17,7 +17,7 @@ const category = ({ categoryName, click }) => (
   //   </Card>
   // </div>
   <div
-    className="col-4 d-flex justify-content-center"
+    className="col-4 my-2 d-flex justify-content-center"
     style={{ height: '150px' }}
   >
     <button
