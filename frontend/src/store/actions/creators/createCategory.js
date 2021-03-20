@@ -1,5 +1,5 @@
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-base';
+import * as actionTypes from '../actionTypes';
+import axios from '../../../axios-base';
 
 const categoryCreationStart = () => ({
   type: actionTypes.CATEGORY_CREATION_START,

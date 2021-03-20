@@ -1,18 +1,19 @@
-export const initPagination = (users, pagination) => {
-  const { current, per } = pagination;
+export const initPagination = (data, pagination) => {
+  let { current, per } = pagination;
 
-  const last = users.length / per;
-  const toDisplay = pageContentSlicer(users, current, per);
+  const last = Math.ceil(data.length / per);
+  current = last < current ? last : current;
+  const toDisplay = pageContentSlicer(data, current, per);
 
   return {
     toDisplay,
-    pagination: { ...pagination, last },
+    pagination: { ...pagination, last, current },
   };
 };
 
-export const pageContentSlicer = (users, page, per) => {
+export const pageContentSlicer = (data, page, per) => {
   const start = per * (page - 1);
   const end = per * page;
 
-  return users.slice(start, end);
+  return data.slice(start, end);
 };

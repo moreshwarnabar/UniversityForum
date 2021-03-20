@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import UsersTable from './UsersTable/UsersTable';
 import Pagination from '../../UI/Pagination/Pagination';
-import * as actions from '../../../store/actions/listUsers';
+import * as actions from '../../../store/actions/creators/listUsers';
 
 class ListUsers extends Component {
   state = {
@@ -121,7 +121,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onFetchAll: () => dispatch(actions.fetchAllUsers()),
   onFilteredFetch: search => dispatch(actions.fetchFilteredUsers(search)),
-  onPageChange: page => dispatch(actions.changePage(page)),
+  onPageChange: page => dispatch(actions.changeUsersPage(page)),
   onBlockUnblockUser: user => dispatch(actions.aysncBlockUnblockUser(user)),
 });
 

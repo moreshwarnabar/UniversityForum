@@ -25,7 +25,6 @@ export const userRegistrationReducer = (state = initialState, action) => {
       return { ...state, isSuccess: true, isRegisteringUser: false };
 
     default:
-      console.log('in registrations default');
       return state;
   }
 };
