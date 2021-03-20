@@ -22,7 +22,6 @@ export const questionsReducer = (state = initialState, action) => {
       return { ...state, isFetching: false, error: action.payload };
 
     case actionTypes.FETCH_SEARCH_SUCCESS:
-      console.log(state.questions);
       return {
         ...state,
         searchQuestions: action.payload,

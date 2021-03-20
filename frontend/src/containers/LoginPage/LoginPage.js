@@ -49,7 +49,7 @@ class LoginPage extends Component {
     this.props.userLogin(data);
   };
 
-  componentDidUpdate() {
+  componentDidMount() {
     if (this.props.isLoggedIn) {
       const nextPath =
         this.props.user.role === 'ADMIN' ? 'admin' : 'categories';

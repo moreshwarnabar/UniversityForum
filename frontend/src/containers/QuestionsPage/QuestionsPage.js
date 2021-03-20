@@ -4,22 +4,36 @@ import { connect } from 'react-redux';
 // import RecentlyAsked from '../../components/Questions/RecentlyAsked';
 import * as actions from '../../store/actions/creators/questions';
 import Navbar from '../../components/UI/Navbar/Navbar';
+import UnansweredQuestions from '../../components/Questions/UnansweredQuestion';
+import SearchQuestion from '../../components/Questions/QuestionsForms/SearchQuestion';
+import PostQuestion from '../../components/Questions/QuestionsForms/PostQuestion';
+import DisplayQuestions from '../../components/Questions/DisplayQuestions/DisplayQuestions';
 
 class QuestionsPage extends Component {
   state = {
-    isLoaded: false,
-    questions: [],
-    error: null,
     searchQuestion: '',
-    searchRelatedQue: [],
     postQuestion: '',
-    resetButton: '',
     showSearchQuestions: false,
+    searchError: false,
+    postError: false,
   };
 
   componentDidMount() {
     const id = this.props.categoryId;
+    console.log(id);
     this.props.onPageLoad(id);
+  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return this.props.categoryId !== nextProps.categoryId;
+  // }
+
+  componentDidUpdate() {
+    const { categoryId, questions, onPageLoad, isFetching } = this.props;
+    const id = +categoryId;
+    if (questions.length && questions[0].category.id !== id && !isFetching) {
+      onPageLoad(id);
+    }
   }
 
   handleClick() {
@@ -34,11 +48,16 @@ class QuestionsPage extends Component {
 
   searchQuestionSubmitHandler = event => {
     event.preventDefault();
+    if (!this.state.searchQuestion.trim().length) {
+      this.setState({ searchError: true });
+      return;
+    }
+
     const id = this.props.categoryId;
     const data = { id, search: this.state.searchQuestion };
 
     this.props.onSearch(data);
-    this.setState({ showSearchQuestions: true });
+    this.setState({ showSearchQuestions: true, searchError: false });
   };
 
   postQuestionChangeHandler = event => {
@@ -50,6 +69,12 @@ class QuestionsPage extends Component {
 
   postQuestionSubmitHandler = event => {
     event.preventDefault();
+
+    if (!this.state.postQuestion.trim().length) {
+      this.setState({ postError: true });
+      return;
+    }
+
     const data = {
       description: this.state.postQuestion,
       askedBy: this.props.user,
@@ -59,164 +84,172 @@ class QuestionsPage extends Component {
     };
 
     this.props.onPost(data);
-    this.setState({ postQuestion: '' });
+    this.setState({ postQuestion: '', postError: false });
   };
 
   resetSubmitHandler = event => {
+    event.preventDefault();
     this.setState({ showSearchQuestions: false });
   };
 
   render() {
     const { isFetching, questions, searchQuestions } = this.props;
+    console.log('questions render');
 
     return (
       <React.Fragment>
         <Navbar />
 
-        {isFetching ? (
-          <div>Loading...</div>
-        ) : (
-          <div>
-            <br />
-            <div className="container-fluid">
-              <div className="row">
-                <div className="col-sm-4 ">
-                  {/* <div className="form-group card">
+        <div className="container pt-3 bg-light min-vh-100">
+          <div className="row" style={{ minHeight: '400px' }}>
+            <div className="col-lg-4 ">
+              {/* <div className="form-group card">
                   <div className=" card-header">
                     <label>Recently ask Question</label>
                   </div>
                   <RecentlyAsked categoryId={this.props.categoryId} />
                 </div> */}
+              {isFetching ? (
+                <div>Loading...</div>
+              ) : (
+                <UnansweredQuestions
+                  questions={questions}
+                  clicked={this.handleClick}
+                />
+              )}
+            </div>
 
-                  <div className="form-group card">
-                    <div className="card-header">
-                      <label>UnAnswered Question</label>
+            <div
+              className="col-lg-8 d-flex flex-wrap align-items-center"
+              style={{ height: '375px' }}
+            >
+              {/* <form className="card card-body mb-3">
+                  <div className="form-group">
+                    <input
+                      className="form-control"
+                      id="search"
+                      type="text"
+                      value={this.state.searchQuestion}
+                      placeholder="Search a Question......"
+                      onChange={this.searchQuestionChangeHandler}
+                      name="postQue"
+                    />
+                  </div>
+                  <button
+                    className="col-sm-2 btn btn-outline-success align-self-end"
+                    onClick={this.searchQuestionSubmitHandler}
+                  >
+                    Search
+                  </button>
+                </form>
+
+                <div className="form-group card">
+                  <div className="card-header ">
+                    <h5>Post a Question</h5>
+                  </div>
+                  <div className="card-body d-flex flex-column">
+                    <div className="form-group">
+                      <input
+                        className="form-control"
+                        id="post"
+                        type="text"
+                        placeholder="post a question...."
+                        value={this.state.postQuestion}
+                        onChange={this.postQuestionChangeHandler}
+                        name="postQue"
+                      />
                     </div>
-                    {questions
-                      .filter(item => !item.answered)
-                      .map(item => {
-                        return (
+                    <button
+                      className="col-sm-2 btn btn-outline-success align-self-end"
+                      onClick={this.postQuestionSubmitHandler}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </div> */}
+              <SearchQuestion
+                searchQuestion={this.state.searchQuestion}
+                searchChange={this.searchQuestionChangeHandler}
+                searchSubmit={this.searchQuestionSubmitHandler}
+                error={this.state.searchError}
+              />
+              <PostQuestion
+                postQuestion={this.state.postQuestion}
+                postChange={this.postQuestionChangeHandler}
+                postSubmit={this.postQuestionSubmitHandler}
+                error={this.state.postError}
+              />
+            </div>
+          </div>
+          {isFetching ? (
+            <div>Loading...</div>
+          ) : (
+            <div className="row">
+              <DisplayQuestions
+                search={searchQuestions}
+                category={questions}
+                showSearch={this.state.showSearchQuestions}
+                click={this.handleClick}
+                reset={this.resetSubmitHandler}
+              />
+            </div>
+          )}
+          {/* <div className="container">
+                <div className="card mb-3">
+                  <div>
+                    {this.state.showSearchQuestions ? (
+                      <div>
+                        <div className="card-header ">
+                          <label>Search Related Question</label>
+                          <button
+                            className="col-sm-2 btn btn-outline-success float-right"
+                            onClick={this.resetSubmitHandler}
+                          >
+                            Reset
+                          </button>
+                        </div>
+                        {searchQuestions.map(item => (
                           <div
                             key={item.id}
                             className=" list-group-item"
                             onClick={this.handleClick}
                             style={{ cursor: 'pointer' }}
                           >
-                            <h6 className="card-text">{item.description}</h6>
+                            <h6 className="card-text">
+                              {item.description} {item.id.answered}
+                            </h6>
                             <footer className="blockquote-footer text-right">
                               {item.askedBy.firstName} {item.askedBy.lastName}
                             </footer>
                           </div>
-                        );
-                      })}
-                  </div>
-                </div>
-
-                <div className="col-sm-8">
-                  <form className=" card card-body">
-                    <div className="row">
-                      <input
-                        className="col-sm-10 form-control input-sm panel-body"
-                        id="search"
-                        type="text"
-                        value={this.state.searchQuestion}
-                        placeholder="Search a Question......"
-                        onChange={this.searchQuestionChangeHandler}
-                        name="postQue"
-                      />
-                      <button
-                        className="col-sm-2 btn btn-outline-success"
-                        onClick={this.searchQuestionSubmitHandler}
-                      >
-                        Search
-                      </button>
-                    </div>
-                  </form>
-                  <br></br>
-
-                  <div className="form-group postQuestion card">
-                    <div className="card-header ">
-                      <label>Post a Question</label>
-                    </div>
-                    <div className=" card-body ">
-                      <div className="row">
-                        <input
-                          className="col-sm-10 form-control input-sm panel-body"
-                          id="post"
-                          type="text"
-                          placeholder="post a question...."
-                          value={this.state.postQuestion}
-                          onChange={this.postQuestionChangeHandler}
-                          name="postQue"
-                        />
-                        <button
-                          className="col-sm-2 btn btn-outline-success"
-                          onClick={this.postQuestionSubmitHandler}
-                        >
-                          Submit
-                        </button>
+                        ))}
                       </div>
-                    </div>
-                  </div>
-
-                  <div className="form-group questionAns card">
-                    <div>
-                      {this.state.showSearchQuestions ? (
-                        <div>
-                          <div className="card-header ">
-                            <label>Search Related Question</label>
-                            <button
-                              className="col-sm-2 btn btn-outline-success float-right"
-                              onClick={this.resetSubmitHandler}
-                            >
-                              Reset
-                            </button>
-                          </div>
-                          {searchQuestions.map(item => (
-                            <div
-                              key={item.id}
-                              className=" list-group-item"
-                              onClick={this.handleClick}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <h6 className="card-text">
-                                {item.description} {item.id.answered}
-                              </h6>
-                              <footer className="blockquote-footer text-right">
-                                {item.askedBy.firstName} {item.askedBy.lastName}
-                              </footer>
-                            </div>
-                          ))}
+                    ) : (
+                      <div>
+                        <div className="card-header ">
+                          <label>Category Related Question</label>
                         </div>
-                      ) : (
-                        <div>
-                          <div className="card-header ">
-                            <label>Category Related Question</label>
+                        {this.props.questions.map(item => (
+                          <div
+                            key={item.id}
+                            className=" list-group-item"
+                            onClick={this.handleClick}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <h6 className="card-text">
+                              {item.description} {item.id.answered}
+                            </h6>
+                            <footer className="blockquote-footer text-right">
+                              {item.askedBy.firstName} {item.askedBy.lastName}
+                            </footer>
                           </div>
-                          {this.props.questions.map(item => (
-                            <div
-                              key={item.id}
-                              className=" list-group-item"
-                              onClick={this.handleClick}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <h6 className="card-text">
-                                {item.description} {item.id.answered}
-                              </h6>
-                              <footer className="blockquote-footer text-right">
-                                {item.askedBy.firstName} {item.askedBy.lastName}
-                              </footer>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              </div> */}
+        </div>
       </React.Fragment>
     );
   }

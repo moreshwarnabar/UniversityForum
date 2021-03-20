@@ -1,60 +1,14 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as RB from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { logoutUser } from '../../../store/actions/creators/login';
+import { selectCategory } from '../../../store/actions/creators/category';
+import * as actions from '../../../store/actions/creators/navbar';
 
 const navbar = props => {
-  // return (
-  //   <nav className="navbar navbar-default bg-dark">
-  //     <div className="container-fluid">
-  //       <div className="navbar-header">
-  //         <a href="abc">
-  //           University{' '}
-  //           <span className="glyphicon glyphicon-education w3-xxlarge "></span>
-  //           Forum{' '}
-  //         </a>
-  //       </div>
-
-  //       <ul className="nav navbar-nav">
-  //         <li>
-  //           {' '}
-  //           <a className="w3-xxlarge nav-item nav-link active" href="#home">
-  //             <span className="glyphicon glyphicon-home "></span>
-  //           </a>
-  //         </li>
-  //         <li className="category">
-  //           <h3>
-  //             <a href="abc" className="col-md-12 text-center">
-  //               <b>CATEGORY</b>
-  //             </a>
-  //           </h3>
-  //         </li>
-  //       </ul>
-
-  //       <ul className="nav navbar-nav navbar-right">
-  //         <li>
-  //           <form className="navbar-form ">
-  //             <div className="form-group col-md-100 text-center">
-  //               <input
-  //                 type="text"
-  //                 className="form-control"
-  //                 placeholder="Search..."
-  //                 name="search"
-  //               />
-  //             </div>
-  //           </form>
-  //         </li>
-  //         <li>
-  //           <a className="w3-xxlarge" href="abc">
-  //             <span className="glyphicon glyphicon-user"></span>{' '}
-  //           </a>
-  //         </li>
-  //       </ul>
-  //     </div>
-  //   </nav>
-  // );
+  console.log('render navbar');
 
   return (
     <RB.Navbar
@@ -64,7 +18,11 @@ const navbar = props => {
       variant="dark"
       animation="false"
     >
-      <RB.Navbar.Brand href="#home" style={{ marginRight: '32px' }}>
+      <RB.Navbar.Brand
+        className="text-uppercase"
+        href="#home"
+        style={{ marginRight: '32px' }}
+      >
         University Forum
       </RB.Navbar.Brand>
       <RB.Navbar.Toggle aria-controls="responsive-navbar-nav" />
@@ -76,26 +34,34 @@ const navbar = props => {
         }}
       >
         {props.user?.role === 'ADMIN' ? null : (
-          <React.Fragment>
-            <RB.Form className="ml-lg-3" inline>
-              <RB.FormControl
-                type="text"
-                placeholder="Search"
-                className="form-control-sm mr-2 col-8 col-lg"
-              />
-              <RB.Button className="btn-sm" type="submit">
-                Submit
-              </RB.Button>
-            </RB.Form>
-
-            <RB.Nav className="mr-lg-5">
-              <RB.NavDropdown title="Category" id="collasible-nav-dropdown">
-                <RB.NavDropdown.Item href="#action/3.1">
-                  Action
-                </RB.NavDropdown.Item>
-              </RB.NavDropdown>
-            </RB.Nav>
-          </React.Fragment>
+          <RB.Nav className="mr-lg-5">
+            <RB.Dropdown
+              title="Category"
+              id="collasible-nav-dropdown"
+              show={props.show}
+              onToggle={props.onToggle}
+            >
+              <RB.Dropdown.Toggle variant="dark" id="dropdown-basic">
+                Category
+              </RB.Dropdown.Toggle>
+              <RB.Dropdown.Menu>
+                {props.categories?.map(({ id, name }) => (
+                  <NavLink
+                    to={`/categories/${name}`}
+                    className="dropdown-item"
+                    activeClassName="active"
+                    onClick={() => {
+                      props.onToggle();
+                      props.onSelectCategory(id);
+                    }}
+                    key={id}
+                  >
+                    {name}
+                  </NavLink>
+                ))}
+              </RB.Dropdown.Menu>
+            </RB.Dropdown>
+          </RB.Nav>
         )}
 
         <RB.Nav className="ml-lg-5">
@@ -141,10 +107,14 @@ const navbar = props => {
 
 const mapStateToProps = state => ({
   user: state.login.user,
+  categories: state.category.categories,
+  show: state.navbar.isOpen,
 });
 
 const mapDispatchToProps = dispatch => ({
   onLogout: () => dispatch(logoutUser()),
+  onSelectCategory: id => dispatch(selectCategory(id)),
+  onToggle: () => dispatch(actions.toggleDropdown()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(navbar);
