@@ -22,6 +22,7 @@ const rootReducer = combineReducers({
   reportedAnswers: reducers.reportedAnswersReducer,
   category: reducers.categoriesReducer,
   questions: reducers.questionsReducer,
+  navbar: reducers.navbarReducer,
 });
 
 const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));

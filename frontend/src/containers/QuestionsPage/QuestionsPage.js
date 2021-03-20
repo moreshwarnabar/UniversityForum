@@ -20,7 +20,20 @@ class QuestionsPage extends Component {
 
   componentDidMount() {
     const id = this.props.categoryId;
+    console.log(id);
     this.props.onPageLoad(id);
+  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return this.props.categoryId !== nextProps.categoryId;
+  // }
+
+  componentDidUpdate() {
+    const { categoryId, questions, onPageLoad, isFetching } = this.props;
+    const id = +categoryId;
+    if (questions.length && questions[0].category.id !== id && !isFetching) {
+      onPageLoad(id);
+    }
   }
 
   handleClick() {
@@ -81,12 +94,13 @@ class QuestionsPage extends Component {
 
   render() {
     const { isFetching, questions, searchQuestions } = this.props;
+    console.log('questions render');
 
     return (
       <React.Fragment>
         <Navbar />
 
-        <div className="container pt-3 bg-light">
+        <div className="container pt-3 bg-light min-vh-100">
           <div className="row" style={{ minHeight: '400px' }}>
             <div className="col-lg-4 ">
               {/* <div className="form-group card">
@@ -95,10 +109,14 @@ class QuestionsPage extends Component {
                   </div>
                   <RecentlyAsked categoryId={this.props.categoryId} />
                 </div> */}
-              <UnansweredQuestions
-                questions={questions}
-                clicked={this.handleClick}
-              />
+              {isFetching ? (
+                <div>Loading...</div>
+              ) : (
+                <UnansweredQuestions
+                  questions={questions}
+                  clicked={this.handleClick}
+                />
+              )}
             </div>
 
             <div

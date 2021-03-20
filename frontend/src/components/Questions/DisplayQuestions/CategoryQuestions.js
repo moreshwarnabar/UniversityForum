@@ -23,4 +23,4 @@ const categoryQuestions = props => (
   </div>
 );
 
-export default memo(categoryQuestions);
+export default categoryQuestions;
