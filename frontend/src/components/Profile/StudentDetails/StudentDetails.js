@@ -8,7 +8,14 @@ class StudentDetails extends Component{
 
     state = {
         studentDetails : null,
-        showStudentDetailsForm : false
+        showStudentDetailsForm : false,
+
+        studentFormData : null,
+
+        error : {
+            branch : "",
+            stream : ""
+        }
     }
 
     componentDidMount(){
@@ -17,18 +24,31 @@ class StudentDetails extends Component{
             (response) => {
                 console.log(response.data)
                 this.setState({
-                    studentDetails : response.data.result
+                    studentDetails : response.data.result,
+                    studentFormData : response.data.result
                 })
             }
         )
-        .catch(
-            (error) => {
-                console.log(error)
-                this.setState({
-                    erroMsg: "Error Something went Wrong"
-                })
-            }
-        )
+       
+    }
+
+    validate = () =>{
+        if(this.state.studentFormData.branch.trim().length < 3){
+            this.setState({error:{branch: "Invalid Branch"}})
+        }
+        else  if(this.state.studentFormData.stream.trim().length < 3){
+            this.setState({error:{stream: "Invalid Stream"}})
+          }
+        else{
+            this.setState({
+                error : {
+                branch : "",
+                stream : ""
+                }
+            })
+            return true
+        } 
+
     }
 
     showEditStudentDetailsForm = () => {
@@ -41,28 +61,31 @@ class StudentDetails extends Component{
 
     changeStudentDetailsHandler = (event) =>{
         const {name,value} = event.target
-        const updatedStudent = {...this.state.studentDetails, [name]:value}
+        const updatedStudent = {...this.state.studentFormData, [name]:value}
         this.setState({
-            studentDetails : updatedStudent   
+            studentFormData : updatedStudent   
         }) 
     }
 
     updateStudentDetails = (event) => {
-        console.log("clicked updateStudentDetails")
-        axios.put("http://localhost:8080/forum/students/", this.state.studentDetails)
-        .then(
-            (response) => {
-                console.log(response.data)
-                this.setState({
-                    showStudentDetailsForm : false
-                })
-            } 
-        )
+       
+
+        if(this.validate()){
+            console.log("clicked updateStudentDetails")
+            axios.put("http://localhost:8080/forum/students/", this.state.studentDetails)
+            .then(
+                (response) => {
+                    console.log(response.data)
+                    this.setState({
+                        showStudentDetailsForm : false
+                    })
+                } 
+            )
+        }
 
     }
 
     render(){
-        console.log(this.state.studentDetails)
         if(this.state.studentDetails != null){
             return(
             <div className="card-body shadow-lg p-3 mb-5 bg-white rounded">
@@ -100,7 +123,8 @@ class StudentDetails extends Component{
                    
                    { 
                    this.state.showStudentDetailsForm ?
-                    <EditStudentDetails  value={this.state}
+                    <EditStudentDetails  {...this.state.studentFormData}
+                    error = {this.state.error}
                     showStudentDetailsForm={this.state.showStudentDetailsForm}
                     showEditStudentDetailsForm={this.showEditStudentDetailsForm}
                     updateStudentDetails={this.updateStudentDetails}

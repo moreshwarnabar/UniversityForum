@@ -1,7 +1,7 @@
 import React from 'react';
 import ContactDetails from '../../components/Profile/ContactDetails/ContactDetails';
 import UserDetails from '../../components/Profile/UserDetails/UserDetails';
-//import StudentDetails from '../../components/Profile/StudentDetails/StudentDetails';
+import StudentDetails from '../../components/Profile/StudentDetails/StudentDetails';
 import FacultyDetails from '../../components/Profile/FacultyDetails/FacultyDetails';
 import Navbar from '../../components/UI/Navbar/Navbar';
 

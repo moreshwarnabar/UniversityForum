@@ -9,7 +9,15 @@ class FacultyDetails extends Component{
 
     state = {
         facultyDetails : null,
-        showFacultyDetailsForm : false
+        showFacultyDetailsForm : false,
+
+        facultyFormDetails : null,
+
+        error : {
+            department : "",
+            position : ""
+        }
+
     }
 
     componentDidMount(){
@@ -18,16 +26,8 @@ class FacultyDetails extends Component{
             (response) => {
                 console.log(response.data)
                 this.setState({
-                    facultyDetails : response.data.result
-                    
-                })
-            }
-        )
-        .catch(
-            (error) => {
-                console.log(error)
-                this.setState({
-                    erroMsg: "Error Something went Wrong"
+                    facultyDetails : response.data.result,
+                    facultyFormDetails : response.data.result
                 })
             }
         )
@@ -43,25 +43,53 @@ class FacultyDetails extends Component{
 
     changeFacultyDetailsHandler = (event) =>{
         const {name,value} = event.target
-        const updatedFaculty = {...this.state.facultyDetails, [name]:value}
+        const updatedFaculty = {...this.state.facultyFormDetails, [name]:value}
         this.setState({
-            facultyDetails : updatedFaculty   
+            facultyFormDetails : updatedFaculty   
         }) 
+    }
+
+    validate(){
+        if(this.state.facultyFormDetails.department.trim().length < 3){
+            this.setState({
+                error:{
+                    department : "Invalid Department"
+                }
+            })
+        }
+         else if(this.state.facultyFormDetails.position.trim().length < 3){
+            this.setState({
+                error:{
+                    position : "Invalid Position"
+                }
+            })
+         }
+         else{
+            this.setState({
+                error:{
+                    department : "",
+                    position : ""
+                }
+                
+            })
+            return true;
+        }
     }
 
     updateFacultyDetails = (event) => {
         console.log("clicked updateFacultyDetails")
-        
-        axios.put("http://localhost:8080/forum/faculty", this.state.facultyDetails)
-        .then(
-            (response) => {
-                console.log(response.data)
-                this.setState({
-                    showFacultyDetailsForm : false
-                })
-            } 
-        )
-
+        if(this.validate()){
+            axios.put("http://localhost:8080/forum/faculty", this.state.facultyFormDetails)
+            .then(
+                (response) => {
+                    console.log(response.data)
+                    this.setState({
+                        showFacultyDetailsForm : false,
+                        facultyDetails : response.data.result
+                    })
+                } 
+            )
+        }
     }
 
     render(){
@@ -71,7 +99,8 @@ class FacultyDetails extends Component{
             
                 <div className="card-body shadow-lg p-3 mb-5 bg-white rounded">
                     {this.state.showFacultyDetailsForm ? 
-                    <EditFacultyDetails  value={this.state}
+                    <EditFacultyDetails  {...this.state.facultyFormDetails}
+                    error={this.state.error}
                     showFacultyDetailsForm={this.state.showFacultyDetailsForm}
                     showEditFacultyDetailsForm={this.showEditFacultyDetailsForm}
                     updateFacultyDetails={this.updateFacultyDetails}
