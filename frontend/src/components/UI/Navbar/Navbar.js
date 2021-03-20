@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import * as RB from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
