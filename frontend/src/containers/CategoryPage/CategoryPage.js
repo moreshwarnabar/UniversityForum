@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import Category from '../../components/Category/Category';
 import Navbar from '../../components/UI/Navbar/Navbar';
-import { fetchCategories } from '../../store/actions/creators/category';
+import * as actions from '../../store/actions/creators/category';
 
 class CategoryPage extends Component {
   componentDidMount() {
@@ -16,8 +16,9 @@ class CategoryPage extends Component {
     this.props.onPageLoad(role);
   }
 
-  clickHandler = catName => {
-    console.log(this.props.categories);
+  clickHandler = (event, catName) => {
+    const categoryId = event.target.dataset.id;
+    this.props.onSelectCategory(categoryId);
     this.props.history.push(`/categories/${catName}`);
   };
 
@@ -27,6 +28,7 @@ class CategoryPage extends Component {
         key={category.id}
         categoryName={category.name}
         click={this.clickHandler}
+        id={category.id}
       />
     ));
 
@@ -53,7 +55,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onPageLoad: role => dispatch(fetchCategories(role)),
+  onPageLoad: role => dispatch(actions.fetchCategories(role)),
+  onSelectCategory: categoryId => dispatch(actions.selectCategory(categoryId)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryPage);

@@ -21,6 +21,11 @@ export const fetchCategories = data => {
     axios
       .get(`category/${data}`)
       .then(response => dispatch(fetchCategoriesSuccess(response.data.result)))
-      .catch(({ response }) => dispatch(fetchCategoriesFail(response.data)));
+      .catch(error => dispatch(fetchCategoriesFail(error.response)));
   };
 };
+
+export const selectCategory = categoryId => ({
+  type: actionTypes.SELECT_CATEGORY,
+  payload: categoryId,
+});

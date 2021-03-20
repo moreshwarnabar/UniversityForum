@@ -10,7 +10,9 @@ class RecentlyAsked extends React.Component {
 
   componentDidMount() {
     axios
-      .get('http://localhost:8080/forum/questions/recentlyask/1')
+      .get(
+        `http://localhost:8080/forum/questions/recentlyask/${this.props.categoryId}`
+      )
 
       .then(response => {
         console.log(response);

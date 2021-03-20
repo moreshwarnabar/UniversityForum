@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   categories: null,
+  selectedCategory: null,
   isFetching: false,
   error: null,
 };
@@ -15,8 +16,10 @@ export const categoriesReducer = (state = initialState, action) => {
       return { ...state, isFetching: false, error: action.payload };
 
     case actionTypes.FETCH_CATEGORIES_SUCCESS:
-      console.log(action.payload);
       return { categories: action.payload, isFetching: false, error: null };
+
+    case actionTypes.SELECT_CATEGORY:
+      return { ...state, selectedCategory: action.payload };
 
     default:
       return state;
