@@ -28,7 +28,7 @@ public class QuestionServiceImpl implements IQuestionService {
 	public List<Question> fetchQuestionForCategory(int categoryId) {
 		Category c = catRepo.findById(categoryId)
 						.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
-		return questionRepo.findByCategory(c);
+		return questionRepo.findByCategoryOrderByAskedOnDesc(c);
 	}
 
 	@Override

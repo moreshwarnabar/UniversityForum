@@ -10,6 +10,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 import * as reducers from './store/reducers/reducers';
+import { loadState, saveState } from './store/localStorage';
+
+const persistedState = loadState();
 
 const rootReducer = combineReducers({
   login: reducers.userLoginReducer,
@@ -17,9 +20,15 @@ const rootReducer = combineReducers({
   createCategory: reducers.categoryCreationReducer,
   listUsers: reducers.listUsersReducer,
   reportedAnswers: reducers.reportedAnswersReducer,
+  category: reducers.categoriesReducer,
+  questions: reducers.questionsReducer,
 });
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
 
 ReactDOM.render(
   <React.StrictMode>

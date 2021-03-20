@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 class RecentlyAsked extends React.Component {
   state = {
@@ -10,7 +11,9 @@ class RecentlyAsked extends React.Component {
 
   componentDidMount() {
     axios
-      .get('http://localhost:8080/forum/questions/recentlyask/1')
+      .get(
+        `http://localhost:8080/forum/questions/recentlyask/${this.props.categoryId}`
+      )
 
       .then(response => {
         console.log(response);
@@ -50,4 +53,4 @@ class RecentlyAsked extends React.Component {
   }
 }
 
-export default RecentlyAsked;
+export default connect()(RecentlyAsked);

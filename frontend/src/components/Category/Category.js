@@ -1,6 +1,6 @@
 import React from 'react';
 
-const category = ({ categoryName, click }) => (
+const category = props => (
   // <div className="d-flex p-3 justify-content-around">
   //   <Card
   //     className="text-info bg-gradient-white"
@@ -17,11 +17,15 @@ const category = ({ categoryName, click }) => (
   //   </Card>
   // </div>
   <div
-    className="col-4 d-flex justify-content-center"
+    className="col-4 my-2 d-flex justify-content-center"
     style={{ height: '150px' }}
   >
-    <button className="btn btn-lg btn-primary btn-block" onClick={click}>
-      {categoryName}
+    <button
+      className="btn btn-lg btn-primary btn-block"
+      onClick={event => props.click(event, props.categoryName)}
+      data-id={props.id}
+    >
+      {props.categoryName}
     </button>
   </div>
 );

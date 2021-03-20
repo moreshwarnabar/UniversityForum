@@ -11,7 +11,7 @@ import com.app.pojos.User;
 
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
-	List<Question> findByCategory(Category c);
+	List<Question> findByCategoryOrderByAskedOnDesc(Category c);
 	
 	List<Question> findByDescriptionContainingAndCategory(String description, Category c);
 	

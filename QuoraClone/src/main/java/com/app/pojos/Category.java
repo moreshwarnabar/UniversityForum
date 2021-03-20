@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -28,10 +29,12 @@ public class Category extends BaseEntity {
 	private boolean facultyAccess;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Question> questions = new ArrayList<>();
 	
 	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST}, mappedBy = "categoriesSubscribed")
 	@JsonIgnoreProperties("categoriesSubscribed")
+	@JsonIgnore
 	private Set<User> subscribers = new HashSet<>();
 	
 	public Category() {
