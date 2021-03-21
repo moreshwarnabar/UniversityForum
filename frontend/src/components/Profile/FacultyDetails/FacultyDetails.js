@@ -19,13 +19,6 @@ class FacultyDetails extends Component {
   };
 
   componentDidMount() {
-    // axios.get('http://localhost:8080/forum/faculty/3').then(response => {
-    //   console.log(response.data);
-    //   this.setState({
-    //     facultyDetails: response.data.result,
-    //     facultyFormDetails: response.data.result,
-    //   });
-    // });
     const id = this.props.userId;
     this.props.onPageLoad(id);
   }
@@ -83,18 +76,6 @@ class FacultyDetails extends Component {
   updateFacultyDetails = event => {
     console.log('clicked updateFacultyDetails');
     if (this.validate()) {
-      //   axios
-      //     .put(
-      //       'http://localhost:8080/forum/faculty',
-      //       this.state.facultyFormDetails
-      //     )
-      //     .then(response => {
-      //       console.log(response.data);
-      //       this.setState({
-      //         showFacultyDetailsForm: false,
-      //         facultyDetails: response.data.result,
-      //       });
-      //     });
       const id = this.props.userId;
       const data = this.state.facultyFormDetails;
 
