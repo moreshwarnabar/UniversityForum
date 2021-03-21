@@ -24,3 +24,27 @@ export const updateUser = data => {
       .catch(error => dispatch(updateUserFail(error.response)));
   };
 };
+
+const updatePasswordStart = () => ({
+  type: actionTypes.UPDATE_PASSWORD_START,
+});
+
+const updatePasswordSuccess = data => ({
+  type: actionTypes.UPDATE_PASSWORD_SUCCESS,
+  payload: data,
+});
+
+const updatePasswordFail = error => ({
+  type: actionTypes.UPDATE_PASSWORD_FAIL,
+  payload: error,
+});
+
+export const updatePassword = (id, password) => {
+  return dispatch => {
+    dispatch(updatePasswordStart());
+    axios
+      .put(`users/password/${id}`, password)
+      .then(response => dispatch(updatePasswordSuccess(response.data.result)))
+      .catch(error => dispatch(updatePasswordFail(error.response)));
+  };
+};

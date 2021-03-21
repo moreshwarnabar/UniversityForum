@@ -7,7 +7,6 @@ const initialState = {
 export const navbarReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.TOGGLE_DROPDOWN:
-      console.log(state.isOpen);
       return { isOpen: !state.isOpen };
 
     default:

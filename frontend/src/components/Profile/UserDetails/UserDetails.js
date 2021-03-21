@@ -3,7 +3,6 @@ import { Button } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
 import { connect } from 'react-redux';
 
-import axios from 'axios';
 import '../Profile.css';
 import avatar7 from '../../../resources/images/avatar7.png';
 import EditUser from '../../Edit/EditUser/EditUser';
@@ -51,7 +50,7 @@ class UserDetails extends Component {
   validatePassword() {
     if (
       !(
-        this.state.password.trim().length > 6 &&
+        this.state.password.trim().length >= 4 &&
         this.state.password.trim().length < 15
       )
     ) {
@@ -78,22 +77,13 @@ class UserDetails extends Component {
       console.log('clicked update Password');
       console.log(this.state.password + ' == ' + this.state.reTypedPassword);
 
-      const userpass = {
+      const id = this.props.user.id;
+      const password = {
         password: this.state.password,
       };
 
-      axios
-        .put('http://localhost:8080/forum/users/password/1', userpass)
-        .then(response => {
-          console.log(response.data);
-          this.setState({
-            showUserDetailsForm: false,
-          });
-          this.setState({
-            showPasswordForm: false,
-            message: response.data.result,
-          });
-        });
+      this.props.onPassword(id, password);
+      this.setState({ showPasswordForm: false });
     }
   };
 
@@ -262,8 +252,11 @@ class UserDetails extends Component {
   }
 }
 
+const mapStateToProps = state => ({ ...state.userDetails });
+
 const mapDispatchToProps = dispatch => ({
   onUpdate: data => dispatch(actions.updateUser(data)),
+  onPassword: (id, password) => dispatch(actions.updatePassword(id, password)),
 });
 
-export default connect(null, mapDispatchToProps)(UserDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);

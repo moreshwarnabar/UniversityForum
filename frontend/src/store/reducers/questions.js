@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   questions: null,
   searchQuestions: null,
+  currentCategory: null,
   isFetching: true,
   error: null,
 };
@@ -16,7 +17,14 @@ export const questionsReducer = (state = initialState, action) => {
       return { ...state, isFetching: false, error: action.payload };
 
     case actionTypes.FETCH_QUESTIONS_SUCCESS:
-      return { questions: action.payload, isFetching: false, error: null };
+      const currentCategory = action.payload.id;
+      return {
+        ...state,
+        questions: action.payload.data,
+        currentCategory,
+        isFetching: false,
+        error: null,
+      };
 
     case actionTypes.FETCH_SEARCH_FAIL:
       return { ...state, isFetching: false, error: action.payload };

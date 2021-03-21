@@ -16,10 +16,12 @@ class CategoryPage extends Component {
     this.props.onPageLoad(role);
   }
 
-  clickHandler = (event, catName) => {
-    const categoryId = event.target.dataset.id;
-    this.props.onSelectCategory(categoryId);
-    this.props.history.push(`/categories/${catName}`);
+  clickHandler = event => {
+    const categoryId = +event.target.dataset.id;
+    const category = this.props.categories.find(cat => cat.id === categoryId);
+
+    this.props.onSelectCategory(category);
+    this.props.history.push(`/categories/${category.name}`);
   };
 
   render() {

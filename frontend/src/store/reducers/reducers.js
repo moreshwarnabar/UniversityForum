@@ -6,3 +6,4 @@ export { reportedAnswersReducer } from './reportedAnsers';
 export { categoriesReducer } from './category';
 export { questionsReducer } from './questions';
 export { navbarReducer } from './navbar';
+export { userDetailsReducer } from './profileReducers/userDetails';

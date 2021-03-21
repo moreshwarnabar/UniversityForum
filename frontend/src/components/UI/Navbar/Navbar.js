@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as RB from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -45,18 +45,18 @@ const navbar = props => {
                 Category
               </RB.Dropdown.Toggle>
               <RB.Dropdown.Menu>
-                {props.categories?.map(({ id, name }) => (
+                {props.categories?.map(cat => (
                   <NavLink
-                    to={`/categories/${name}`}
+                    to={`/categories/${cat.name}`}
                     className="dropdown-item"
                     activeClassName="active"
                     onClick={() => {
                       props.onToggle();
-                      props.onSelectCategory(id);
+                      props.onSelectCategory(cat);
                     }}
-                    key={id}
+                    key={cat.id}
                   >
-                    {name}
+                    {cat.name}
                   </NavLink>
                 ))}
               </RB.Dropdown.Menu>
