@@ -67,3 +67,8 @@ export const postQuestion = data => {
       .catch(error => dispatch(postQuestionFail(error.response)));
   };
 };
+
+export const selectQuestion = data => ({
+  type: actionTypes.SELECT_QUESTION,
+  payload: data,
+});

@@ -4,6 +4,7 @@ const initialState = {
   questions: [],
   searchQuestions: null,
   currentCategory: null,
+  selectedQuestion: null,
   isCatFetching: false,
   isSearchFetching: false,
   error: null,
@@ -46,6 +47,9 @@ export const questionsReducer = (state = initialState, action) => {
       console.log(action.payload);
       updatedQuestions.unshift(action.payload);
       return { ...state, isCatFetching: false, questions: updatedQuestions };
+
+    case actionTypes.SELECT_QUESTION:
+      return { ...state, selectedQuestion: action.payload };
 
     default:
       return state;

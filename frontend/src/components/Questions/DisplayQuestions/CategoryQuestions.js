@@ -17,9 +17,10 @@ const categoryQuestions = props => {
       {props.questions?.map(item => (
         <div
           key={item.id}
-          className=" list-group-item"
+          className="list-group-item"
           onClick={props.select}
           style={{ cursor: 'pointer' }}
+          data-id={item.id}
         >
           <h6 className="card-text">
             {item.description} {item.id.answered}

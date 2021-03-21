@@ -39,9 +39,15 @@ class QuestionsPage extends Component {
     this.setState({ showSearchQuestions: false });
   }
 
-  handleClick() {
-    alert('Answer Page');
-  }
+  handleClick = event => {
+    const questionId = +event.target.closest('.list-group-item').dataset.id;
+    const question = this.props.questions.find(que => que.id === questionId);
+    const url = this.props.match.url;
+
+    console.log(question);
+    this.props.onSelectQuestion(question);
+    this.props.history.push(`${url}/${question.description}`);
+  };
 
   searchQuestionChangeHandler = event => {
     this.setState({
@@ -179,6 +185,7 @@ const mapDispatchToProps = dispatch => ({
   onPageLoad: id => dispatch(actions.fetchQuestions(id)),
   onSearch: data => dispatch(actions.fetchSearch(data)),
   onPost: data => dispatch(actions.postQuestion(data)),
+  onSelectQuestion: data => dispatch(actions.selectQuestion(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(QuestionsPage);

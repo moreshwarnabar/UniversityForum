@@ -58,9 +58,10 @@ class UnansweredQuestions extends Component {
             return (
               <div
                 key={item.id}
-                className=" list-group-item"
+                className="list-group-item"
                 onClick={this.props.clicked}
                 style={{ cursor: 'pointer' }}
+                data-id={item.id}
               >
                 <p className="card-text mb-0">{item.description}</p>
                 <footer className="blockquote-footer text-right">
