@@ -38,7 +38,7 @@ public class ContactDetailsController {
 	}
 
 	// get all contact details
-	@GetMapping("/")
+	@GetMapping
 	public ResponseEntity<?> fetchAllContactDetails() {
 		List<ContactDetails> contacts = contactDetailsService.fetchAllContactDetails();
 		
@@ -51,7 +51,7 @@ public class ContactDetailsController {
 		return new ResponseEntity<>(new ResponseDTO<>(contactDetailsService.saveContactDetails(details, id)), HttpStatus.CREATED);
 	}
 
-	@PutMapping("/")
+	@PutMapping
 	public ResponseEntity<?> updateContactDetails(@RequestBody ContactDetails details) {
 		
 		ContactDetails c = contactDetailsService.updateContactDetails(details);

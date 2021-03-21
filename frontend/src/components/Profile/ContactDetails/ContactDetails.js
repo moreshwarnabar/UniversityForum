@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+
 import '../Profile.css';
 import * as Icon from 'react-bootstrap-icons';
 import EditContactDetails from '../../Edit/EditContactDetails/EditContactDetails';
+import * as actions from '../../../store/actions/creators/profileActionCreators/contactDetails';
 
 class ContactDetails extends Component {
   state = {
-    contactDetails: null,
     showContactDetailsForm: false,
-
     contactFormDetails: null,
-
     error: {
       phoneNo: '',
       PinCode: '',
@@ -18,17 +17,17 @@ class ContactDetails extends Component {
   };
 
   componentDidMount() {
-    axios.get('http://localhost:8080/forum/contacts/1').then(response => {
-      console.log(response.data);
-      this.setState({
-        contactDetails: response.data.result,
-        contactFormDetails: response.data.result,
-      });
-    });
+    const id = this.props.userId;
+    this.props.onPageLoad(id);
+  }
+
+  componentDidUpdate() {
+    if (!this.state.contactFormDetails) {
+      this.setState({ contactFormDetails: this.props.contactDetails });
+    }
   }
 
   showEditContactDetailsForm = () => {
-    console.log('clicked edit contactDetails');
     this.setState({
       showContactDetailsForm: !this.state.showContactDetailsForm,
     });
@@ -64,24 +63,15 @@ class ContactDetails extends Component {
 
   updateContactDetails = event => {
     if (this.validate()) {
-      console.log('clicked updateContactDetails');
-      axios
-        .put(
-          'http://localhost:8080/forum/contacts/',
-          this.state.contactFormDetails
-        )
-        .then(response => {
-          console.log(response.data);
-          this.setState({
-            showContactDetailsForm: false,
-            contactDetails: response.data.result,
-          });
-        });
+      const data = this.state.contactFormDetails;
+
+      this.props.onUpdate(data);
+      this.setState({ showContactDetailsForm: false });
     }
   };
 
   render() {
-    if (this.state.contactDetails != null) {
+    if (this.props.contactDetails) {
       return (
         <div className="col-6 card-body-profile shadow-lg p-3 mb-5 bg-white rounded">
           <div>{this.initialContactDetails}</div>
@@ -113,7 +103,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">Mobile </h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.state.contactDetails.phoneNo}
+                  {this.props.contactDetails.phoneNo}
                 </div>
               </div>
 
@@ -123,7 +113,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">city</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.state.contactDetails.city}
+                  {this.props.contactDetails.city}
                 </div>
               </div>
 
@@ -133,7 +123,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">state</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.state.contactDetails.state}
+                  {this.props.contactDetails.state}
                 </div>
               </div>
 
@@ -143,7 +133,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">Street</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.state.contactDetails.street}
+                  {this.props.contactDetails.street}
                 </div>
               </div>
 
@@ -153,7 +143,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">Pin code</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.state.contactDetails.pinCode}
+                  {this.props.contactDetails.pinCode}
                 </div>
               </div>
             </div>
@@ -165,4 +155,14 @@ class ContactDetails extends Component {
     }
   }
 }
-export default ContactDetails;
+
+const mapStateToProps = state => ({
+  ...state.contactDetails,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onPageLoad: id => dispatch(actions.fetchContact(id)),
+  onUpdate: data => dispatch(actions.updateContact(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactDetails);

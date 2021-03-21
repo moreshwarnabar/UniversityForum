@@ -23,6 +23,8 @@ const rootReducer = combineReducers({
   category: reducers.categoriesReducer,
   questions: reducers.questionsReducer,
   navbar: reducers.navbarReducer,
+  userDetails: reducers.userDetailsReducer,
+  contactDetails: reducers.contactDetailsReducer,
 });
 
 const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
