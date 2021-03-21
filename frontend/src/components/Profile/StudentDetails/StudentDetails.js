@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import EditStudentDetails from '../../Edit/EditStudentDetails/EditStudentDetails';
+import Spinner from '../../UI/Spinner/Spinner';
 import '../Profile.css';
 import * as Icon from 'react-bootstrap-icons';
-import EditStudentDetails from '../../Edit/EditStudentDetails/EditStudentDetails';
 import * as actions from '../../../store/actions/creators/profileActionCreators/studentDetails';
 
 class StudentDetails extends Component {
@@ -11,6 +12,7 @@ class StudentDetails extends Component {
     showStudentDetailsForm: false,
     formFields: ['branch', 'stream', 'year'],
     studentFormData: null,
+    isFormInit: false,
     error: {
       branch: '',
       stream: '',
@@ -23,13 +25,13 @@ class StudentDetails extends Component {
   }
 
   componentDidUpdate() {
-    if (!this.state.studentFormData) {
+    if (!this.state.isFormInit && !this.props.isFetching) {
       const formData = {};
       const student = this.props.studentDetails;
       this.state.formFields.forEach(
         field => (formData[field] = student ? student[field] : '')
       );
-      this.setState({ studentFormData: formData });
+      this.setState({ studentFormData: formData, isFormInit: true });
     }
   }
 
@@ -67,9 +69,13 @@ class StudentDetails extends Component {
     if (this.validate()) {
       const id = this.props.userId;
       const data = this.state.studentFormData;
-      
-      if (this.props.studentDetails) this.props.onUpdate(data);
-      else this.props.onCreate(id, data);
+
+      if (this.props.studentDetails) {
+        data.id = id;
+        this.props.onUpdate(data);
+      } else {
+        this.props.onCreate(id, data);
+      }
       this.setState({ showStudentDetailsForm: false });
     }
   };
@@ -77,7 +83,7 @@ class StudentDetails extends Component {
   render() {
     if (!this.props.isFetching) {
       return (
-        <div className="card-body-profile shadow-lg p-3 mb-5 bg-white rounded">
+        <div className="card-body-profile shadow-lg p-3 mb-3 bg-white rounded">
           <div className="row ml-4 justify-content-between">
             <h5 className=" ml-3">Student Details :</h5>
             <button
@@ -133,7 +139,14 @@ class StudentDetails extends Component {
         </div>
       );
     } else {
-      return <div>Loading...</div>;
+      return (
+        <div
+          className="my-3 col-6 d-flex justify-content-center align-items-center"
+          style={{ height: '300px' }}
+        >
+          <Spinner loading={true} size={200} />
+        </div>
+      );
     }
   }
 }
