@@ -71,5 +71,15 @@ public class AnswerServiceImpl implements IAnswerService {
 		
 		return ansRepo.save(a);
 	}
+	
+	@Override
+	public Answer addReport(Answer ans) {
+		Answer a = ansRepo.findById(ans.getId())
+				.orElseThrow(() -> new AnswerNotFoundException("No one Answered for this question....Sorry!!!!"));
+	
+			a.setIsReported(ans.getIsReported());
+		
+		return ansRepo.save(a);
+	}
 
 }

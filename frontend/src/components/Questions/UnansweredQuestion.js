@@ -48,7 +48,7 @@ class UnansweredQuestions extends Component {
     );
 
     return this.state.toDisplay ? (
-      <div className="form-group card">
+      <div className="form-group card align-self-start">
         <div className="card-header">
           <h5>Un-Answered Question</h5>
         </div>
@@ -62,7 +62,7 @@ class UnansweredQuestions extends Component {
                 onClick={this.props.clicked}
                 style={{ cursor: 'pointer' }}
               >
-                <p className="card-text">{item.description}</p>
+                <p className="card-text mb-0">{item.description}</p>
                 <footer className="blockquote-footer text-right">
                   {item.askedBy.firstName} {item.askedBy.lastName}
                 </footer>

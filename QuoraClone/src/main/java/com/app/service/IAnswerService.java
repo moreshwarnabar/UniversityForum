@@ -15,5 +15,7 @@ public interface IAnswerService {
 	List<Answer> fetchReportedAnswers();
 	
 	Answer removeReport(Answer answer);
+	
+	Answer addReport(Answer ans);
 
 }

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import * as RB from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -8,8 +8,6 @@ import { selectCategory } from '../../../store/actions/creators/category';
 import * as actions from '../../../store/actions/creators/navbar';
 
 const navbar = props => {
-  console.log('render navbar');
-
   return (
     <RB.Navbar
       collapseOnSelect

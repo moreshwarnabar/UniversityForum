@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 
 const searchQuestion = props => {
-  console.log('search q render');
+  // console.log('search q render');
   return (
     <form className="w-100 card card-body " style={{ height: 'fit-content' }}>
       <div className="form-group">
