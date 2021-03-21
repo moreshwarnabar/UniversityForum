@@ -10,6 +10,7 @@ class ContactDetails extends Component {
   state = {
     showContactDetailsForm: false,
     contactFormDetails: null,
+    formFields: ['mobile', 'city', 'state', 'street', 'pinCode'],
     error: {
       phoneNo: '',
       PinCode: '',
@@ -23,7 +24,12 @@ class ContactDetails extends Component {
 
   componentDidUpdate() {
     if (!this.state.contactFormDetails) {
-      this.setState({ contactFormDetails: this.props.contactDetails });
+      const formData = {};
+      const contacts = this.props.contactDetails;
+      this.state.formFields.forEach(
+        field => (formData[field] = contacts ? contacts[field] : '')
+      );
+      this.setState({ contactFormDetails: formData });
     }
   }
 
@@ -63,17 +69,19 @@ class ContactDetails extends Component {
 
   updateContactDetails = event => {
     if (this.validate()) {
+      const id = this.props.userId;
       const data = this.state.contactFormDetails;
 
-      this.props.onUpdate(data);
+      if (this.props.contactDetails) this.props.onUpdate(data);
+      else this.props.onCreate(id, data);
       this.setState({ showContactDetailsForm: false });
     }
   };
 
   render() {
-    if (this.props.contactDetails) {
+    if (!this.props.isFetching) {
       return (
-        <div className="col-6 card-body-profile shadow-lg p-3 mb-5 bg-white rounded">
+        <div className="card-body-profile shadow-lg p-3 mb-5 bg-white rounded">
           <div>{this.initialContactDetails}</div>
 
           <EditContactDetails
@@ -103,7 +111,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">Mobile </h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.props.contactDetails.phoneNo}
+                  {this.props.contactDetails?.phoneNo}
                 </div>
               </div>
 
@@ -113,7 +121,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">city</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.props.contactDetails.city}
+                  {this.props.contactDetails?.city}
                 </div>
               </div>
 
@@ -123,7 +131,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">state</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.props.contactDetails.state}
+                  {this.props.contactDetails?.state}
                 </div>
               </div>
 
@@ -133,7 +141,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">Street</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.props.contactDetails.street}
+                  {this.props.contactDetails?.street}
                 </div>
               </div>
 
@@ -143,7 +151,7 @@ class ContactDetails extends Component {
                   <h6 className="ml-5">Pin code</h6>
                 </div>
                 <div className="col-sm-7 text-secondary">
-                  {this.props.contactDetails.pinCode}
+                  {this.props.contactDetails?.pinCode}
                 </div>
               </div>
             </div>
@@ -163,6 +171,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   onPageLoad: id => dispatch(actions.fetchContact(id)),
   onUpdate: data => dispatch(actions.updateContact(data)),
+  onCreate: (id, data) => dispatch(actions.createContact(id, data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactDetails);

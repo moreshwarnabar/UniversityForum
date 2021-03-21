@@ -48,3 +48,13 @@ export const updateContact = data => {
       .catch(error => dispatch(updateContactFail(error.response)));
   };
 };
+
+export const createContact = (id, data) => {
+  return dispatch => {
+    dispatch(updateContactStart());
+    axios
+      .post(`contacts/${id}`, data)
+      .then(response => dispatch(updateContactSuccess(response.data.result)))
+      .catch(error => dispatch(updateContactFail(error.response)));
+  };
+};

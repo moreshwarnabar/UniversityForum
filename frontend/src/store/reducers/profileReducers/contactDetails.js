@@ -15,7 +15,7 @@ export const contactDetailsReducer = (state = initialState, action) => {
       return { ...state, contactDetails: action.payload, isFetching: false };
 
     case actionTypes.FETCH_CONTACT_FAIL:
-      return { ...state, error: action.payload, isFetching: false };
+      return { contactDetails: null, error: action.payload, isFetching: false };
 
     case actionTypes.UPDATE_CONTACT_START:
       return { ...state, isFetching: true };
