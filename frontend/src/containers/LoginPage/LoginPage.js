@@ -84,6 +84,7 @@ class LoginPage extends Component {
             submit={this.LoginHandler}
             formErrors={this.state.formErrors}
             blur={this.onBlurHandler}
+            loading={this.props.isFetching}
           />
 
           <div className="mt-3 w-100 d-flex flex-column align-items-center justify-content-center">

@@ -19,6 +19,10 @@ export const showUserForm = () => ({
   type: actionTypes.SHOW_USER_FORM,
 });
 
+export const hideUserForm = () => ({
+  type: actionTypes.HIDE_USER_FORM,
+});
+
 export const resetUserForm = () => ({
   type: actionTypes.RESET_USER_FORM,
 });

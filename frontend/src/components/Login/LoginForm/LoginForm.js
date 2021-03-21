@@ -1,7 +1,7 @@
 import React from 'react';
 
 const loginForm = props => (
-  <form>
+  <form className="w-100">
     <div className="form-group">
       <label style={{ fontSize: '13px' }} htmlFor="uname">
         Username

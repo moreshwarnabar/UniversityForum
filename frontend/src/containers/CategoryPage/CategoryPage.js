@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import Category from '../../components/Category/Category';
 import Navbar from '../../components/UI/Navbar/Navbar';
+import Spinner from '../../components/UI/Spinner/Spinner';
 import * as actions from '../../store/actions/creators/category';
 
 class CategoryPage extends Component {
@@ -38,13 +39,21 @@ class CategoryPage extends Component {
       <React.Fragment>
         <Navbar />
         <div className="container min-vh-100 bg-light d-flex flex-column justify-content-center">
-          <h3 className="p-3 my-3 bg-white text-center text-secondary text-uppercase">
-            Choose from the below categories
-          </h3>
+          {this.props.isFetching ? (
+            <div className="align-self-center">
+              <Spinner loading={true} size={250} />
+            </div>
+          ) : (
+            <React.Fragment>
+              <h3 className="p-3 my-3 bg-white text-center text-secondary text-uppercase">
+                Choose from the below categories
+              </h3>
 
-          <div className="col d-flex flex-wrap align-items-center">
-            {categoryList}
-          </div>
+              <div className="col d-flex flex-wrap align-items-center">
+                {categoryList}
+              </div>
+            </React.Fragment>
+          )}
         </div>
       </React.Fragment>
     );

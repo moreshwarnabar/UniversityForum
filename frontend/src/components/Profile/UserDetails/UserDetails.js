@@ -7,6 +7,7 @@ import '../Profile.css';
 import avatar7 from '../../../resources/images/avatar7.png';
 import EditUser from '../../Edit/EditUser/EditUser';
 import EditPassword from '../../Edit/EditPassword/EditPassword';
+import Spinner from '../../UI/Spinner/Spinner';
 import * as actions from '../../../store/actions/creators/profileActionCreators/userDetails';
 
 class UserDetails extends Component {
@@ -29,7 +30,6 @@ class UserDetails extends Component {
 
   //Password Change
   showEditPasswordForm = () => {
-    console.log('clicked edit Password');
     this.setState({
       showPasswordForm: !this.state.showPasswordForm,
     });
@@ -54,17 +54,14 @@ class UserDetails extends Component {
         this.state.password.trim().length < 15
       )
     ) {
-      console.log('password error1');
       this.setState({
         message: 'password must be contain at between 6 to 15 character ',
       });
     } else if (!(this.state.password === this.state.reTypedPassword)) {
-      console.log('password error2');
       this.setState({
         message: 'Both the Password fields must be same',
       });
     } else {
-      console.log('password error3');
       this.setState({
         message: '',
       });
@@ -74,9 +71,6 @@ class UserDetails extends Component {
 
   updatePassword = event => {
     if (this.validatePassword()) {
-      console.log('clicked update Password');
-      console.log(this.state.password + ' == ' + this.state.reTypedPassword);
-
       const id = this.props.user.id;
       const password = {
         password: this.state.password,
@@ -88,7 +82,6 @@ class UserDetails extends Component {
   };
 
   showEditUserDetailsForm = () => {
-    console.log('clicked editUser');
     this.setState({
       showUserDetailsForm: !this.state.showUserDetailsForm,
     });
@@ -121,7 +114,6 @@ class UserDetails extends Component {
 
   updateUserDetails = () => {
     if (this.validate()) {
-      console.log('clicked updateUserDetails');
       const data = this.state.userFormDetails;
       this.props.onUpdate(data);
       this.setState({ showUserDetailsForm: false });
@@ -129,51 +121,53 @@ class UserDetails extends Component {
   };
 
   render() {
-    if (this.props.user != null) {
-      return (
-        <div>
-          <EditUser
-            {...this.state.userFormDetails}
-            {...this.state.error}
-            showUserDetailsForm={this.state.showUserDetailsForm}
-            showEditUserDetailsForm={this.showEditUserDetailsForm}
-            updateUserDetails={this.updateUserDetails}
-            changeUserDetailsHandler={this.changeUserDetailsHandler}
-          />
+    return (
+      <div>
+        <EditUser
+          {...this.state.userFormDetails}
+          {...this.state.error}
+          showUserDetailsForm={this.state.showUserDetailsForm}
+          showEditUserDetailsForm={this.showEditUserDetailsForm}
+          updateUserDetails={this.updateUserDetails}
+          changeUserDetailsHandler={this.changeUserDetailsHandler}
+        />
 
-          <div className="shadow-lg p-3 mt-3 bg-white rounded ">
-            <div className="row ml-4 justify-content-between">
-              <h3 className="ml-2">Profile :</h3>
-              <Button
-                variant="light"
-                size="sm"
-                className="mb-3 "
-                onClick={this.showEditPasswordForm}
-              >
-                <Icon.ShieldLockFill /> Change Password
-              </Button>
+        <div className="shadow-lg p-3 mt-3 bg-white rounded ">
+          <div className="row ml-4 justify-content-between">
+            <h3 className="ml-2">Profile :</h3>
+            <Button
+              variant="light"
+              size="sm"
+              className="mb-3 "
+              onClick={this.showEditPasswordForm}
+            >
+              <Icon.ShieldLockFill /> Change Password
+            </Button>
 
-              <Button
-                variant="light"
-                size="sm"
-                className="mr-5 mb-3"
-                onClick={this.showEditUserDetailsForm}
-              >
-                <Icon.PencilFill />
-              </Button>
+            <Button
+              variant="light"
+              size="sm"
+              className="mr-5 mb-3"
+              onClick={this.showEditUserDetailsForm}
+            >
+              <Icon.PencilFill />
+            </Button>
+          </div>
+
+          <div className="row">
+            <div className="col-sm-4">
+              <img
+                className="float-left img-fluid rounded-circle"
+                src={avatar7}
+                alt="Profile Pic"
+              ></img>
             </div>
 
-            <div className="row">
-              <div className="col-sm-4">
-                <img
-                  className="float-left img-fluid rounded-circle"
-                  src={avatar7}
-                  alt="Profile Pic"
-                ></img>
+            {this.props.isFetching ? (
+              <div className="col d-flex justify-content-center align-items-center">
+                <Spinner loading={true} size={200} />
               </div>
-
-              <hr />
-
+            ) : (
               <div className="col-sm-8">
                 <table className="table table-striped">
                   <tbody>
@@ -231,28 +225,29 @@ class UserDetails extends Component {
                 </table>
                 <div className="text-success">{this.state.message}</div>
               </div>
-            </div>
+            )}
           </div>
-
-          <EditPassword
-            password={this.state.password}
-            reTypedPassword={this.state.reTypedPassword}
-            showPasswordForm={this.state.showPasswordForm}
-            message={this.state.message}
-            showEditPasswordForm={this.showEditPasswordForm}
-            changePasswordHandler={this.changePasswordHandler}
-            changeRetypedPasswordHandler={this.changeRetypedPasswordHandler}
-            updatePassword={this.updatePassword}
-          />
         </div>
-      );
-    } else {
-      return <div>Loading...</div>;
-    }
+
+        <EditPassword
+          password={this.state.password}
+          reTypedPassword={this.state.reTypedPassword}
+          showPasswordForm={this.state.showPasswordForm}
+          message={this.state.message}
+          showEditPasswordForm={this.showEditPasswordForm}
+          changePasswordHandler={this.changePasswordHandler}
+          changeRetypedPasswordHandler={this.changeRetypedPasswordHandler}
+          updatePassword={this.updatePassword}
+        />
+      </div>
+    );
   }
 }
 
-const mapStateToProps = state => ({ ...state.userDetails });
+const mapStateToProps = state => ({
+  ...state.userDetails,
+  isFetching: state.login.isFetching || state.userDetails.isFetching,
+});
 
 const mapDispatchToProps = dispatch => ({
   onUpdate: data => dispatch(actions.updateUser(data)),

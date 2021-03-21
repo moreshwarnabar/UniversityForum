@@ -19,6 +19,10 @@ export const showCategoryForm = () => ({
   type: actionTypes.SHOW_CATEGORY_FORM,
 });
 
+export const hideCategoryForm = () => ({
+  type: actionTypes.HIDE_CATEGORY_FORM,
+});
+
 export const resetCategoryForm = () => ({
   type: actionTypes.RESET_CATEGORY_FORM,
 });

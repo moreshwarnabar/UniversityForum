@@ -31,7 +31,10 @@ class AdminPage extends Component {
     return (
       <React.Fragment>
         <Navbar logout={this.logoutHandler} />
-        <div className="container pt-2 bg-light min-vh-100 d-flex flex-wrap justify-content-center">
+        <div
+          className="container pt-2 bg-light min-vh-100 d-flex flex-wrap justify-content-center"
+          style={{ opacity: '0.8' }}
+        >
           <Links links={this.state.linkData} url={this.props.match.url} />
           <Switch>
             <Route path="/admin/users" component={ListUsers} />

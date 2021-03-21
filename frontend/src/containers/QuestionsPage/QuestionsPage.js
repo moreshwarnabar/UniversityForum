@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-// import RecentlyAsked from '../../components/Questions/RecentlyAsked';
 import * as actions from '../../store/actions/creators/questions';
 import Navbar from '../../components/UI/Navbar/Navbar';
 import UnansweredQuestions from '../../components/Questions/UnansweredQuestion';
 import SearchQuestion from '../../components/Questions/QuestionsForms/SearchQuestion';
 import PostQuestion from '../../components/Questions/QuestionsForms/PostQuestion';
 import DisplayQuestions from '../../components/Questions/DisplayQuestions/DisplayQuestions';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class QuestionsPage extends Component {
   state = {
@@ -20,7 +20,6 @@ class QuestionsPage extends Component {
 
   componentDidMount() {
     const id = this.props.category.id;
-    console.log(id);
     this.props.onPageLoad(id);
   }
 
@@ -31,6 +30,13 @@ class QuestionsPage extends Component {
     if (currentCategory !== id && !isFetching) {
       onPageLoad(id);
     }
+    if (currentCategory !== id && this.state.showSearchQuestions) {
+      this.setState({ showSearchQuestions: false });
+    }
+  }
+
+  componentWillUnmount() {
+    this.setState({ showSearchQuestions: false });
   }
 
   handleClick() {
@@ -54,14 +60,17 @@ class QuestionsPage extends Component {
     const data = { id, search: this.state.searchQuestion };
 
     this.props.onSearch(data);
-    this.setState({ showSearchQuestions: true, searchError: false });
+    this.setState({
+      showSearchQuestions: true,
+      searchError: false,
+      searchQuestion: '',
+    });
   };
 
   postQuestionChangeHandler = event => {
     this.setState({
       postQuestion: event.target.value,
     });
-    console.log(this.state.postQuestion);
   };
 
   postQuestionSubmitHandler = event => {
@@ -90,27 +99,29 @@ class QuestionsPage extends Component {
   };
 
   render() {
-    const { isFetching, questions, searchQuestions } = this.props;
-    console.log(questions);
+    const {
+      isCatFetching,
+      questions,
+      searchQuestions,
+      isSearchFetching,
+    } = this.props;
 
     return (
       <React.Fragment>
         <Navbar />
-
         <div className="container pt-3 bg-light min-vh-100">
-          <div className="mb-3 text-center text-uppercase" style={{height: '50px'}}>
+          <div
+            className="mb-3 text-center text-uppercase"
+            style={{ height: '50px' }}
+          >
             <h2>{this.props.category.name}</h2>
           </div>
           <div className="row" style={{ minHeight: '400px' }}>
-            <div className="col-lg-4 ">
-              {/* <div className="form-group card">
-                  <div className=" card-header">
-                    <label>Recently ask Question</label>
-                  </div>
-                  <RecentlyAsked categoryId={this.props.categoryId} />
-                </div> */}
-              {isFetching ? (
-                <div>Loading...</div>
+            <div className="col-lg-4 d-flex align-items-center">
+              {isCatFetching ? (
+                <div className="w-100 d-flex justify-content-center">
+                  <Spinner loading={true} size={150} />
+                </div>
               ) : (
                 <UnansweredQuestions
                   questions={questions}
@@ -123,50 +134,6 @@ class QuestionsPage extends Component {
               className="col-lg-8 d-flex flex-wrap align-items-center"
               style={{ height: '375px' }}
             >
-              {/* <form className="card card-body mb-3">
-                  <div className="form-group">
-                    <input
-                      className="form-control"
-                      id="search"
-                      type="text"
-                      value={this.state.searchQuestion}
-                      placeholder="Search a Question......"
-                      onChange={this.searchQuestionChangeHandler}
-                      name="postQue"
-                    />
-                  </div>
-                  <button
-                    className="col-sm-2 btn btn-outline-success align-self-end"
-                    onClick={this.searchQuestionSubmitHandler}
-                  >
-                    Search
-                  </button>
-                </form>
-
-                <div className="form-group card">
-                  <div className="card-header ">
-                    <h5>Post a Question</h5>
-                  </div>
-                  <div className="card-body d-flex flex-column">
-                    <div className="form-group">
-                      <input
-                        className="form-control"
-                        id="post"
-                        type="text"
-                        placeholder="post a question...."
-                        value={this.state.postQuestion}
-                        onChange={this.postQuestionChangeHandler}
-                        name="postQue"
-                      />
-                    </div>
-                    <button
-                      className="col-sm-2 btn btn-outline-success align-self-end"
-                      onClick={this.postQuestionSubmitHandler}
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </div> */}
               <SearchQuestion
                 searchQuestion={this.state.searchQuestion}
                 searchChange={this.searchQuestionChangeHandler}
@@ -181,10 +148,12 @@ class QuestionsPage extends Component {
               />
             </div>
           </div>
-          {isFetching ? (
-            <div>Loading...</div>
-          ) : (
-            <div className="row">
+          <div className="row justify-content-center">
+            {isCatFetching || isSearchFetching ? (
+              <div className="mt-3">
+                <Spinner loading={true} size={250} />
+              </div>
+            ) : (
               <DisplayQuestions
                 search={searchQuestions}
                 category={questions}
@@ -192,63 +161,8 @@ class QuestionsPage extends Component {
                 click={this.handleClick}
                 reset={this.resetSubmitHandler}
               />
-            </div>
-          )}
-          {/* <div className="container">
-                <div className="card mb-3">
-                  <div>
-                    {this.state.showSearchQuestions ? (
-                      <div>
-                        <div className="card-header ">
-                          <label>Search Related Question</label>
-                          <button
-                            className="col-sm-2 btn btn-outline-success float-right"
-                            onClick={this.resetSubmitHandler}
-                          >
-                            Reset
-                          </button>
-                        </div>
-                        {searchQuestions.map(item => (
-                          <div
-                            key={item.id}
-                            className=" list-group-item"
-                            onClick={this.handleClick}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <h6 className="card-text">
-                              {item.description} {item.id.answered}
-                            </h6>
-                            <footer className="blockquote-footer text-right">
-                              {item.askedBy.firstName} {item.askedBy.lastName}
-                            </footer>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div>
-                        <div className="card-header ">
-                          <label>Category Related Question</label>
-                        </div>
-                        {this.props.questions.map(item => (
-                          <div
-                            key={item.id}
-                            className=" list-group-item"
-                            onClick={this.handleClick}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <h6 className="card-text">
-                              {item.description} {item.id.answered}
-                            </h6>
-                            <footer className="blockquote-footer text-right">
-                              {item.askedBy.firstName} {item.askedBy.lastName}
-                            </footer>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div> */}
+            )}
+          </div>
         </div>
       </React.Fragment>
     );

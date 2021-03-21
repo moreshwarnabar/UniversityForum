@@ -1,6 +1,10 @@
 import * as actionTypes from '../actionTypes';
 import axios from '../../../axios-base';
 
+const loginUserStart = () => ({
+  type: actionTypes.LOGIN_USER_START,
+});
+
 const loginUserSuccess = user => {
   return {
     type: actionTypes.LOGIN_USER_SUCCESS,
@@ -17,6 +21,7 @@ const loginUserFail = errorMsg => {
 
 export const authenticateUser = loginData => {
   return dispatch => {
+    dispatch(loginUserStart());
     const { username, password } = loginData;
     axios
       .get(`users/single/${username}/${password}`)
