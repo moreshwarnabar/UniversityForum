@@ -1,7 +1,7 @@
 import React from 'react';
 
 const categoryQuestions = props => {
-  const message = props.questions.length ? null : (
+  const message = props.questions?.length ? null : (
     <div className="mt-3 text-center font-weight-bold">
       <p>
         No questions asked in this category yet! Be the first and ask one now!

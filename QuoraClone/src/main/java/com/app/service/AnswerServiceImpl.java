@@ -29,10 +29,11 @@ public class AnswerServiceImpl implements IAnswerService {
 	public List<Answer> fetchAnswerForQuestion(int qId) {
 		Question q = queRepo.findById(qId)
 						.orElseThrow(() -> new QuestionNotFoundException("question not found"));
-		List<Answer> ans = ansRepo.findByQuestion(q);
+		List<Answer> ans = ansRepo.findByQuestionOrderByAnsweredOnDesc(q);
 		if (ans.isEmpty()) {
 			throw new AnswerNotFoundException("No one Answered for this question....Sorry!!!!");
 		}
+		System.out.println(ans);
 		return ans;
 	}
 
@@ -65,9 +66,8 @@ public class AnswerServiceImpl implements IAnswerService {
 	public Answer removeReport(Answer answer) {
 		Answer a = ansRepo.findById(answer.getId())
 				.orElseThrow(() -> new AnswerNotFoundException("No one Answered for this question....Sorry!!!!"));
-		
-		if (a.getIsReported() != answer.getIsReported())
-			a.setIsReported(answer.getIsReported());
+			
+		a.setIsReported(false);
 		
 		return ansRepo.save(a);
 	}
@@ -77,7 +77,7 @@ public class AnswerServiceImpl implements IAnswerService {
 		Answer a = ansRepo.findById(ans.getId())
 				.orElseThrow(() -> new AnswerNotFoundException("No one Answered for this question....Sorry!!!!"));
 	
-			a.setIsReported(ans.getIsReported());
+		a.setIsReported(true);
 		
 		return ansRepo.save(a);
 	}

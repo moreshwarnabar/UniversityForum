@@ -44,7 +44,6 @@ class QuestionsPage extends Component {
     const question = this.props.questions.find(que => que.id === questionId);
     const url = this.props.match.url;
 
-    console.log(question);
     this.props.onSelectQuestion(question);
     this.props.history.push(`${url}/${question.description}`);
   };

@@ -1,27 +1,21 @@
 import React, { Component } from 'react';
-import axios from '../../axios-base';
+import { connect } from 'react-redux';
 
 import PostAnswer from '../../components/Answers/PostAnswer';
 import ShowAnswers from '../../components/Answers/ShowAnswers';
 import Navbar from '../../components/UI/Navbar/Navbar';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import * as actions from '../../store/actions/creators/answers';
 
 class Answer extends Component {
   state = {
-    isLoaded: false,
-    answers: [],
-    error: null,
     postAnswer: '',
+    postError: null,
   };
 
   componentDidMount() {
-    axios.get('answers/question/1').then(response => {
-      console.log(response);
-      this.setState({
-        answers: response.data.result,
-        isLoaded: true,
-      });
-    });
-    console.log(this.state.answers);
+    const questionId = this.props.question.id;
+    this.props.onPageLoad(questionId);
   }
 
   postAnswerChangeHandler = event => {
@@ -31,24 +25,15 @@ class Answer extends Component {
     console.log(this.state.postAnswer);
   };
 
-  postAnswerSubmitHandler = event => {
-    console.log('Submit button click');
-    const answerRelatedData = {
-      question: {
-        id: 11,
-      },
-
-      answerBy: {
-        id: 1,
-      },
+  postAnswerSubmitHandler = () => {
+    const data = {
+      question: this.props.question,
+      answerBy: this.props.user,
       answer: this.state.postAnswer,
     };
     if (this.validatePostedAnswer()) {
-      axios
-        .post('http://localhost:7071/forum/answers/', answerRelatedData)
-        .then(response => {
-          console.log(response);
-        });
+      this.props.onPostAnswer(data);
+      this.setState({ postAnswer: '' });
     }
   };
 
@@ -56,70 +41,69 @@ class Answer extends Component {
     this.setState({
       postAnswer: event.target.value,
     });
-    console.log(this.state.postAnswer);
   };
 
   reportHandler = event => {
-    console.log('Report button click');
-
-    console.log(event.currentTarget.id);
-    const reportButtonRelatedData = {
+    const id = event.currentTarget.id;
+    const data = {
       id: event.currentTarget.id,
       isReported: true,
     };
 
-    axios
-      .put(`http://localhost:7071/forum/answers/`, reportButtonRelatedData)
-      .then(response => {
-        console.log(response);
-      });
+    this.props.onReport(data);
   };
 
-  likeHandler = event => {
-    console.log('Like button click');
-
-    console.log(event.currentTarget.id);
-
-    alert(event.currentTarget.id + ' like button click ');
-  };
-
-  disLikeHandler = event => {
-    console.log('DisLike button click');
-    console.log(event.currentTarget.id);
-    alert(event.currentTarget.id + ' dislike button click');
-  };
-
-  validatePostedAnswer = event => {
-    console.log('validate' + this.state.postAnswer.trim().length);
-    if (this.state.postAnswer.trim().length < 5) {
-      alert('Your answer must be greater than 5 characters');
+  validatePostedAnswer = () => {
+    if (
+      this.state.postAnswer.trim().length < 5 ||
+      this.state.postAnswer.trim().length > 500
+    ) {
+      const errMsg = 'Your answer must be between 5 and 500 characters';
+      this.setState({ postError: errMsg });
+      return false;
     } else {
       return true;
     }
   };
 
   render() {
-    const { isLoaded, answers, postAnswer } = this.state;
+    const { postAnswer, postError } = this.state;
+    const { isFetching, answers, question } = this.props;
 
     return (
       <React.Fragment>
         <Navbar />
-        <div className="container pt-3 bg-light" style={{opacity: '0.9'}}>
+        <div className="container pt-3 bg-light" style={{ opacity: '0.9' }}>
           <PostAnswer
-            postAnswer={this.state.postAnswer}
+            question={question}
+            postAnswer={postAnswer}
+            postError={postError}
             postAnswerChangeHandler={this.postAnswerChangeHandler}
             postAnswerSubmitHandler={this.postAnswerSubmitHandler}
           />
-          <ShowAnswers
-            answers={this.state.answers}
-            reportHandler={this.reportHandler}
-            likeHandler={this.likeHandler}
-            disLikeHandler={this.disLikeHandler}
-          />
+          {isFetching ? (
+            <div className="w-100 d-flex justify-content-center">
+              <Spinner size={200} />
+            </div>
+          ) : (
+            <ShowAnswers answers={answers} reportHandler={this.reportHandler} />
+          )}
         </div>
       </React.Fragment>
     );
   }
 }
 
-export default Answer;
+const mapStateToProps = state => ({
+  user: state.login.user,
+  question: state.questions.selectedQuestion,
+  ...state.answers,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onPageLoad: id => dispatch(actions.fetchAnswers(id)),
+  onPostAnswer: data => dispatch(actions.postAnswer(data)),
+  onReport: data => dispatch(actions.reportAnswer(data)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Answer);

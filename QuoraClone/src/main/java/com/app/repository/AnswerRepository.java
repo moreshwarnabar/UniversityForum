@@ -9,7 +9,7 @@ import com.app.pojos.Question;
 
 public interface AnswerRepository extends JpaRepository<Answer, Integer> {
 
-	List<Answer> findByQuestion(Question q);
+	List<Answer> findByQuestionOrderByAnsweredOnDesc(Question q);
 	
 	List<Answer> findByIsReported(boolean isReported);
 
