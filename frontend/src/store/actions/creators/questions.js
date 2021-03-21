@@ -1,8 +1,9 @@
 import * as actionTypes from '../actionTypes';
 import axios from '../../../axios-base';
 
-const fetchQuestionsStart = () => ({
+const fetchQuestionsStart = flag => ({
   type: actionTypes.FETCH_QUESTIONS_START,
+  payload: flag,
 });
 
 const fetchQuestionsFail = error => ({
@@ -17,7 +18,7 @@ const fetchQuestionsSuccess = (data, id) => ({
 
 export const fetchQuestions = id => {
   return dispatch => {
-    dispatch(fetchQuestionsStart());
+    dispatch(fetchQuestionsStart('isCatFetching'));
     axios
       .get(`questions/all/${id}`)
       .then(response =>
@@ -39,7 +40,7 @@ const fetchSearchSuccess = data => ({
 
 export const fetchSearch = data => {
   return dispatch => {
-    dispatch(fetchQuestionsStart());
+    dispatch(fetchQuestionsStart('isSearchFetching'));
     axios
       .get(`questions/filter/${data.search}/${data.id}`)
       .then(response => dispatch(fetchSearchSuccess(response.data.result)))
@@ -59,7 +60,7 @@ const postQuestionFail = error => ({
 
 export const postQuestion = data => {
   return dispatch => {
-    dispatch(fetchQuestionsStart());
+    dispatch(fetchQuestionsStart('isCatFetching'));
     axios
       .post('questions', data)
       .then(response => dispatch(postQuestionSuccess(response.data.result)))
