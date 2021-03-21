@@ -16,7 +16,12 @@ export const categoriesReducer = (state = initialState, action) => {
       return { ...state, isFetching: false, error: action.payload };
 
     case actionTypes.FETCH_CATEGORIES_SUCCESS:
-      return { categories: action.payload, isFetching: false, error: null };
+      return {
+        ...state,
+        categories: action.payload,
+        isFetching: false,
+        error: null,
+      };
 
     case actionTypes.SELECT_CATEGORY:
       return { ...state, selectedCategory: action.payload };

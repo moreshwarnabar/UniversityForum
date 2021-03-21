@@ -6,3 +6,7 @@ export { reportedAnswersReducer } from './reportedAnsers';
 export { categoriesReducer } from './category';
 export { questionsReducer } from './questions';
 export { navbarReducer } from './navbar';
+export { userDetailsReducer } from './profileReducers/userDetails';
+export { contactDetailsReducer } from './profileReducers/contactDetails';
+export { studentDetailsReducer } from './profileReducers/studentDetails';
+export { facultyDetailsReducer } from './profileReducers/facultyDetails';

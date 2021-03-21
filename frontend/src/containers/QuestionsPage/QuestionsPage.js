@@ -19,19 +19,16 @@ class QuestionsPage extends Component {
   };
 
   componentDidMount() {
-    const id = this.props.categoryId;
+    const id = this.props.category.id;
     console.log(id);
     this.props.onPageLoad(id);
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return this.props.categoryId !== nextProps.categoryId;
-  // }
-
   componentDidUpdate() {
-    const { categoryId, questions, onPageLoad, isFetching } = this.props;
-    const id = +categoryId;
-    if (questions.length && questions[0].category.id !== id && !isFetching) {
+    const { category, onPageLoad, isFetching, currentCategory } = this.props;
+    const id = category.id;
+
+    if (currentCategory !== id && !isFetching) {
       onPageLoad(id);
     }
   }
@@ -53,7 +50,7 @@ class QuestionsPage extends Component {
       return;
     }
 
-    const id = this.props.categoryId;
+    const id = this.props.category.id;
     const data = { id, search: this.state.searchQuestion };
 
     this.props.onSearch(data);
@@ -79,7 +76,7 @@ class QuestionsPage extends Component {
       description: this.state.postQuestion,
       askedBy: this.props.user,
       category: {
-        id: this.props.categoryId,
+        id: this.props.category.id,
       },
     };
 
@@ -94,13 +91,16 @@ class QuestionsPage extends Component {
 
   render() {
     const { isFetching, questions, searchQuestions } = this.props;
-    console.log('questions render');
+    console.log(questions);
 
     return (
       <React.Fragment>
         <Navbar />
 
         <div className="container pt-3 bg-light min-vh-100">
+          <div className="mb-3 text-center text-uppercase" style={{height: '50px'}}>
+            <h2>{this.props.category.name}</h2>
+          </div>
           <div className="row" style={{ minHeight: '400px' }}>
             <div className="col-lg-4 ">
               {/* <div className="form-group card">
@@ -257,7 +257,7 @@ class QuestionsPage extends Component {
 
 const mapStateToProps = state => ({
   user: state.login.user,
-  categoryId: state.category.selectedCategory,
+  category: state.category.selectedCategory,
   ...state.questions,
 });
 

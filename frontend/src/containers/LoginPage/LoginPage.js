@@ -49,6 +49,14 @@ class LoginPage extends Component {
     this.props.userLogin(data);
   };
 
+  componentDidUpdate() {
+    if (this.props.isLoggedIn) {
+      const nextPath =
+        this.props.user.role === 'ADMIN' ? 'admin' : 'categories';
+      this.props.history.push(`/${nextPath}`);
+    }
+  }
+
   componentDidMount() {
     if (this.props.isLoggedIn) {
       const nextPath =
@@ -80,7 +88,7 @@ class LoginPage extends Component {
 
           <div className="mt-3 w-100 d-flex flex-column align-items-center justify-content-center">
             <p className="text-danger" style={{ fontSize: '14px' }}>
-              {this.props.error}
+              {this.props.error?.data.errorDetails}
             </p>
             <small className="text-muted">
               <a className="text-muted mr-1" href="about">

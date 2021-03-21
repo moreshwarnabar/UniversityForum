@@ -18,9 +18,9 @@ const ProfilePage = props => (
       <div className="row">
         <ContactDetails userId={props.user.id} />
         {props.user.role === 'STUDENT' ? (
-          <StudentDetails />
+          <StudentDetails userId={props.user.id} />
         ) : (
-          <FacultyDetails />
+          <FacultyDetails userId={props.user.id} />
         )}
       </div>
     </div>

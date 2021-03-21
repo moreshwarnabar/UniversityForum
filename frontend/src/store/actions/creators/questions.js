@@ -10,9 +10,9 @@ const fetchQuestionsFail = error => ({
   payload: error,
 });
 
-const fetchQuestionsSuccess = data => ({
+const fetchQuestionsSuccess = (data, id) => ({
   type: actionTypes.FETCH_QUESTIONS_SUCCESS,
-  payload: data,
+  payload: { data, id },
 });
 
 export const fetchQuestions = id => {
@@ -20,7 +20,9 @@ export const fetchQuestions = id => {
     dispatch(fetchQuestionsStart());
     axios
       .get(`questions/all/${id}`)
-      .then(response => dispatch(fetchQuestionsSuccess(response.data.result)))
+      .then(response =>
+        dispatch(fetchQuestionsSuccess(response.data.result, id))
+      )
       .catch(error => dispatch(fetchQuestionsFail(error.response)));
   };
 };

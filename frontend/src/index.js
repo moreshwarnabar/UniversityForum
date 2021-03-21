@@ -23,12 +23,19 @@ const rootReducer = combineReducers({
   category: reducers.categoriesReducer,
   questions: reducers.questionsReducer,
   navbar: reducers.navbarReducer,
+  userDetails: reducers.userDetailsReducer,
+  contactDetails: reducers.contactDetailsReducer,
+  studentDetails: reducers.studentDetailsReducer,
+  facultyDetails: reducers.facultyDetailsReducer,
 });
 
 const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
 
 store.subscribe(() => {
-  saveState(store.getState());
+  saveState({
+    login: store.getState().login,
+    category: store.getState().category,
+  });
 });
 
 ReactDOM.render(
