@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import RegistrationForm from './RegistrationForm/RegistrationForm';
-import * as userActions from '../../../../store/actions/creators/userRegistrations';
+import Spinner from '../../../UI/Spinner/Spinner';
+import * as actions from '../../../../store/actions/creators/userRegistrations';
 import * as formConfigs from '../../../../config/formConfigs';
 
 class UserRegistration extends Component {
@@ -72,8 +73,12 @@ class UserRegistration extends Component {
     const data = formConfigs.dataFactory(this.state.formData);
 
     this.props.onSubmit(data);
-    this.setState({ formData: this.resetForm() });
+    this.setState({ formData: formConfigs.resetForm(this.state.formData) });
   };
+
+  componentWillUnmount() {
+    this.props.onHide();
+  }
 
   render() {
     const successMessage = this.props.isSuccess ? (
@@ -85,18 +90,22 @@ class UserRegistration extends Component {
         <div className="pl-2 w-100">
           <h3>User Registration</h3>
         </div>
-        <div className="p-1 border-top">
-          <RegistrationForm
-            {...this.state.formData}
-            radio={this.state.radioChoices}
-            option={this.state.selectOptions}
-            changed={this.valueChangedHandler}
-            reset={this.resetFormHandler}
-            submit={this.registerUserHandler}
-            formErrors={this.state.formErrors}
-            blur={this.onBlurHandler}
-            isFormValid={this.state.isFormValid}
-          />
+        <div className="p-1 border-top d-flex justify-content-center align-items-center">
+          {this.props.isFetching ? (
+            <Spinner loading={true} size={300} />
+          ) : (
+            <RegistrationForm
+              {...this.state.formData}
+              radio={this.state.radioChoices}
+              option={this.state.selectOptions}
+              changed={this.valueChangedHandler}
+              reset={this.resetFormHandler}
+              submit={this.registerUserHandler}
+              formErrors={this.state.formErrors}
+              blur={this.onBlurHandler}
+              isFormValid={this.state.isFormValid}
+            />
+          )}
         </div>
         {this.state.isFormValid ? (
           <div>
@@ -129,9 +138,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onShow: () => dispatch(userActions.showUserForm()),
-  onReset: () => dispatch(userActions.resetUserForm()),
-  onSubmit: data => dispatch(userActions.userRegistration(data)),
+  onShow: () => dispatch(actions.showUserForm()),
+  onHide: () => dispatch(actions.hideUserForm()),
+  onReset: () => dispatch(actions.resetUserForm()),
+  onSubmit: data => dispatch(actions.userRegistration(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRegistration);

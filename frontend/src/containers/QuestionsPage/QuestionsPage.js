@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-// import RecentlyAsked from '../../components/Questions/RecentlyAsked';
 import * as actions from '../../store/actions/creators/questions';
 import Navbar from '../../components/UI/Navbar/Navbar';
 import UnansweredQuestions from '../../components/Questions/UnansweredQuestion';
@@ -98,7 +97,10 @@ class QuestionsPage extends Component {
         <Navbar />
 
         <div className="container pt-3 bg-light min-vh-100">
-          <div className="mb-3 text-center text-uppercase" style={{height: '50px'}}>
+          <div
+            className="mb-3 text-center text-uppercase"
+            style={{ height: '50px' }}
+          >
             <h2>{this.props.category.name}</h2>
           </div>
           <div className="row" style={{ minHeight: '400px' }}>

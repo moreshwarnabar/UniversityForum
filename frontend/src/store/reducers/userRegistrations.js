@@ -2,7 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   isRegisteringUser: false,
-  isSending: false,
+  isFetching: false,
   isSuccess: false,
   errors: null,
 };
@@ -12,17 +12,25 @@ export const userRegistrationReducer = (state = initialState, action) => {
     case actionTypes.SHOW_USER_FORM:
       return { ...state, isRegisteringUser: true };
 
+    case actionTypes.HIDE_USER_FORM:
+      return { ...state, isRegisteringUser: false };
+
     case actionTypes.RESET_USER_FORM:
       return { ...state, errors: null };
 
     case actionTypes.USER_REGISTRATION_START:
-      return { ...state, isSending: true };
+      return { ...state, isFetching: true };
 
     case actionTypes.USER_REGISTRATION_FAIL:
-      return { ...state, errors: action.payload };
+      return { ...state, errors: action.payload, isFetching: false };
 
     case actionTypes.USER_REGISTRATION_SUCCESS:
-      return { ...state, isSuccess: true, isRegisteringUser: false };
+      return {
+        ...state,
+        isSuccess: true,
+        isRegisteringUser: false,
+        isFetching: false,
+      };
 
     default:
       return state;
