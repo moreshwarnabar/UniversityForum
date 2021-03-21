@@ -1,7 +1,7 @@
 import React from 'react';
 
 const registrationForm = props => (
-  <form className="">
+  <form className="w-100">
     <div className="form-row">
       <div className="form-group col-md-6">
         <label style={{ fontSize: '13px' }} htmlFor="fname">

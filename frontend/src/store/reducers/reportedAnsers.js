@@ -29,12 +29,18 @@ export const reportedAnswersReducer = (state = initialState, action) => {
       return {
         ...state,
         answers: fetchedAnswers,
+        isFetching: false,
         ...initPaginationResult,
         isAnswersEmpty: !fetchedAnswers.length,
       };
 
     case actionTypes.FETCH_REPORTS_FAIL:
-      return { ...state, isAnswersEmpty: true, error: action.payload };
+      return {
+        ...state,
+        isAnswersEmpty: true,
+        error: action.payload,
+        isFetching: false,
+      };
 
     case actionTypes.REMOVE_REPORT_SUCCESS:
       const updatedAnswers = removeAnswer([...state.answers], action.payload);

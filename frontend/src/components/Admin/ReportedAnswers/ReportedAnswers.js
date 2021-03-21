@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import AnswersTable from './AnswersTable/AnswersTable';
 import Pagination from '../../UI/Pagination/Pagination';
 import ModalWindow from '../../UI/ModalWindow/ModalWindow';
+import Spinner from '../../UI/Spinner/Spinner';
 import * as actions from '../../../store/actions/creators/reportedAnswers';
 
 class ReportedAnswers extends Component {
@@ -84,7 +85,7 @@ class ReportedAnswers extends Component {
   render() {
     return (
       <div className="row m-0 justify-content-center align-self-start align-items-center w-100">
-        <div className="container p-2 border rounded shadow bg-light">
+        <div className="container p-2 border rounded shadow bg-light d-flex justify-content-center flex-wrap">
           <ModalWindow
             showModal={this.state.showModal}
             closeModal={this.modalCloseHandler}
@@ -93,22 +94,28 @@ class ReportedAnswers extends Component {
             {...this.state.modalData}
           />
 
-          <div>
-            <h3>Reported Answers</h3>
-          </div>
-          <div className="pt-3 border-top table-responsive">
-            <AnswersTable
-              answers={this.props.toDisplay}
-              clicked={this.modalViewHandler}
-              isNoReports={this.props.isAnswersEmpty}
-            />
-          </div>
-          <div className="d-flex justify-content-between">
-            <Pagination
-              {...this.props.pagination}
-              clicked={this.pageChangeHandler}
-            />
-          </div>
+          {this.props.isFetching ? (
+            <Spinner loading={true} size={250} />
+          ) : (
+            <React.Fragment>
+              <div>
+                <h3 className="text-uppercase">Reported Answers</h3>
+              </div>
+              <div className="pt-3 border-top table-responsive">
+                <AnswersTable
+                  answers={this.props.toDisplay}
+                  clicked={this.modalViewHandler}
+                  isNoReports={this.props.isAnswersEmpty}
+                />
+              </div>
+              <div className="w-100 d-flex justify-content-between">
+                <Pagination
+                  {...this.props.pagination}
+                  clicked={this.pageChangeHandler}
+                />
+              </div>
+            </React.Fragment>
+          )}
         </div>
       </div>
     );

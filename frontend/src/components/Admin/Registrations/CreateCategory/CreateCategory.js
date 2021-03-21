@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import CategoryForm from './CategoryForm/CategoryForm';
-import * as categoryActions from '../../../../store/actions/creators/createCategory';
+import Spinner from '../../../UI/Spinner/Spinner';
+import * as actions from '../../../../store/actions/creators/createCategory';
 import * as formConfigs from '../../../../config/formConfigs';
 
 class CreateCategory extends Component {
@@ -56,8 +57,12 @@ class CreateCategory extends Component {
     const data = formConfigs.dataFactory(this.state.formData);
 
     this.props.onSubmit(data);
-    this.setState({ formData: this.resetForm() });
+    this.setState({ formData: formConfigs.resetForm(this.state.formData) });
   };
+
+  componentWillUnmount() {
+    this.props.onHide();
+  }
 
   render() {
     const successMessage = this.props.isSuccess ? (
@@ -72,16 +77,20 @@ class CreateCategory extends Component {
         <div className="pl-2 w-100">
           <h3>Create Category</h3>
         </div>
-        <div className="p-1 border-top">
-          <CategoryForm
-            {...this.state.formData}
-            radio={this.state.radioChoices}
-            changed={this.valueChangedHandler}
-            reset={this.resetFormHandler}
-            submit={this.createCategoryHandler}
-            formErrors={this.state.formErrors}
-            blur={this.onBlurHandler}
-          />
+        <div className="p-1 border-top d-flex justify-content-center align-items-center">
+          {this.props.isFetching ? (
+            <Spinner loading={true} size={200} />
+          ) : (
+            <CategoryForm
+              {...this.state.formData}
+              radio={this.state.radioChoices}
+              changed={this.valueChangedHandler}
+              reset={this.resetFormHandler}
+              submit={this.createCategoryHandler}
+              formErrors={this.state.formErrors}
+              blur={this.onBlurHandler}
+            />
+          )}
         </div>
         <div className="mt-3">
           <p className="text-danger text-center" style={{ fontSize: '14px' }}>
@@ -112,9 +121,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  onShow: () => dispatch(categoryActions.showCategoryForm()),
-  onReset: () => dispatch(categoryActions.resetCategoryForm()),
-  onSubmit: data => dispatch(categoryActions.categoryCreation(data)),
+  onShow: () => dispatch(actions.showCategoryForm()),
+  onHide: () => dispatch(actions.hideCategoryForm()),
+  onReset: () => dispatch(actions.resetCategoryForm()),
+  onSubmit: data => dispatch(actions.categoryCreation(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateCategory);
