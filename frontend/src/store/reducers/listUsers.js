@@ -31,10 +31,16 @@ export const listUsersReducer = (state = initialState, action) => {
         users: fetchedUsers,
         ...initPaginationResult,
         isUsersEmpty: !fetchedUsers.length,
+        isFetching: false,
       };
 
     case actionTypes.FETCH_USERS_FAIL:
-      return { ...state, isUsersEmpty: true, error: action.payload };
+      return {
+        ...state,
+        isUsersEmpty: true,
+        error: action.payload,
+        isFetching: false,
+      };
 
     case actionTypes.CHANGE_USERS_PAGE:
       const toDisplay = paginationConfigs.pageContentSlicer(
