@@ -24,7 +24,11 @@ class AdminPage extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.user) this.props.history.replace('/');
+    if (!this.props.isLoggedIn) this.props.history.replace('/');
+    else {
+      if (this.props.user.role !== 'ADMIN')
+        this.props.history.replace('/category');
+    }
   }
 
   render() {
@@ -49,6 +53,7 @@ class AdminPage extends Component {
 
 const mapStateToProps = state => ({
   user: state.login.user,
+  isLoggedIn: state.login.isLoggedIn,
 });
 
 const mapDispatchToProps = dispatch => ({

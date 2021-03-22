@@ -20,10 +20,9 @@ class CategoryPage extends Component {
   clickHandler = event => {
     const categoryId = +event.target.dataset.id;
     const category = this.props.categories.find(cat => cat.id === categoryId);
-    const url = this.props.match.url;
 
     this.props.onSelectCategory(category);
-    this.props.history.push(`${url}/${category.name}`);
+    this.props.history.replace('/questions');
   };
 
   render() {

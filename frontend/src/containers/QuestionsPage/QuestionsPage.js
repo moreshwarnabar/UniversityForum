@@ -47,10 +47,9 @@ class QuestionsPage extends Component {
   handleClick = event => {
     const questionId = +event.target.closest('.list-group-item').dataset.id;
     const question = this.props.questions.find(que => que.id === questionId);
-    const url = this.props.match.url;
 
     this.props.onSelectQuestion(question);
-    this.props.history.push(`${url}/${question.description}`);
+    this.props.history.replace('/answers');
   };
 
   searchQuestionChangeHandler = event => {

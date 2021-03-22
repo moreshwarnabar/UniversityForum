@@ -19,9 +19,9 @@ class App extends Component {
         <Switch>
           <Route path="/admin" component={AdminPage} />
           <Route path="/profile" component={ProfilePage} />
-          <Route path="/categories/:name/:question" component={AnswersPage} />
-          <Route path="/categories/:name" component={QuestionsPage} />
           <Route path="/categories" component={CategoryPage} />
+          <Route path="/questions" component={QuestionsPage} />
+          <Route path="/answers" component={AnswersPage} />
           <Route path="/" component={LoginPage} />
         </Switch>
       </div>
