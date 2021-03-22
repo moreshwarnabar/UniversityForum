@@ -8,6 +8,7 @@ import ListUsers from '../../components/Admin/ListUsers/ListUsers';
 import ReportedAnswers from '../../components/Admin/ReportedAnswers/ReportedAnswers';
 import Links from '../../components/UI/Links/Links';
 import { logoutUser } from '../../store/actions/creators/login';
+import AuthRoute from '../../components/AuthRoute/AuthRoute';
 
 class AdminPage extends Component {
   state = {
@@ -23,10 +24,6 @@ class AdminPage extends Component {
     this.props.onLogout();
   };
 
-  componentDidMount() {
-    if (!this.props.user) this.props.history.replace('/');
-  }
-
   render() {
     return (
       <React.Fragment>
@@ -39,7 +36,8 @@ class AdminPage extends Component {
           <Switch>
             <Route path="/admin/users" component={ListUsers} />
             <Route path="/admin/answers" component={ReportedAnswers} />
-            <Route path="/admin" component={Registrations} />
+            <Route path="/admin" exact component={Registrations} />
+            <AuthRoute path="" component={Registrations} />
           </Switch>
         </div>
       </React.Fragment>
@@ -49,6 +47,7 @@ class AdminPage extends Component {
 
 const mapStateToProps = state => ({
   user: state.login.user,
+  isLoggedIn: state.login.isLoggedIn,
 });
 
 const mapDispatchToProps = dispatch => ({

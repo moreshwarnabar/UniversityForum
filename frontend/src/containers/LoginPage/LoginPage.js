@@ -49,22 +49,6 @@ class LoginPage extends Component {
     this.props.userLogin(data);
   };
 
-  componentDidUpdate() {
-    if (this.props.isLoggedIn) {
-      const nextPath =
-        this.props.user.role === 'ADMIN' ? 'admin' : 'categories';
-      this.props.history.push(`/${nextPath}`);
-    }
-  }
-
-  componentDidMount() {
-    if (this.props.isLoggedIn) {
-      const nextPath =
-        this.props.user.role === 'ADMIN' ? 'admin' : 'categories';
-      this.props.history.push(`/${nextPath}`);
-    }
-  }
-
   render() {
     return (
       <div

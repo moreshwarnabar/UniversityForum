@@ -9,6 +9,7 @@ import AdminPage from './containers/AdminPage/AdminPage';
 import QuestionsPage from './containers/QuestionsPage/QuestionsPage';
 import AnswersPage from './containers/AnswersPage/AnswersPage';
 import NetworkError from './components/NetworkError/NetworkError';
+import AuthRoute from './components/AuthRoute/AuthRoute';
 
 class App extends Component {
   render() {
@@ -17,12 +18,16 @@ class App extends Component {
         <NetworkError />
 
         <Switch>
-          <Route path="/admin" component={AdminPage} />
-          <Route path="/profile" component={ProfilePage} />
-          <Route path="/categories/:name/:question" component={AnswersPage} />
-          <Route path="/categories/:name" component={QuestionsPage} />
-          <Route path="/categories" component={CategoryPage} />
-          <Route path="/" component={LoginPage} />
+          <AuthRoute path="/admin" component={AdminPage} test={1} />
+          <AuthRoute path="/profile" component={ProfilePage} test={2} />
+          <AuthRoute path="/categories" component={CategoryPage} test={3} />
+          <AuthRoute path="/questions" component={QuestionsPage} test={4} />
+          <AuthRoute path="/answers" component={AnswersPage} test={5} />
+          {/* <AuthRoute path="/" component={LoginPage} test={16} /> */}
+          <Route
+            path="/"
+            render={() => <AuthRoute path="/" component={LoginPage} test={7} />}
+          />
         </Switch>
       </div>
     );
