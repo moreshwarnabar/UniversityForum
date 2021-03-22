@@ -35,12 +35,17 @@ public class AnswerController {
 		return ResponseEntity.ok(new ResponseDTO<>(answerService.fetchReportedAnswers()));
 	}
 
-	@PostMapping("/")
+	@PostMapping
 	public ResponseEntity<?> addAnswer(@RequestBody Answer ans) {
 		return new ResponseEntity<>(new ResponseDTO<>(answerService.addAnswer(ans)), HttpStatus.CREATED);
 	}
 	
-	@PutMapping
+	@PutMapping("/report/add")
+	public ResponseEntity<?> addReport(@RequestBody Answer ans) {
+		return ResponseEntity.ok(new ResponseDTO<>(answerService.addReport(ans)));
+	}
+	
+	@PutMapping("/report/remove")
 	public ResponseEntity<?> removeReport(@RequestBody Answer ans) {
 		return ResponseEntity.ok(new ResponseDTO<>(answerService.removeReport(ans)));
 	}

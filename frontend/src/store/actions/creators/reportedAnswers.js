@@ -34,7 +34,7 @@ export const removeReport = data => {
   return dispatch => {
     dispatch(fetchReportsStart());
     axios
-      .put('answers', data)
+      .put('answers/report/remove', data)
       .then(response => dispatch(removeReportsSuccess(response.data.result)))
       .catch(({ response }) => dispatch(fetchReportsFail(response.data)));
   };

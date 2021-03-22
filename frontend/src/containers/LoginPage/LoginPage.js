@@ -88,15 +88,17 @@ class LoginPage extends Component {
           />
 
           <div className="mt-3 w-100 d-flex flex-column align-items-center justify-content-center">
-            <p className="text-danger" style={{ fontSize: '14px' }}>
-              {this.props.error?.data.errorDetails}
-            </p>
+            {this.props.error ? (
+              <p className="text-danger" style={{ fontSize: '14px' }}>
+                {this.props.error.data.errorDetails}
+              </p>
+            ) : null}
             <small className="text-muted">
-              <a className="text-muted mr-1" href="about">
+              <a className="text-muted mr-1" href="/">
                 About
               </a>
               |
-              <a className="text-muted ml-1" href="contact">
+              <a className="text-muted ml-1" href="/">
                 Contact Us
               </a>
             </small>

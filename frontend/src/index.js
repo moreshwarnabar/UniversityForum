@@ -27,6 +27,7 @@ const rootReducer = combineReducers({
   contactDetails: reducers.contactDetailsReducer,
   studentDetails: reducers.studentDetailsReducer,
   facultyDetails: reducers.facultyDetailsReducer,
+  answers: reducers.answersReducer,
 });
 
 const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
@@ -35,6 +36,7 @@ store.subscribe(() => {
   saveState({
     login: store.getState().login,
     category: store.getState().category,
+    questions: store.getState().questions,
   });
 });
 

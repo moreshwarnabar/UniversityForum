@@ -10,3 +10,4 @@ export { userDetailsReducer } from './profileReducers/userDetails';
 export { contactDetailsReducer } from './profileReducers/contactDetails';
 export { studentDetailsReducer } from './profileReducers/studentDetails';
 export { facultyDetailsReducer } from './profileReducers/facultyDetails';
+export { answersReducer } from './answers';

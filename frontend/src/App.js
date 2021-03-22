@@ -7,6 +7,7 @@ import LoginPage from './containers/LoginPage/LoginPage';
 import CategoryPage from './containers/CategoryPage/CategoryPage';
 import AdminPage from './containers/AdminPage/AdminPage';
 import QuestionsPage from './containers/QuestionsPage/QuestionsPage';
+import AnswersPage from './containers/AnswersPage/AnswersPage';
 
 class App extends Component {
   render() {
@@ -15,12 +16,11 @@ class App extends Component {
         <Switch>
           <Route path="/admin" component={AdminPage} />
           <Route path="/profile" component={ProfilePage} />
+          <Route path="/categories/:name/:question" component={AnswersPage} />
           <Route path="/categories/:name" component={QuestionsPage} />
           <Route path="/categories" component={CategoryPage} />
           <Route path="/" component={LoginPage} />
         </Switch>
-        {/* <QuestionsPage /> */}
-        {/* <CategoryPage /> */}
       </div>
     );
   }

@@ -3,7 +3,10 @@ import React from 'react';
 const searchQuestions = props => {
   const message = props.questions.length ? null : (
     <div className="mt-3 text-center font-weight-bold">
-      <p>No questions for your search query. Please post a new question!</p>
+      <p>
+        No questions for your search query. Either refine your search or post a
+        question!
+      </p>
     </div>
   );
 
@@ -21,9 +24,10 @@ const searchQuestions = props => {
       {props.questions.map(item => (
         <div
           key={item.id}
-          className=" list-group-item"
+          className="list-group-item"
           onClick={props.select}
           style={{ cursor: 'pointer' }}
+          data-id={item.id}
         >
           <h6 className="card-text">
             {item.description} {item.id.answered}
