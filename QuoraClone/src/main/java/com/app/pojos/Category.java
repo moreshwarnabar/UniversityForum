@@ -41,6 +41,13 @@ public class Category extends BaseEntity {
 		System.out.println("In default constructor of " + getClass().getName());
 	}
 
+	public Category(int id, String name, int numberOfSubscribers, boolean facultyAccess) {
+		this.setId(id);
+		this.name = name;
+		this.numberOfSubscribers = numberOfSubscribers;
+		this.facultyAccess = facultyAccess;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -84,7 +91,7 @@ public class Category extends BaseEntity {
 	@Override
 	public String toString() {
 		return "Category [name=" + name + ", numberOfSubscribers=" + numberOfSubscribers + ", blockedForFaculty="
-				+ facultyAccess + "]";
+				+ facultyAccess + "]" + "id: " + this.getId();
 	}
 
 	public void editNumberOfSubscribers(int i) {

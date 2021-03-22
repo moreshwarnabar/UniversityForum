@@ -24,10 +24,16 @@ public class QuestionServiceImpl implements IQuestionService {
 	@Autowired
 	private CategoryRepository catRepo;
 
+	public QuestionServiceImpl(QuestionRepository questionRepo, CategoryRepository catRepo) {
+		this.questionRepo = questionRepo;
+		this.catRepo = catRepo;
+	}
+
 	@Override
 	public List<Question> fetchQuestionForCategory(int categoryId) {
 		Category c = catRepo.findById(categoryId)
 						.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
+
 		return questionRepo.findByCategoryOrderByAskedOnDesc(c);
 	}
 

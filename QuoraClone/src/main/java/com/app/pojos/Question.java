@@ -50,6 +50,13 @@ public class Question extends BaseEntity {
 		System.out.println("In default constructor of " + getClass().getName());
 	}
 
+	public Question(String description, boolean isAnswered, LocalDate askedOn, Category category) {
+		this.description = description;
+		this.isAnswered = isAnswered;
+		this.askedOn = askedOn;
+		this.category = category;
+	}
+
 	public String getDescription() {
 		return description;
 	}
