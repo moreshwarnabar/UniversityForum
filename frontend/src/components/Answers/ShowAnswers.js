@@ -2,8 +2,17 @@ import React from 'react';
 import { Flag, FlagFill } from 'react-bootstrap-icons';
 
 const ShowAnswers = props => {
+  const message = props.answers.length ? null : (
+    <div className="mt-3 text-center font-weight-bold">
+      <p>
+        No answers for this question yet. Be the first to post an answer now!
+      </p>
+    </div>
+  );
+
   return (
     <div className="card border-0">
+      {message}
       {props.answers.map(item => (
         <div className="card my-2" key={item.id}>
           <div className="card-header border-0">

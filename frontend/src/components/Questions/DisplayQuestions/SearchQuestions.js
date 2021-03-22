@@ -3,7 +3,10 @@ import React from 'react';
 const searchQuestions = props => {
   const message = props.questions.length ? null : (
     <div className="mt-3 text-center font-weight-bold">
-      <p>No questions for your search query. Please post a new question!</p>
+      <p>
+        No questions for your search query. Either refine your search or post a
+        question!
+      </p>
     </div>
   );
 

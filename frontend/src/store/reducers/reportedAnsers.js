@@ -5,7 +5,7 @@ const initialState = {
   answers: null,
   toDisplay: null,
   pagination: {
-    per: 8,
+    per: 7,
     current: 1,
     last: 1,
   },

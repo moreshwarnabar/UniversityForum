@@ -111,7 +111,7 @@ export const facultyAccessValidation = facultyAccess => {
   let errorMsg = null;
 
   if (!value.trim().length) {
-    errorMsg = 'Please enter a valid name';
+    errorMsg = 'Please choose an option';
   }
   facultyAccess.isValid = !errorMsg;
 

@@ -30,6 +30,7 @@ class UserRegistration extends Component {
     ],
     formErrors: null,
     isFormValid: false,
+    isSubmitted: false,
   };
 
   valueChangedHandler = event => {
@@ -73,8 +74,15 @@ class UserRegistration extends Component {
     const data = formConfigs.dataFactory(this.state.formData);
 
     this.props.onSubmit(data);
-    this.setState({ formData: formConfigs.resetForm(this.state.formData) });
+    this.setState({ isSubmitted: true });
   };
+
+  componentDidUpdate() {
+    const { isSubmitted, formData } = this.state;
+    if (isSubmitted && !this.props.isFetching && !this.props.errors) {
+      this.setState({ formData: formConfigs.resetForm(formData) });
+    }
+  }
 
   componentWillUnmount() {
     this.props.onHide();
@@ -107,10 +115,10 @@ class UserRegistration extends Component {
             />
           )}
         </div>
-        {this.state.isFormValid ? (
+        {this.props.errors ? (
           <div>
             <p className="text-danger text-center" style={{ fontSize: '14px' }}>
-              {this.props.errors}
+              {this.props.errors.data.errorDetails}
             </p>
           </div>
         ) : null}

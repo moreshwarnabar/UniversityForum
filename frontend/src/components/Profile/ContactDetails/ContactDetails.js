@@ -36,8 +36,20 @@ class ContactDetails extends Component {
   }
 
   showEditContactDetailsForm = () => {
+    const { showContactDetailsForm, error } = this.state;
+    const contactFormDetails = { ...this.state.contactFormDetails };
+    if (error) {
+      Object.keys(error).forEach(
+        key => (contactFormDetails[key] = this.props.contactDetails[key] || '')
+      );
+    }
     this.setState({
-      showContactDetailsForm: !this.state.showContactDetailsForm,
+      showContactDetailsForm: !showContactDetailsForm,
+      contactFormDetails,
+      error: {
+        phoneNo: '',
+        PinCode: '',
+      },
     });
   };
 
@@ -50,13 +62,16 @@ class ContactDetails extends Component {
   };
 
   validate = () => {
-    if (this.state.contactFormDetails.phoneNo.trim().length !== 10) {
+    const { phoneNo, pinCode } = this.state.contactFormDetails;
+    if (!Number.isInteger(phoneNo)) {
+      this.setState({ error: { phoneNo: 'Mobile number must be numeric' } });
+    } else if (phoneNo.trim().length !== 10) {
       this.setState({
         error: {
           phoneNo: 'Mobile No. must contain 10 digit',
         },
       });
-    } else if (this.state.contactFormDetails.pinCode.trim().length !== 6) {
+    } else if (pinCode.trim().length !== 6) {
       this.setState({ error: { pinCode: 'pincode must contain 6 digit' } });
     } else {
       this.setState({
@@ -74,13 +89,13 @@ class ContactDetails extends Component {
       const id = this.props.userId;
       const data = this.state.contactFormDetails;
 
-      if (this.props.contactDetails) {
-        data.id = id;
-        this.props.onUpdate(data);
-      } else {
-        this.props.onCreate(id, data);
-      }
-      this.setState({ showContactDetailsForm: false });
+      // if (this.props.contactDetails) {
+      //   data.id = id;
+      //   this.props.onUpdate(data);
+      // } else {
+      //   this.props.onCreate(id, data);
+      // }
+      // this.setState({ showContactDetailsForm: false });
     }
   };
 

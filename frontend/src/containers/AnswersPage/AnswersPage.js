@@ -44,7 +44,6 @@ class Answer extends Component {
   };
 
   reportHandler = event => {
-    const id = event.currentTarget.id;
     const data = {
       id: event.currentTarget.id,
       isReported: true,
@@ -73,7 +72,7 @@ class Answer extends Component {
     return (
       <React.Fragment>
         <Navbar />
-        <div className="container pt-3 bg-light" style={{ opacity: '0.9' }}>
+        <div className="container pt-3 bg-light min-vh-100" style={{ opacity: '0.9' }}>
           <PostAnswer
             question={question}
             postAnswer={postAnswer}

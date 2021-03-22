@@ -5,7 +5,7 @@ const initialState = {
   users: null,
   toDisplay: null,
   pagination: {
-    per: 1,
+    per: 6,
     current: 1,
     last: 1,
   },

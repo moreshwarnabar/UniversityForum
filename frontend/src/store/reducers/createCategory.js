@@ -13,7 +13,7 @@ export const categoryCreationReducer = (state = initialState, action) => {
       return { ...state, isCreatingCategory: true };
 
     case actionTypes.HIDE_CATEGORY_FORM:
-      return { ...state, isCreatingCategory: false };
+      return { ...state, isCreatingCategory: false, errors: null };
 
     case actionTypes.RESET_CATEGORY_FORM:
       return { ...state, errors: null };

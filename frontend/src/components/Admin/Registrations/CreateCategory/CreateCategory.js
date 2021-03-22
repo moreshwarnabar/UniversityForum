@@ -18,6 +18,7 @@ class CreateCategory extends Component {
     ],
     isFormValid: false,
     formErrors: null,
+    isSubmitted: false,
   };
 
   valueChangedHandler = event => {
@@ -57,11 +58,18 @@ class CreateCategory extends Component {
     const data = formConfigs.dataFactory(this.state.formData);
 
     this.props.onSubmit(data);
-    this.setState({ formData: formConfigs.resetForm(this.state.formData) });
+    this.setState({ isSubmitted: true });
   };
 
   componentWillUnmount() {
     this.props.onHide();
+  }
+
+  componentDidUpdate() {
+    const { isSubmitted, formData } = this.state;
+    if (isSubmitted && !this.props.isFetching && !this.props.errors) {
+      this.setState({ formData: formConfigs.resetForm(formData) });
+    }
   }
 
   render() {
@@ -92,11 +100,13 @@ class CreateCategory extends Component {
             />
           )}
         </div>
-        <div className="mt-3">
-          <p className="text-danger text-center" style={{ fontSize: '14px' }}>
-            {this.props.errors}
-          </p>
-        </div>
+        {this.props.errors ? (
+          <div className="mt-3">
+            <p className="text-danger text-center" style={{ fontSize: '14px' }}>
+              {this.props.errors.data.errorDetails}
+            </p>
+          </div>
+        ) : null}
       </div>
     ) : (
       <div
