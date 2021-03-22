@@ -35,7 +35,6 @@ class QuestionsPage extends Component {
         this.setState({ showSearchQuestions: false });
       }
     } else {
-      console.log('redirect');
       this.props.history.replace('/categories');
     }
   }
