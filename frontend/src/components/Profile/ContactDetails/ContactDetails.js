@@ -89,13 +89,13 @@ class ContactDetails extends Component {
       const id = this.props.userId;
       const data = this.state.contactFormDetails;
 
-      // if (this.props.contactDetails) {
-      //   data.id = id;
-      //   this.props.onUpdate(data);
-      // } else {
-      //   this.props.onCreate(id, data);
-      // }
-      // this.setState({ showContactDetailsForm: false });
+      if (this.props.contactDetails) {
+        data.id = id;
+        this.props.onUpdate(data);
+      } else {
+        this.props.onCreate(id, data);
+      }
+      this.setState({ showContactDetailsForm: false });
     }
   };
 
