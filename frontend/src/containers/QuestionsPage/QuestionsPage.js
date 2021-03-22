@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import * as actions from '../../store/actions/creators/questions';
 import Navbar from '../../components/UI/Navbar/Navbar';
@@ -27,11 +28,16 @@ class QuestionsPage extends Component {
     const { category, onPageLoad, isFetching, currentCategory } = this.props;
     const id = category.id;
 
-    if (currentCategory !== id && !isFetching) {
-      onPageLoad(id);
-    }
-    if (currentCategory !== id && this.state.showSearchQuestions) {
-      this.setState({ showSearchQuestions: false });
+    if (!this.props.isError) {
+      if (currentCategory !== id && !isFetching) {
+        onPageLoad(id);
+      }
+      if (currentCategory !== id && this.state.showSearchQuestions) {
+        this.setState({ showSearchQuestions: false });
+      }
+    } else {
+      console.log('redirect');
+      this.props.history.replace('/categories');
     }
   }
 
@@ -178,6 +184,7 @@ const mapStateToProps = state => ({
   user: state.login.user,
   category: state.category.selectedCategory,
   ...state.questions,
+  isError: state.networkError.isError,
 });
 
 const mapDispatchToProps = dispatch => ({

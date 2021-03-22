@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const categoryCreationStart = () => ({
@@ -36,6 +37,7 @@ export const categoryCreation = data => {
         dispatch(categoryCreationSuccess());
       })
       .catch(error => {
+        if (!error.response) dispatch(networkError());
         dispatch(categoryCreationFail(error.response));
       });
   };

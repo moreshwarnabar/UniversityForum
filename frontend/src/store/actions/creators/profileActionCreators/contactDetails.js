@@ -1,4 +1,5 @@
 import * as actionTypes from '../../actionTypes';
+import { networkError } from '../networkError';
 import axios from '../../../../axios-base';
 
 const fetchContactStart = () => ({
@@ -21,7 +22,10 @@ export const fetchContact = id => {
     axios
       .get(`contacts/${id}`)
       .then(response => dispatch(fetchContactSuccess(response.data.result)))
-      .catch(error => dispatch(fetchContactFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchContactFail(error.response));
+      });
   };
 };
 
@@ -45,7 +49,10 @@ export const updateContact = data => {
     axios
       .put('contacts', data)
       .then(response => dispatch(updateContactSuccess(response.data.result)))
-      .catch(error => dispatch(updateContactFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updateContactFail(error.response));
+      });
   };
 };
 
@@ -55,6 +62,9 @@ export const createContact = (id, data) => {
     axios
       .post(`contacts/${id}`, data)
       .then(response => dispatch(updateContactSuccess(response.data.result)))
-      .catch(error => dispatch(updateContactFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updateContactFail(error.response));
+      });
   };
 };

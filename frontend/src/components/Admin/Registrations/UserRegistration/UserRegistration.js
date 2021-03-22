@@ -79,8 +79,11 @@ class UserRegistration extends Component {
 
   componentDidUpdate() {
     const { isSubmitted, formData } = this.state;
-    if (isSubmitted && !this.props.isFetching && !this.props.errors) {
-      this.setState({ formData: formConfigs.resetForm(formData) });
+    if (isSubmitted && this.props.isSuccess) {
+      this.setState({
+        formData: formConfigs.resetForm(formData),
+        isSubmitted: false,
+      });
     }
   }
 
@@ -143,6 +146,7 @@ class UserRegistration extends Component {
 
 const mapStateToProps = state => ({
   ...state.userRegistration,
+  isError: state.networkError.isError,
 });
 
 const mapDispatchToProps = dispatch => ({

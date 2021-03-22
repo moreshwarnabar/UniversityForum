@@ -1,4 +1,5 @@
 import * as actionTypes from '../../actionTypes';
+import { networkError } from '../networkError';
 import axios from '../../../../axios-base';
 
 const updateUserStart = () => ({
@@ -21,7 +22,10 @@ export const updateUser = data => {
     axios
       .put('users', data)
       .then(response => dispatch(updateUserSuccess(response.data.result)))
-      .catch(error => dispatch(updateUserFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updateUserFail(error.response));
+      });
   };
 };
 
@@ -45,6 +49,9 @@ export const updatePassword = (id, password) => {
     axios
       .put(`users/password/${id}`, password)
       .then(response => dispatch(updatePasswordSuccess(response.data.result)))
-      .catch(error => dispatch(updatePasswordFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updatePasswordFail(error.response));
+      });
   };
 };

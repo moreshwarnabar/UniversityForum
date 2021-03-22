@@ -8,11 +8,14 @@ import CategoryPage from './containers/CategoryPage/CategoryPage';
 import AdminPage from './containers/AdminPage/AdminPage';
 import QuestionsPage from './containers/QuestionsPage/QuestionsPage';
 import AnswersPage from './containers/AnswersPage/AnswersPage';
+import NetworkError from './components/NetworkError/NetworkError';
 
 class App extends Component {
   render() {
     return (
       <div className="container-fluid px-0 App">
+        <NetworkError />
+
         <Switch>
           <Route path="/admin" component={AdminPage} />
           <Route path="/profile" component={ProfilePage} />

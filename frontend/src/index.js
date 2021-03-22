@@ -28,6 +28,7 @@ const rootReducer = combineReducers({
   studentDetails: reducers.studentDetailsReducer,
   facultyDetails: reducers.facultyDetailsReducer,
   answers: reducers.answersReducer,
+  networkError: reducers.networkErrorReducer,
 });
 
 const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));

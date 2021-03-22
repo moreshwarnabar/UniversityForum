@@ -1,4 +1,5 @@
 import * as actionTypes from '../../actionTypes';
+import { networkError } from '../networkError';
 import axios from '../../../../axios-base';
 
 const fetchFacultyStart = () => ({
@@ -21,7 +22,10 @@ export const fetchFaculty = id => {
     axios
       .get(`faculty/${id}`)
       .then(response => dispatch(fetchFacultySuccess(response.data.result)))
-      .catch(error => dispatch(fetchFacultyFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchFacultyFail(error.response));
+      });
   };
 };
 
@@ -45,7 +49,10 @@ export const updateFaculty = data => {
     axios
       .put('faculty', data)
       .then(response => dispatch(updateFacultySuccess(response.data.result)))
-      .catch(error => dispatch(updateFacultyFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updateFacultyFail(error.response));
+      });
   };
 };
 
@@ -55,6 +62,9 @@ export const createFaculty = (id, data) => {
     axios
       .post(`faculty/${id}`, data)
       .then(response => dispatch(updateFacultySuccess(response.data.result)))
-      .catch(error => dispatch(updateFacultyFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updateFacultyFail(error.response));
+      });
   };
 };

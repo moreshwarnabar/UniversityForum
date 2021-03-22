@@ -22,7 +22,12 @@ export const userRegistrationReducer = (state = initialState, action) => {
       return { ...state, isFetching: true };
 
     case actionTypes.USER_REGISTRATION_FAIL:
-      return { ...state, errors: action.payload, isFetching: false };
+      return {
+        ...state,
+        errors: action.payload,
+        isFetching: false,
+        isSuccess: false,
+      };
 
     case actionTypes.USER_REGISTRATION_SUCCESS:
       return {

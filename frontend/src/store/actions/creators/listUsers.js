@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const fetchUsersStart = () => ({
@@ -21,7 +22,10 @@ export const fetchAllUsers = () => {
     axios
       .get('users/all')
       .then(response => dispatch(fetchUsersSuccess(response.data.result)))
-      .catch(error => dispatch(fetchUsersFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchUsersFail(error.response));
+      });
   };
 };
 
@@ -31,7 +35,10 @@ export const fetchFilteredUsers = search => {
     axios
       .get(`users${search === '' ? '/all' : `/filters?${search}`}`)
       .then(response => dispatch(fetchUsersSuccess(response.data.result)))
-      .catch(error => dispatch(fetchUsersFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchUsersFail(error.response));
+      });
   };
 };
 
@@ -53,6 +60,9 @@ export const aysncBlockUnblockUser = user => {
       .then(response => {
         dispatch(blockUnblockUser(response.data.result));
       })
-      .catch(({ response }) => dispatch(fetchUsersFail(response.data)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchUsersFail(error.response));
+      });
   };
 };

@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const userRegistrationStart = () => ({
@@ -36,6 +37,7 @@ export const userRegistration = data => {
         dispatch(userRegistrationSuccess());
       })
       .catch(error => {
+        if (!error.response) dispatch(networkError());
         dispatch(userRegistrationFail(error.response));
       });
   };

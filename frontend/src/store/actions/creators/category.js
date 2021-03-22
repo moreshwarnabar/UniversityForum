@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const fetchCategoriesStart = () => ({
@@ -21,7 +22,10 @@ export const fetchCategories = data => {
     axios
       .get(`category/${data}`)
       .then(response => dispatch(fetchCategoriesSuccess(response.data.result)))
-      .catch(error => dispatch(fetchCategoriesFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchCategoriesFail(error.response));
+      });
   };
 };
 

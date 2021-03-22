@@ -22,7 +22,12 @@ export const categoryCreationReducer = (state = initialState, action) => {
       return { ...state, isFetching: true };
 
     case actionTypes.CATEGORY_CREATION_FAIL:
-      return { ...state, errors: action.payload, isFetching: false };
+      return {
+        ...state,
+        errors: action.payload,
+        isFetching: false,
+        isSuccess: false,
+      };
 
     case actionTypes.CATEGORY_CREATION_SUCCESS:
       return {

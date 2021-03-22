@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const loginUserStart = () => ({
@@ -30,7 +31,8 @@ export const authenticateUser = loginData => {
         dispatch(loginUserSuccess(user));
       })
       .catch(error => {
-        dispatch(loginUserFail(error.response));
+        if (!error.response) dispatch(networkError());
+        else dispatch(loginUserFail(error.response));
       });
   };
 };

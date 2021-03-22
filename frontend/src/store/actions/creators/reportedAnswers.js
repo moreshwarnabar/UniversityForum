@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const fetchReportsStart = () => ({
@@ -21,7 +22,10 @@ export const fetchReports = () => {
     axios
       .get('answers/reports')
       .then(response => dispatch(fetchReportsSuccess(response.data.result)))
-      .catch(error => dispatch(fetchReportsFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchReportsFail(error.response));
+      });
   };
 };
 
@@ -36,7 +40,10 @@ export const removeReport = data => {
     axios
       .put('answers/report/remove', data)
       .then(response => dispatch(removeReportsSuccess(response.data.result)))
-      .catch(({ response }) => dispatch(fetchReportsFail(response.data)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchReportsFail(error.response));
+      });
   };
 };
 
@@ -51,7 +58,10 @@ export const deleteAnswer = data => {
     axios
       .delete(`answers/${data}`)
       .then(response => dispatch(deleteAnswerSuccess(data)))
-      .catch(({ response }) => dispatch(fetchReportsFail(response.data)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchReportsFail(error.response));
+      });
   };
 };
 
