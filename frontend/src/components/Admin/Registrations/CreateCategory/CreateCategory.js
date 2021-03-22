@@ -67,8 +67,11 @@ class CreateCategory extends Component {
 
   componentDidUpdate() {
     const { isSubmitted, formData } = this.state;
-    if (isSubmitted && !this.props.isFetching && !this.props.errors) {
-      this.setState({ formData: formConfigs.resetForm(formData) });
+    if (isSubmitted && this.props.isSuccess) {
+      this.setState({
+        formData: formConfigs.resetForm(formData),
+        isSubmitted: false,
+      });
     }
   }
 
@@ -128,6 +131,7 @@ class CreateCategory extends Component {
 
 const mapStateToProps = state => ({
   ...state.createCategory,
+  isError: state.networkError.isError,
 });
 
 const mapDispatchToProps = dispatch => ({

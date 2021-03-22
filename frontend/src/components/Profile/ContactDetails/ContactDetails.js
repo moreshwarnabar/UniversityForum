@@ -14,8 +14,8 @@ class ContactDetails extends Component {
     formFields: ['phoneNo', 'city', 'state', 'street', 'pinCode'],
     isFormInit: false,
     error: {
-      phoneNo: '',
-      PinCode: '',
+      phoneNo: null,
+      pinCode: null,
     },
   };
 
@@ -38,7 +38,7 @@ class ContactDetails extends Component {
   showEditContactDetailsForm = () => {
     const { showContactDetailsForm, error } = this.state;
     const contactFormDetails = { ...this.state.contactFormDetails };
-    if (error) {
+    if ((error.phoneNo || error.pinCode) && this.props.contactDetails) {
       Object.keys(error).forEach(
         key => (contactFormDetails[key] = this.props.contactDetails[key] || '')
       );
@@ -47,8 +47,8 @@ class ContactDetails extends Component {
       showContactDetailsForm: !showContactDetailsForm,
       contactFormDetails,
       error: {
-        phoneNo: '',
-        PinCode: '',
+        phoneNo: null,
+        pinCode: null,
       },
     });
   };
@@ -63,9 +63,7 @@ class ContactDetails extends Component {
 
   validate = () => {
     const { phoneNo, pinCode } = this.state.contactFormDetails;
-    if (!Number.isInteger(phoneNo)) {
-      this.setState({ error: { phoneNo: 'Mobile number must be numeric' } });
-    } else if (phoneNo.trim().length !== 10) {
+    if (phoneNo.trim().length !== 10) {
       this.setState({
         error: {
           phoneNo: 'Mobile No. must contain 10 digit',
@@ -186,6 +184,7 @@ class ContactDetails extends Component {
 
 const mapStateToProps = state => ({
   ...state.contactDetails,
+  isError: state.networkError.isError,
 });
 
 const mapDispatchToProps = dispatch => ({

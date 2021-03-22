@@ -1,4 +1,5 @@
 import * as actionTypes from '../../actionTypes';
+import { networkError } from '../networkError';
 import axios from '../../../../axios-base';
 
 const fetchStudentStart = () => ({
@@ -21,7 +22,10 @@ export const fetchStudent = id => {
     axios
       .get(`students/${id}`)
       .then(response => dispatch(fetchStudentSuccess(response.data.result)))
-      .catch(error => dispatch(fetchStudentFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchStudentFail(error.response));
+      });
   };
 };
 
@@ -45,7 +49,10 @@ export const updateStudent = data => {
     axios
       .put('students', data)
       .then(response => dispatch(updateStudentSuccess(response.data.result)))
-      .catch(error => dispatch(updateStudentFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updateStudentFail(error.response));
+      });
   };
 };
 
@@ -55,6 +62,9 @@ export const createStudent = (id, data) => {
     axios
       .post(`students/${id}`, data)
       .then(response => dispatch(updateStudentSuccess(response.data.result)))
-      .catch(error => dispatch(updateStudentFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(updateStudentFail(error.response));
+      });
   };
 };

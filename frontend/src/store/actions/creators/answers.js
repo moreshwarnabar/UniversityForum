@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const fetchAnswersStart = () => ({
@@ -21,7 +22,10 @@ export const fetchAnswers = id => {
     axios
       .get(`answers/question/${id}`)
       .then(response => dispatch(fetchAnswersSuccess(response.data.result)))
-      .catch(error => dispatch(fetchAnswersFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchAnswersFail(error.response));
+      });
   };
 };
 
@@ -41,7 +45,10 @@ export const postAnswer = data => {
     axios
       .post('answers', data)
       .then(response => dispatch(postAnswerSuccess(response.data.result)))
-      .catch(error => dispatch(postAnswerFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(postAnswerFail(error.response));
+      });
   };
 };
 
@@ -61,6 +68,9 @@ export const reportAnswer = data => {
     axios
       .put(`answers/report/add`, data)
       .then(response => dispatch(reportAnswerSuccess(response.data.result)))
-      .catch(error => dispatch(reportAnswerFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(reportAnswerFail(error.response));
+      });
   };
 };

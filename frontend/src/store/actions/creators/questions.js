@@ -1,4 +1,5 @@
 import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
 import axios from '../../../axios-base';
 
 const fetchQuestionsStart = flag => ({
@@ -24,7 +25,10 @@ export const fetchQuestions = id => {
       .then(response =>
         dispatch(fetchQuestionsSuccess(response.data.result, id))
       )
-      .catch(error => dispatch(fetchQuestionsFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchQuestionsFail(error.response));
+      });
   };
 };
 
@@ -44,7 +48,10 @@ export const fetchSearch = data => {
     axios
       .get(`questions/filter/${data.search}/${data.id}`)
       .then(response => dispatch(fetchSearchSuccess(response.data.result)))
-      .catch(error => dispatch(fetchSearchFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(fetchSearchFail(error.response));
+      });
   };
 };
 
@@ -64,7 +71,10 @@ export const postQuestion = data => {
     axios
       .post('questions', data)
       .then(response => dispatch(postQuestionSuccess(response.data.result)))
-      .catch(error => dispatch(postQuestionFail(error.response)));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(postQuestionFail(error.response));
+      });
   };
 };
 

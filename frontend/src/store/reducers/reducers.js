@@ -11,3 +11,4 @@ export { contactDetailsReducer } from './profileReducers/contactDetails';
 export { studentDetailsReducer } from './profileReducers/studentDetails';
 export { facultyDetailsReducer } from './profileReducers/facultyDetails';
 export { answersReducer } from './answers';
+export { networkErrorReducer } from './networkError';

@@ -18,6 +18,12 @@ class Answer extends Component {
     this.props.onPageLoad(questionId);
   }
 
+  componentDidUpdate() {
+    if (this.props.isError) {
+      this.props.history.replace('/categories');
+    }
+  }
+
   postAnswerChangeHandler = event => {
     this.setState({
       postAnswer: event.target.value,
@@ -72,7 +78,10 @@ class Answer extends Component {
     return (
       <React.Fragment>
         <Navbar />
-        <div className="container pt-3 bg-light min-vh-100" style={{ opacity: '0.9' }}>
+        <div
+          className="container pt-3 bg-light min-vh-100"
+          style={{ opacity: '0.9' }}
+        >
           <PostAnswer
             question={question}
             postAnswer={postAnswer}
@@ -97,6 +106,7 @@ const mapStateToProps = state => ({
   user: state.login.user,
   question: state.questions.selectedQuestion,
   ...state.answers,
+  isError: state.networkError.isError,
 });
 
 const mapDispatchToProps = dispatch => ({
