@@ -19,7 +19,7 @@ const authRoute = props => {
       <Redirect to={authorizer.baseRoute(role)} />
     );
   } else {
-    return <LoginPage />;
+    return <Route path="/" component={LoginPage} />;
   }
 };
 

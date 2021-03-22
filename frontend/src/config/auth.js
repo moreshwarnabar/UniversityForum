@@ -8,6 +8,7 @@ class Authorizer {
   }
 
   isAuthorized(role, path) {
+    console.log(role, path);
     return this.rights[role.toLowerCase()].includes(path);
   }
 

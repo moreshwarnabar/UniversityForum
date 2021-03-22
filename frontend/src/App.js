@@ -18,15 +18,15 @@ class App extends Component {
         <NetworkError />
 
         <Switch>
-          <AuthRoute path="/admin" component={AdminPage} />
-          <AuthRoute path="/profile" component={ProfilePage} />
-          <AuthRoute path="/categories" component={CategoryPage} />
-          <AuthRoute path="/questions" component={QuestionsPage} />
-          <AuthRoute path="/answers" component={AnswersPage} />
+          <AuthRoute path="/admin" component={AdminPage} test={1} />
+          <AuthRoute path="/profile" component={ProfilePage} test={2} />
+          <AuthRoute path="/categories" component={CategoryPage} test={3} />
+          <AuthRoute path="/questions" component={QuestionsPage} test={4} />
+          <AuthRoute path="/answers" component={AnswersPage} test={5} />
+          {/* <AuthRoute path="/" component={LoginPage} test={16} /> */}
           <Route
             path="/"
-            exact
-            render={() => <AuthRoute path="/" component={LoginPage} />}
+            render={() => <AuthRoute path="/" component={LoginPage} test={7} />}
           />
         </Switch>
       </div>
