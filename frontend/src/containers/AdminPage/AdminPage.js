@@ -23,14 +23,6 @@ class AdminPage extends Component {
     this.props.onLogout();
   };
 
-  componentDidMount() {
-    if (!this.props.isLoggedIn) this.props.history.replace('/');
-    else {
-      if (this.props.user.role !== 'ADMIN')
-        this.props.history.replace('/category');
-    }
-  }
-
   render() {
     return (
       <React.Fragment>

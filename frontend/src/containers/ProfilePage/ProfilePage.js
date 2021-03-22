@@ -8,13 +8,6 @@ import FacultyDetails from '../../components/Profile/FacultyDetails/FacultyDetai
 import Navbar from '../../components/UI/Navbar/Navbar';
 
 const ProfilePage = props => {
-  // if (!props.isLoggedIn) {
-  //   props.history.replace('/');
-  // } else {
-  //   if (props.user.role === 'ADMIN') {
-  //   }
-  // }
-
   return (
     <React.Fragment>
       <Navbar />
