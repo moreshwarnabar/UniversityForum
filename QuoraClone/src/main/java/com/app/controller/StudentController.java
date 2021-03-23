@@ -29,7 +29,7 @@ public class StudentController {
 	@Autowired
 	private IStudentService StudentService;
 	
-	//get all student details
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> fetchStudents(@PathVariable int id){
 		Student students = StudentService.fetchStudents(id);
