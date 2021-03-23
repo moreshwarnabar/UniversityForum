@@ -55,8 +55,10 @@ public class UserControllerTest {
 		when(service.authenticateUser("rajpatil@university.com", "raj123")).thenReturn(u);
 		
 		mockMvc.perform(get("/users/single/rajpatil@university.com/raj123")).
-		andExpect(jsonPath("$.result.username").value("rajpatil@university.com")).//in resulting JSON : checks key name n asserts its value 
-		andExpect(status().isOk());//chks if HttpStatus is OK
+		andExpect(jsonPath("$.result.username").value("rajpatil@university.com")). 
+		andExpect(status().isOk())
+		.andExpect(jsonPath("$.result.username").value("rajpatil@university.com"))
+		.andExpect(jsonPath("$.result.firstName").value("raj"));
 	}
 	
 	

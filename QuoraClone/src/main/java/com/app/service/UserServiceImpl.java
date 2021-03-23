@@ -22,12 +22,19 @@ public class UserServiceImpl implements IUserService {
 	
 	@Autowired
 	private UserRepository userRepo;
+	
+	
+	public UserServiceImpl() {
+	}
+
+	public UserServiceImpl(UserRepository userRepo) {
+		this.userRepo = userRepo;
+	}
 
 	@Override
 	public List<User> fetchAllUsers() {
 		List<User> users = userRepo.findAll();
 		users.forEach((u) -> u.getCategoriesSubscribed().size());
-		System.out.println(users);
 		return users;
 	}
 
