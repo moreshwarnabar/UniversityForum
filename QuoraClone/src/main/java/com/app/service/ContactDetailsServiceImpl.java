@@ -22,8 +22,16 @@ public class ContactDetailsServiceImpl implements IContactDetailsService {
 	private ContactDetailsRepository contactDetailsRepo;
 	@Autowired
 	private UserRepository userRepo;
+
 	
+	public ContactDetailsServiceImpl() {
+	}
 	
+	public ContactDetailsServiceImpl(ContactDetailsRepository contactDetailsRepo, UserRepository userRepo) {
+		this.contactDetailsRepo = contactDetailsRepo;
+		this.userRepo=userRepo;
+	}
+
 	@Override
 	public ContactDetails fetchContactDetails(int id) {
 		ContactDetails c = contactDetailsRepo.findById(id)
@@ -56,7 +64,6 @@ public class ContactDetailsServiceImpl implements IContactDetailsService {
 
 	@Override
 	public ContactDetails updateContactDetails(ContactDetails details) {
-		System.out.println("in service "+details);
 		
 		contactDetailsRepo.save(details);
 		
