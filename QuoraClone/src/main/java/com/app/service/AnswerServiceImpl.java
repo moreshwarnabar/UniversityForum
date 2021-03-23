@@ -25,6 +25,11 @@ public class AnswerServiceImpl implements IAnswerService {
 	@Autowired
 	private QuestionRepository queRepo;
 
+	public AnswerServiceImpl(AnswerRepository ansRepo, QuestionRepository queRepo) {
+		this.ansRepo = ansRepo;
+		this.queRepo = queRepo;
+	}
+
 	@Override
 	public List<Answer> fetchAnswerForQuestion(int qId) {
 		Question q = queRepo.findById(qId)
@@ -33,7 +38,7 @@ public class AnswerServiceImpl implements IAnswerService {
 		if (ans.isEmpty()) {
 			throw new AnswerNotFoundException("No one Answered for this question....Sorry!!!!");
 		}
-		System.out.println(ans);
+
 		return ans;
 	}
 
@@ -42,9 +47,7 @@ public class AnswerServiceImpl implements IAnswerService {
 		Question q = queRepo.findById(ans.getQuestion().getId())
 						.orElseThrow(() -> new QuestionNotFoundException(
 								"question not found " + ans.getQuestion().getId()));
-
-		//ans.setVotes(0);
-		//ans.setReported(false);		
+	
 		q.setAnswered(true);
 		ans.setAnsweredOn(LocalDate.now());
 		return ansRepo.save(ans);
