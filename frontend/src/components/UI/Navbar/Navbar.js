@@ -16,12 +16,8 @@ const navbar = props => {
       variant="dark"
       animation="false"
     >
-      <RB.Navbar.Brand
-        className="text-uppercase"
-        href="#home"
-        style={{ marginRight: '32px' }}
-      >
-        University Forum
+      <RB.Navbar.Brand className="text-uppercase mr-2" href="#home">
+        <h5 className="mb-0">University Forum</h5>
       </RB.Navbar.Brand>
       <RB.Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <RB.Navbar.Collapse
@@ -32,7 +28,7 @@ const navbar = props => {
         }}
       >
         {props.user?.role === 'ADMIN' ? null : (
-          <RB.Nav className="mr-lg-5">
+          <RB.Nav className="mr-lg-5 ml-lg-3">
             <RB.Dropdown
               title="Category"
               id="collasible-nav-dropdown"
