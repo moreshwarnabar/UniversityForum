@@ -5,7 +5,7 @@ const initialState = {
   users: null,
   toDisplay: null,
   pagination: {
-    per: 1,
+    per: 6,
     current: 1,
     last: 1,
   },
@@ -16,10 +16,10 @@ const initialState = {
 
 export const listUsersReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.FETCH_START:
+    case actionTypes.FETCH_USERS_START:
       return { ...state, isFetching: true };
 
-    case actionTypes.FETCH_SUCCESS:
+    case actionTypes.FETCH_USERS_SUCCESS:
       const fetchedUsers = action.payload;
       const initPaginationResult = paginationConfigs.initPagination(
         fetchedUsers,
@@ -31,12 +31,18 @@ export const listUsersReducer = (state = initialState, action) => {
         users: fetchedUsers,
         ...initPaginationResult,
         isUsersEmpty: !fetchedUsers.length,
+        isFetching: false,
       };
 
-    case actionTypes.FETCH_FAIL:
-      return { ...state, isUsersEmpty: true, error: action.payload };
+    case actionTypes.FETCH_USERS_FAIL:
+      return {
+        ...state,
+        isUsersEmpty: true,
+        error: action.payload,
+        isFetching: false,
+      };
 
-    case actionTypes.CHANGE_PAGE:
+    case actionTypes.CHANGE_USERS_PAGE:
       const toDisplay = paginationConfigs.pageContentSlicer(
         state.users,
         action.payload,

@@ -14,14 +14,16 @@ const modalWindow = props => {
         <Modal.Title>{props.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>{props.content}</Modal.Body>
-      <Modal.Footer>
-        <Button variant="success" onClick={props.cancel}>
-          {props.btnLabels?.cancel}
-        </Button>
-        <Button variant="danger" onClick={props.proceed}>
-          {props.btnLabels?.proceed}
-        </Button>
-      </Modal.Footer>
+      {props.btnLabels ? (
+        <Modal.Footer>
+          <Button variant="success" onClick={props.cancel}>
+            {props.btnLabels?.cancel}
+          </Button>
+          <Button variant="danger" onClick={props.proceed}>
+            {props.btnLabels?.proceed}
+          </Button>
+        </Modal.Footer>
+      ) : null}
     </Modal>
   );
 };

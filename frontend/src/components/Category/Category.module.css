@@ -1,0 +1,18 @@
+.Category {
+  height: 50px;
+}
+
+.Category button {
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 768px) {
+  .Category {
+    height: 150px;
+  }
+
+  .Category button {
+    font-size: 1.25rem;
+  }
+}

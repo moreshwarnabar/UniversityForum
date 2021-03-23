@@ -10,15 +10,36 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.css';
 import * as reducers from './store/reducers/reducers';
+import { loadState, saveState } from './store/localStorage';
+
+const persistedState = loadState();
 
 const rootReducer = combineReducers({
   login: reducers.userLoginReducer,
   userRegistration: reducers.userRegistrationReducer,
   createCategory: reducers.categoryCreationReducer,
   listUsers: reducers.listUsersReducer,
+  reportedAnswers: reducers.reportedAnswersReducer,
+  category: reducers.categoriesReducer,
+  questions: reducers.questionsReducer,
+  navbar: reducers.navbarReducer,
+  userDetails: reducers.userDetailsReducer,
+  contactDetails: reducers.contactDetailsReducer,
+  studentDetails: reducers.studentDetailsReducer,
+  facultyDetails: reducers.facultyDetailsReducer,
+  answers: reducers.answersReducer,
+  networkError: reducers.networkErrorReducer,
 });
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
+const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
+
+store.subscribe(() => {
+  saveState({
+    login: store.getState().login,
+    category: store.getState().category,
+    questions: store.getState().questions,
+  });
+});
 
 ReactDOM.render(
   <React.StrictMode>

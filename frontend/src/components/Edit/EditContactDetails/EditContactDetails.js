@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 
 const EditContactDetails = props => (
   <div>
-    <Modal show={props.showContactDetailsForm} centered>
+    <Modal show={props.showContactDetailsForm} onHide={props.showEditContactDetailsForm} centered>
       <Modal.Header>
         <h4>Update Contact Details</h4>
       </Modal.Header>
@@ -12,7 +12,7 @@ const EditContactDetails = props => (
           <tbody>
             <tr>
               <td>
-                <label>Mobile : </label>
+                <label>Mobile : (+91) </label>
               </td>
               <td>
                 <input
@@ -20,9 +20,10 @@ const EditContactDetails = props => (
                   minLength={10}
                   name="phoneNo"
                   className="form-control"
-                  value={props.value.contactDetails.phoneNo}
+                  value={props.phoneNo}
                   onChange={props.changeContactDetailsHandler}
                 />
+                 <div className="text-danger">{props.error.phoneNo}</div>
               </td>
             </tr>
             <tr>
@@ -35,7 +36,7 @@ const EditContactDetails = props => (
                   min={3}
                   name="city"
                   className="form-control"
-                  value={props.value.contactDetails.city}
+                  value={props.city}
                   onChange={props.changeContactDetailsHandler}
                 />
               </td>
@@ -49,7 +50,7 @@ const EditContactDetails = props => (
                   type="text"
                   name="state"
                   className="form-control"
-                  value={props.value.contactDetails.state}
+                  value={props.state}
                   onChange={props.changeContactDetailsHandler}
                 />
               </td>
@@ -63,7 +64,7 @@ const EditContactDetails = props => (
                   type="text"
                   name="street"
                   className="form-control"
-                  value={props.value.contactDetails.street}
+                  value={props.street}
                   onChange={props.changeContactDetailsHandler}
                 />
               </td>
@@ -77,9 +78,10 @@ const EditContactDetails = props => (
                   type="number"
                   name="pinCode"
                   className="form-control"
-                  value={props.value.contactDetails.pinCode}
+                  value={props.pinCode}
                   onChange={props.changeContactDetailsHandler}
                 />
+                <div  className="text-danger">{props.error.pinCode}</div>
               </td>
             </tr>
           </tbody>

@@ -45,7 +45,7 @@ public class StudentController {
 	}
 	
 	
-	@PutMapping("/")
+	@PutMapping
 	public ResponseEntity<?>  updateStudentDetails(@RequestBody Student details) {
 		System.out.println("in controller -"+ details);
 		Student c= StudentService.updateStudentDetails(details);

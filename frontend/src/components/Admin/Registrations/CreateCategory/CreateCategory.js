@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import CategoryForm from './CategoryForm/CategoryForm';
-import * as validators from '../../../../validation/validation';
-import * as categoryActions from '../../../../store/actions/actions';
+import Spinner from '../../../UI/Spinner/Spinner';
+import * as actions from '../../../../store/actions/creators/createCategory';
+import * as formConfigs from '../../../../config/formConfigs';
 
 class CreateCategory extends Component {
   state = {
@@ -17,93 +18,62 @@ class CreateCategory extends Component {
     ],
     isFormValid: false,
     formErrors: null,
+    isSubmitted: false,
   };
 
   valueChangedHandler = event => {
     const { name, value } = event.target;
 
-    const updatedFormData = { ...this.state.formData };
-    const updatedElData = {
-      value,
-      isValid: name === 'gender',
-    };
-    updatedFormData[name] = updatedElData;
+    const updatedFormData = formConfigs.changeValue(
+      { ...this.state.formData },
+      name,
+      value
+    );
 
     this.setState({ formData: updatedFormData });
   };
 
   onBlurHandler = event => {
     const { name } = event.target;
-    console.log(name);
-    const { formErrors, formData } = this.state;
-    const validationResult = this.validateField(name, formErrors, formData);
+    const validationResult = formConfigs.validateField(name, this.state);
     this.setState({ ...validationResult });
-  };
-
-  validateField = (name, formErrors, formData) => {
-    const result = validators[`${name}Validation`]({ ...formData[name] });
-    const validatedFormData = { ...formData, [name]: result[name] };
-    const updatedFormErrors = { ...formErrors, [name]: result.errorMsg };
-
-    // check if valid detail
-    const isFormValid = this.checkFormValidity(validatedFormData);
-
-    return {
-      formData: validatedFormData,
-      formErrors: updatedFormErrors,
-      isFormValid,
-    };
-  };
-
-  checkFormValidity = formData => {
-    return Object.values(formData).every(({ isValid }) => isValid);
-  };
-
-  createCategoryHandler = event => {
-    event.preventDefault();
-    const { formData, formErrors } = this.state;
-    const finalFormErrors = {},
-      updatedFormData = {};
-
-    let isFormValid = true;
-    Object.keys(formData).forEach(key => {
-      const validationResult = this.validateField(key, formErrors, formData);
-      finalFormErrors[key] = validationResult.formErrors[key];
-      updatedFormData[key] = validationResult.formData[key];
-      isFormValid = validationResult.isFormValid;
-    });
-
-    if (!isFormValid) {
-      this.setState({
-        formData: updatedFormData,
-        formErrors: finalFormErrors,
-        isFormValid,
-      });
-      return;
-    }
-
-    const data = {};
-    for (let [key, { value }] of Object.entries(formData)) {
-      data[key] = value;
-    }
-
-    this.props.onSubmit(data);
-    this.setState({ formData: this.resetForm() });
-  };
-
-  resetForm = () => {
-    const resetFormData = {};
-    Object.keys(this.state.formData).forEach(
-      key => (resetFormData[key] = { value: '', isValid: false })
-    );
-    return resetFormData;
   };
 
   resetFormHandler = event => {
     event.preventDefault();
-    this.setState({ formData: this.resetForm() });
+    this.setState({ formData: formConfigs.resetForm(this.state.formData) });
     this.props.onReset();
   };
+
+  createCategoryHandler = event => {
+    event.preventDefault();
+
+    const result = formConfigs.validateFormBeforeSubmit(this.state);
+
+    if (!result.isFormValid) {
+      this.setState({ ...result });
+      return;
+    }
+
+    const data = formConfigs.dataFactory(this.state.formData);
+
+    this.props.onSubmit(data);
+    this.setState({ isSubmitted: true });
+  };
+
+  componentWillUnmount() {
+    this.props.onHide();
+  }
+
+  componentDidUpdate() {
+    const { isSubmitted, formData } = this.state;
+    if (isSubmitted && this.props.isSuccess) {
+      this.setState({
+        formData: formConfigs.resetForm(formData),
+        isSubmitted: false,
+      });
+    }
+  }
 
   render() {
     const successMessage = this.props.isSuccess ? (
@@ -118,22 +88,28 @@ class CreateCategory extends Component {
         <div className="pl-2 w-100">
           <h3>Create Category</h3>
         </div>
-        <div className="p-1 border-top">
-          <CategoryForm
-            {...this.state.formData}
-            radio={this.state.radioChoices}
-            changed={this.valueChangedHandler}
-            reset={this.resetFormHandler}
-            submit={this.createCategoryHandler}
-            formErrors={this.state.formErrors}
-            blur={this.onBlurHandler}
-          />
+        <div className="p-1 border-top d-flex justify-content-center align-items-center">
+          {this.props.isFetching ? (
+            <Spinner loading={true} size={200} />
+          ) : (
+            <CategoryForm
+              {...this.state.formData}
+              radio={this.state.radioChoices}
+              changed={this.valueChangedHandler}
+              reset={this.resetFormHandler}
+              submit={this.createCategoryHandler}
+              formErrors={this.state.formErrors}
+              blur={this.onBlurHandler}
+            />
+          )}
         </div>
-        <div className="mt-3">
-          <p className="text-danger text-center" style={{ fontSize: '14px' }}>
-            {this.props.errors}
-          </p>
-        </div>
+        {this.props.errors ? (
+          <div className="mt-3">
+            <p className="text-danger text-center" style={{ fontSize: '14px' }}>
+              {this.props.errors.data.errorDetails}
+            </p>
+          </div>
+        ) : null}
       </div>
     ) : (
       <div
@@ -155,12 +131,14 @@ class CreateCategory extends Component {
 
 const mapStateToProps = state => ({
   ...state.createCategory,
+  isError: state.networkError.isError,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onShow: () => dispatch(categoryActions.showCategoryForm()),
-  onReset: () => dispatch(categoryActions.resetCategoryForm()),
-  onSubmit: data => dispatch(categoryActions.categoryCreation(data)),
+  onShow: () => dispatch(actions.showCategoryForm()),
+  onHide: () => dispatch(actions.hideCategoryForm()),
+  onReset: () => dispatch(actions.resetCategoryForm()),
+  onSubmit: data => dispatch(actions.categoryCreation(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateCategory);

@@ -12,4 +12,6 @@ public interface IQuestionService {
 	
 	Question persistQuestion(Question question);
 	
+	List<Question> FetchfindByAskedOnAfter(int categoryId);
+	
 }

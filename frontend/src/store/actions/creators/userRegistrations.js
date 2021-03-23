@@ -1,5 +1,6 @@
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-base';
+import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
+import axios from '../../../axios-base';
 
 const userRegistrationStart = () => ({
   type: actionTypes.USER_REGISTRATION_START,
@@ -19,6 +20,10 @@ export const showUserForm = () => ({
   type: actionTypes.SHOW_USER_FORM,
 });
 
+export const hideUserForm = () => ({
+  type: actionTypes.HIDE_USER_FORM,
+});
+
 export const resetUserForm = () => ({
   type: actionTypes.RESET_USER_FORM,
 });
@@ -31,9 +36,9 @@ export const userRegistration = data => {
       .then(response => {
         dispatch(userRegistrationSuccess());
       })
-      .catch(({ response }) => {
-        console.log(response);
-        dispatch(userRegistrationFail(response.data.errorDetails));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(userRegistrationFail(error.response));
       });
   };
 };

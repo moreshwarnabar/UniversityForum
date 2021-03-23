@@ -10,7 +10,7 @@ const EditPassword = props => (
        
         </Modal.Header>
         <Modal.Body>
-            <p className="text-warning">{props.message}</p>
+            <p className="text-danger">{props.message}</p>
                 <table className="table table-responsive">
                     <tbody>
                         <tr>
@@ -18,7 +18,7 @@ const EditPassword = props => (
                             <td> <input  type="password" placeholder="Password@123" minLength="6"  name="password" className="form-control" value={props.password} onChange={props.changePasswordHandler}/> </td>
                         </tr>
                         <tr>
-                            <td> <label>Retype New password  :</label></td>
+                            <td> <label>Confirm New password  :</label></td>
                             <td> <input  type="password" placeholder="Password@123" minLength="6" name="retypedpPassword" className="form-control" value={props.reTypedPassword} onChange={props.changeRetypedPasswordHandler}/></td>
                         </tr>
                         

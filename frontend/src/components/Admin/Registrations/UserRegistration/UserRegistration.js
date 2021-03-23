@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import RegistrationForm from './RegistrationForm/RegistrationForm';
-import * as validators from '../../../../validation/validation';
-import * as userActions from '../../../../store/actions/actions';
+import Spinner from '../../../UI/Spinner/Spinner';
+import * as actions from '../../../../store/actions/creators/userRegistrations';
+import * as formConfigs from '../../../../config/formConfigs';
 
 class UserRegistration extends Component {
   state = {
@@ -29,59 +30,31 @@ class UserRegistration extends Component {
     ],
     formErrors: null,
     isFormValid: false,
+    isSubmitted: false,
   };
 
   valueChangedHandler = event => {
     const { name, value } = event.target;
 
-    const updatedFormData = { ...this.state.formData };
-    const updatedElData = {
-      value,
-      isValid: name === 'gender',
-    };
-    updatedFormData[name] = updatedElData;
+    const updatedFormData = formConfigs.changeValue(
+      { ...this.state.formData },
+      name,
+      value
+    );
 
     this.setState({ formData: updatedFormData });
   };
 
   onBlurHandler = event => {
     const { name } = event.target;
-    const { formErrors, formData } = this.state;
-    const validationResult = this.validateField(name, formErrors, formData);
+    const validationResult = formConfigs.validateField(name, this.state);
     this.setState({ ...validationResult });
-  };
-
-  validateField = (name, formErrors, formData) => {
-    const result = validators[`${name}Validation`]({ ...formData[name] });
-    const validatedFormData = { ...formData, [name]: result[name] };
-    const updatedFormErrors = { ...formErrors, [name]: result.errorMsg };
-
-    // check if valid detail
-    const isFormValid = this.checkFormValidity(validatedFormData);
-
-    return {
-      formData: validatedFormData,
-      formErrors: updatedFormErrors,
-      isFormValid,
-    };
-  };
-
-  checkFormValidity = formData => {
-    return Object.values(formData).every(({ isValid }) => isValid);
-  };
-
-  resetForm = () => {
-    const resetFormData = {};
-    Object.keys(this.state.formData).forEach(
-      key => (resetFormData[key] = { value: '', isValid: false })
-    );
-    return resetFormData;
   };
 
   resetFormHandler = event => {
     event.preventDefault();
     this.setState({
-      formData: this.resetForm(),
+      formData: formConfigs.resetForm(this.state.formData),
       formErrors: null,
       isFormValid: false,
     });
@@ -90,35 +63,33 @@ class UserRegistration extends Component {
 
   registerUserHandler = event => {
     event.preventDefault();
-    const { formData, formErrors } = this.state;
-    const finalFormErrors = {},
-      updatedFormData = {};
 
-    let isFormValid = true;
-    Object.keys(formData).forEach(key => {
-      const validationResult = this.validateField(key, formErrors, formData);
-      finalFormErrors[key] = validationResult.formErrors[key];
-      updatedFormData[key] = validationResult.formData[key];
-      isFormValid = validationResult.isFormValid;
-    });
+    const result = formConfigs.validateFormBeforeSubmit(this.state);
 
-    if (!isFormValid) {
-      this.setState({
-        formData: updatedFormData,
-        formErrors: finalFormErrors,
-        isFormValid,
-      });
+    if (!result.isFormValid) {
+      this.setState({ ...result });
       return;
     }
 
-    const data = {};
-    for (let [key, { value }] of Object.entries(formData)) {
-      data[key] = value;
-    }
+    const data = formConfigs.dataFactory(this.state.formData);
 
     this.props.onSubmit(data);
-    this.setState({ formData: this.resetForm() });
+    this.setState({ isSubmitted: true });
   };
+
+  componentDidUpdate() {
+    const { isSubmitted, formData } = this.state;
+    if (isSubmitted && this.props.isSuccess) {
+      this.setState({
+        formData: formConfigs.resetForm(formData),
+        isSubmitted: false,
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.onHide();
+  }
 
   render() {
     const successMessage = this.props.isSuccess ? (
@@ -130,23 +101,27 @@ class UserRegistration extends Component {
         <div className="pl-2 w-100">
           <h3>User Registration</h3>
         </div>
-        <div className="p-1 border-top">
-          <RegistrationForm
-            {...this.state.formData}
-            radio={this.state.radioChoices}
-            option={this.state.selectOptions}
-            changed={this.valueChangedHandler}
-            reset={this.resetFormHandler}
-            submit={this.registerUserHandler}
-            formErrors={this.state.formErrors}
-            blur={this.onBlurHandler}
-            isFormValid={this.state.isFormValid}
-          />
+        <div className="p-1 border-top d-flex justify-content-center align-items-center">
+          {this.props.isFetching ? (
+            <Spinner loading={true} size={300} />
+          ) : (
+            <RegistrationForm
+              {...this.state.formData}
+              radio={this.state.radioChoices}
+              option={this.state.selectOptions}
+              changed={this.valueChangedHandler}
+              reset={this.resetFormHandler}
+              submit={this.registerUserHandler}
+              formErrors={this.state.formErrors}
+              blur={this.onBlurHandler}
+              isFormValid={this.state.isFormValid}
+            />
+          )}
         </div>
-        {this.state.isFormValid ? (
+        {this.props.errors ? (
           <div>
             <p className="text-danger text-center" style={{ fontSize: '14px' }}>
-              {this.props.errors}
+              {this.props.errors.data.errorDetails}
             </p>
           </div>
         ) : null}
@@ -171,12 +146,14 @@ class UserRegistration extends Component {
 
 const mapStateToProps = state => ({
   ...state.userRegistration,
+  isError: state.networkError.isError,
 });
 
 const mapDispatchToProps = dispatch => ({
-  onShow: () => dispatch(userActions.showUserForm()),
-  onReset: () => dispatch(userActions.resetUserForm()),
-  onSubmit: data => dispatch(userActions.userRegistration(data)),
+  onShow: () => dispatch(actions.showUserForm()),
+  onHide: () => dispatch(actions.hideUserForm()),
+  onReset: () => dispatch(actions.resetUserForm()),
+  onSubmit: data => dispatch(actions.userRegistration(data)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserRegistration);

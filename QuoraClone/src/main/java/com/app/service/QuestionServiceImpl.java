@@ -24,11 +24,17 @@ public class QuestionServiceImpl implements IQuestionService {
 	@Autowired
 	private CategoryRepository catRepo;
 
+	public QuestionServiceImpl(QuestionRepository questionRepo, CategoryRepository catRepo) {
+		this.questionRepo = questionRepo;
+		this.catRepo = catRepo;
+	}
+
 	@Override
 	public List<Question> fetchQuestionForCategory(int categoryId) {
 		Category c = catRepo.findById(categoryId)
 						.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
-		return questionRepo.findByCategory(c);
+
+		return questionRepo.findByCategoryOrderByAskedOnDesc(c);
 	}
 
 	@Override
@@ -44,6 +50,15 @@ public class QuestionServiceImpl implements IQuestionService {
 		//question.setAnswered(false);			//while 1st asking que isAnswered will false 
 		questionRepo.save(question);
 		return question;
+	}
+	
+	@Override
+	public List<Question> FetchfindByAskedOnAfter(int categoryId) {
+		Category c = catRepo.findById(categoryId)
+				.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
+		LocalDate date=LocalDate.now().minusDays(10);
+		return questionRepo.findByAskedOnAfterAndCategory(date,c);
+		
 	}
 
 }
