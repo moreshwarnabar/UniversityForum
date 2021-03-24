@@ -41,13 +41,12 @@ public class Faculty extends BaseEntity {
 		System.out.println("in ctor of "+getClass().getName());
 	}
 
-	public Faculty(String department, String position, int experience, LocalDate hireDate, User user) {
+	public Faculty(String department, String position, int experience, LocalDate hireDate) {
 		super();
 		this.department = department;
 		this.position = position;
 		this.experience = experience;
 		this.hireDate = hireDate;
-		this.user = user;
 	}
 
 	public String getDepartment() {

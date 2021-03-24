@@ -37,6 +37,19 @@ public class Category extends BaseEntity {
 	public Category() {
 		System.out.println("In default constructor of " + getClass().getName());
 	}
+	
+	public Category(String name) {
+		super();
+		this.name = name;
+	}
+
+	public Category(String name, int numberOfSubscribers, boolean facultyAccess) {
+		super();
+		this.name = name;
+		this.numberOfSubscribers = numberOfSubscribers;
+		this.facultyAccess = facultyAccess;
+	}
+
 
 	public String getName() {
 		return name;

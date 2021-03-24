@@ -11,6 +11,14 @@ public abstract class BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
+	
+	public BaseEntity() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	public BaseEntity(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getId() {
 		return id;
