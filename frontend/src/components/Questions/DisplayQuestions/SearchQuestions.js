@@ -12,10 +12,10 @@ const searchQuestions = props => {
 
   return (
     <React.Fragment>
-      <div className="card-header ">
-        <label>Search Related Question</label>
+      <div className="card-header d-flex justify-content-between flex-wrap">
+        <label className="mb-sm-0 pt-sm-2">Search Related Question</label>
         <button
-          className="col-sm-2 btn btn-outline-success float-right"
+          className="col-sm-2 btn btn-outline-success "
           onClick={props.reset}
         >
           Reset
