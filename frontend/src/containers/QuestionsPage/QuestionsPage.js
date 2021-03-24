@@ -120,11 +120,10 @@ class QuestionsPage extends Component {
         <div className="container pt-3 bg-light min-vh-100">
           <div
             className="mb-3 text-center text-uppercase"
-            style={{ height: '50px' }}
           >
             <h2>{this.props.category.name}</h2>
           </div>
-          <div className="row" style={{ minHeight: '400px' }}>
+          <div className="row mt-2" style={{ minHeight: '400px' }}>
             <div className="col-lg-4 d-flex align-items-center">
               {isCatFetching ? (
                 <div className="w-100 d-flex justify-content-center">

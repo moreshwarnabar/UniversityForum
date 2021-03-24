@@ -12,7 +12,7 @@ const categoryQuestions = props => {
   return (
     <div>
       <div className="card-header ">
-        <label>Category Related Question</label>
+        <label className="mb-0">Category Related Question</label>
       </div>
       {props.questions?.map(item => (
         <div
