@@ -52,13 +52,4 @@ public class QuestionServiceImpl implements IQuestionService {
 		return question;
 	}
 	
-	@Override
-	public List<Question> FetchfindByAskedOnAfter(int categoryId) {
-		Category c = catRepo.findById(categoryId)
-				.orElseThrow(() -> new CategoryNotFoundException("No category found for id " + categoryId));
-		LocalDate date=LocalDate.now().minusDays(10);
-		return questionRepo.findByAskedOnAfterAndCategory(date,c);
-		
-	}
-
 }

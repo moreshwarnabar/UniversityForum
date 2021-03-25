@@ -20,16 +20,16 @@ public class ContactDetailsServiceImpl implements IContactDetailsService {
 
 	@Autowired
 	private ContactDetailsRepository contactDetailsRepo;
+
 	@Autowired
 	private UserRepository userRepo;
 
-	
 	public ContactDetailsServiceImpl() {
 	}
-	
+
 	public ContactDetailsServiceImpl(ContactDetailsRepository contactDetailsRepo, UserRepository userRepo) {
 		this.contactDetailsRepo = contactDetailsRepo;
-		this.userRepo=userRepo;
+		this.userRepo = userRepo;
 	}
 
 	@Override
@@ -42,8 +42,8 @@ public class ContactDetailsServiceImpl implements IContactDetailsService {
 	@Override
 	public List<ContactDetails> fetchAllContactDetails() {
 		List<ContactDetails> contacts = contactDetailsRepo.findAll();
-		
-		if(contacts.isEmpty()) {
+
+		if (contacts.isEmpty()) {
 			throw new ContactDetailsNotFoundException("No Contact details found");
 		}
 		return contacts;
@@ -52,29 +52,28 @@ public class ContactDetailsServiceImpl implements IContactDetailsService {
 	@Override
 	public ContactDetails saveContactDetails(ContactDetails details, int id) {
 
-		User u = userRepo.findById(id)
-				.orElseThrow(() -> new UserNotFoundException("No user registered for id " + id));
+		User u = userRepo.findById(id).orElseThrow(() -> new UserNotFoundException("No user registered for id " + id));
 
 		details.setUser(u);
 
 		ContactDetails c = contactDetailsRepo.save(details);
-		
+
 		return c;
 	}
 
 	@Override
 	public ContactDetails updateContactDetails(ContactDetails details) {
-		
+
 		contactDetailsRepo.save(details);
-		
+
 		return details;
 	}
 
 	@Override
 	public String deleteContactDetails(int id) {
-		
+
 		contactDetailsRepo.deleteById(id);
-		
+
 		return "Deleted contact Details";
 	}
 
