@@ -50,6 +50,7 @@ class LoginPage extends Component {
   };
 
   render() {
+    console.log(this.props.isFetching);
     return (
       <div
         className={`min-vh-100 d-flex justify-content-center align-items-center ${styles.LoginPage}`}
@@ -96,6 +97,7 @@ class LoginPage extends Component {
 const mapStateToProps = state => {
   return {
     ...state.login,
+    isError: state.networkError.isError,
   };
 };
 

@@ -44,17 +44,17 @@ class CategoryControllerTest {
 	
 	@Test
 	public void testFetchCategoryTitles() throws Exception {
-		List<String> categoryTitles = new ArrayList<>();
-		categoryTitles.add("Anti Ragging");
-		categoryTitles.add("Education");
-		categoryTitles.add("Basic Details");
-		categoryTitles.add("Sports");
-		categoryTitles.add("Lifestyle");
-		categoryTitles.add("Miscellaneous");	
+		List<Category> categoryTitles = new ArrayList<>();
+		categoryTitles.add(new Category("Anti Ragging"));
+		categoryTitles.add(new Category("Education"));
+		categoryTitles.add(new Category("Basic Details"));
+		categoryTitles.add(new Category("Sports"));
+		categoryTitles.add(new Category("Lifestyle"));
+		categoryTitles.add(new Category("Miscellaneous"));	
 		when(service.fetchAllCategories(any(Role.class))).thenReturn(categoryTitles);
 		// performs a request get with path var=3
 		mockMvc.perform(get("/category/STUDENT")). 
-		andExpect(jsonPath("$.result[0]").value("Anti Ragging")). //in resulting JSON : checks key name n asserts its value 
+		andExpect(jsonPath("$.result[0]").value(new Category("Anti Ragging"))). //in resulting JSON : checks key name n asserts its value 
 		andExpect(status().isOk());//chks if HttpStatus is OK
 	}
 	

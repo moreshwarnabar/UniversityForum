@@ -21,6 +21,7 @@ export const userLoginReducer = (state = initialState, action) => {
       };
 
     case actionTypes.LOGIN_USER_FAIL:
+      console.log('failed');
       return {
         ...state,
         error: action.payload,

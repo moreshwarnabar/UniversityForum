@@ -24,7 +24,9 @@ public class AnswerServiceImpl implements IAnswerService {
 
 	@Autowired
 	private QuestionRepository queRepo;
-
+	
+	public AnswerServiceImpl() {}
+	
 	public AnswerServiceImpl(AnswerRepository ansRepo, QuestionRepository queRepo) {
 		this.ansRepo = ansRepo;
 		this.queRepo = queRepo;
