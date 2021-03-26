@@ -31,8 +31,10 @@ export const authenticateUser = loginData => {
         dispatch(loginUserSuccess(user));
       })
       .catch(error => {
-        if (!error.response) dispatch(networkError());
-        else dispatch(loginUserFail(error.response));
+        if (!error.response) {
+          dispatch(networkError());
+          dispatch(loginUserFail(null));
+        } else dispatch(loginUserFail(error.response));
       });
   };
 };
