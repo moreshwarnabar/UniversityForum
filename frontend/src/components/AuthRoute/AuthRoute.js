@@ -8,8 +8,8 @@ import authorizer from '../../config/auth';
 const authRoute = props => {
   if (props.isLoggedIn) {
     const {
-      user: { role },
-      path,
+      user: { role }, // admin
+      path, // /categories
       component: Component,
     } = props;
 

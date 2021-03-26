@@ -39,7 +39,7 @@ class Answer extends Component {
     };
     if (this.validatePostedAnswer()) {
       this.props.onPostAnswer(data);
-      this.setState({ postAnswer: '' });
+      this.setState({ postAnswer: '', postError: null });
     }
   };
 

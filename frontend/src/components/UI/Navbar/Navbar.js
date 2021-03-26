@@ -41,9 +41,9 @@ const navbar = props => {
               <RB.Dropdown.Menu>
                 {props.categories?.map(cat => (
                   <NavLink
-                    to={`/categories/${cat.name}`}
+                    to={`/questions`}
                     className="dropdown-item"
-                    activeClassName="active"
+                    activeClassName=""
                     onClick={() => {
                       props.onToggle();
                       props.onSelectCategory(cat);

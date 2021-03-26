@@ -41,7 +41,11 @@ class CreateCategory extends Component {
 
   resetFormHandler = event => {
     event.preventDefault();
-    this.setState({ formData: formConfigs.resetForm(this.state.formData) });
+    this.setState({
+      formData: formConfigs.resetForm(this.state.formData),
+      formErrors: null,
+      isFormValid: false,
+    });
     this.props.onReset();
   };
 
