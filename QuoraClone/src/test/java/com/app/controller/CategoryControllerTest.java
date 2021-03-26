@@ -51,7 +51,7 @@ class CategoryControllerTest {
 		categoryTitles.add("Sports");
 		categoryTitles.add("Lifestyle");
 		categoryTitles.add("Miscellaneous");	
-		when(service.fetchAllCategoryNames(any(Role.class))).thenReturn(categoryTitles);
+		when(service.fetchAllCategories(any(Role.class))).thenReturn(categoryTitles);
 		// performs a request get with path var=3
 		mockMvc.perform(get("/category/STUDENT")). 
 		andExpect(jsonPath("$.result[0]").value("Anti Ragging")). //in resulting JSON : checks key name n asserts its value 
