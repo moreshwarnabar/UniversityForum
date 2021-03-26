@@ -59,7 +59,12 @@ export const listUsersReducer = (state = initialState, action) => {
       const users = updateUser([...state.users], action.payload);
       const updatedToDisplay = updateUser([...state.toDisplay], action.payload);
 
-      return { ...state, users, toDisplay: updatedToDisplay };
+      return {
+        ...state,
+        users,
+        toDisplay: updatedToDisplay,
+        isFetching: false,
+      };
 
     default:
       return state;
