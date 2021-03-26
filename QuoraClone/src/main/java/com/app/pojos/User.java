@@ -75,6 +75,20 @@ public class User extends BaseEntity {
 	public User() {
 		System.out.println("In default constructor of " + getClass().getName());
 	}
+	
+	public User(String firstName, String lastName, LocalDate dateOfBirth, Gender gender, boolean isBlocked,
+			String username, String password, Role role) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.dateOfBirth = dateOfBirth;
+		this.gender = gender;
+		this.isBlocked = isBlocked;
+		this.username = username;
+		this.password = password;
+		this.role = role;
+	}
+
 
 	
 	public User(String firstName, String lastName, LocalDate dateOfBirth, Gender gender, boolean isBlocked,

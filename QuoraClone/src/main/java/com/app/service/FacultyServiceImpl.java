@@ -22,6 +22,15 @@ public class FacultyServiceImpl implements IFacultyService {
 	 @Autowired 
 	 private UserRepository userRepo;
 	 
+	 public FacultyServiceImpl() {
+		// TODO Auto-generated constructor stub
+	}
+	 
+	public FacultyServiceImpl(FacultyRepository facultyRepo, UserRepository userRepo) {
+		super();
+		this.facultyRepo = facultyRepo;
+		this.userRepo = userRepo;
+	}
 
 	@Override
 	public Faculty fetchFacultyDetails(int facultyId) {
