@@ -31,8 +31,10 @@ public class Student extends BaseEntity {
 	@MapsId // shared primary key
 	@JsonIgnore
 	private User user;
-	
-	
+
+//constructors
+	public Student() {
+	}
 
 	public Student(String stream, String branch, String year) {
 		super();
@@ -41,6 +43,7 @@ public class Student extends BaseEntity {
 		this.year = year;
 	}
 
+//getters and setters
 	public String getStream() {
 		return stream;
 	}

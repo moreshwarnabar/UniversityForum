@@ -1,220 +1,257 @@
 import React, { Component } from 'react';
-import axios from 'axios'
-import '../Profile.css'
-import avatar7 from '../../../resources/images/avatar7.png';
+import { Button } from 'react-bootstrap';
 import * as Icon from 'react-bootstrap-icons';
+import { connect } from 'react-redux';
+
+import '../Profile.css';
+import avatar7 from '../../../resources/images/avatar7.png';
 import EditUser from '../../Edit/EditUser/EditUser';
 import EditPassword from '../../Edit/EditPassword/EditPassword';
-import { Button} from "react-bootstrap";
+import Spinner from '../../UI/Spinner/Spinner';
+import * as actions from '../../../store/actions/creators/profileActionCreators/userDetails';
 
-class UserDetails extends Component{
-    state = {
-        userDetails : null,
-        showUserDetailsForm : false,
-        
-        password : '',
-        reTypedPassword : '',
-        showPasswordForm : false,
-        message : ''
+class UserDetails extends Component {
+  state = {
+    showUserDetailsForm: false,
+    userFormDetails: null,
+    password: '',
+    reTypedPassword: '',
+    showPasswordForm: false,
+    message: '',
+    error: {
+      fName: '',
+      lName: '',
+    },
+  };
+
+  componentDidMount() {
+    this.setState({ userFormDetails: this.props.user });
+  }
+
+  //Password Change
+  showEditPasswordForm = () => {
+    this.setState({
+      showPasswordForm: !this.state.showPasswordForm,
+    });
+  };
+
+  changePasswordHandler = event => {
+    this.setState({
+      password: event.target.value,
+    });
+  };
+
+  changeRetypedPasswordHandler = event => {
+    this.setState({
+      reTypedPassword: event.target.value,
+    });
+  };
+
+  validatePassword() {
+    if (
+      !(
+        this.state.password.trim().length >= 4 &&
+        this.state.password.trim().length < 15
+      )
+    ) {
+      this.setState({
+        message: 'password must be contain at between 6 to 15 character ',
+      });
+    } else if (!(this.state.password === this.state.reTypedPassword)) {
+      this.setState({
+        message: 'Both the Password fields must be same',
+      });
+    } else {
+      this.setState({
+        message: '',
+      });
+      return true;
     }
+  }
 
-    componentDidMount(){
-        axios.get("http://localhost:8080/forum/users/ganesh123/ganesh123")
-        .then(
-            (response) => {
-                console.log(response.data)
-                this.setState({
-                    userDetails : response.data.result
-                })
-            }
-        )
-        .catch(
-            (error) => {
-                console.log(error)
-                this.setState({
-                    erroMsg: "Error Something went Wrong"
-                })
-            }
-        )
+  updatePassword = event => {
+    if (this.validatePassword()) {
+      const id = this.props.user.id;
+      const password = {
+        password: this.state.password,
+      };
+
+      this.props.onPassword(id, password);
+      this.setState({ showPasswordForm: false });
     }
+  };
 
+  showEditUserDetailsForm = () => {
+    this.setState({
+      showUserDetailsForm: !this.state.showUserDetailsForm,
+    });
+  };
 
-    //Password Change
-    showEditPasswordForm = () =>{
-        console.log("clicked edit Password")
-        this.setState({
-            showPasswordForm : !this.state.showPasswordForm
-          
-        })
+  changeUserDetailsHandler = event => {
+    const { name, value } = event.target;
+    const updatedUser = { ...this.state.userFormDetails, [name]: value };
+    this.setState({
+      userFormDetails: updatedUser,
+    });
+  };
+
+  validate = () => {
+    if (!(this.state.userFormDetails.firstName.trim().length < 15)) {
+      this.setState({
+        error: {
+          fName: 'First Name must be 15 character',
+        },
+      });
+    } else if (!(this.state.userFormDetails.lastName.trim().length < 15)) {
+      this.setState({
+        error: { lName: 'Last Name must be 15 character' },
+      });
+    } else {
+      this.setState({ error: { fName: '', lName: '' } });
+      return true;
     }
+  };
 
-    changePasswordHandler = (event) =>{
-        this.setState({
-            password : event.target.value,
-        })
+  updateUserDetails = () => {
+    if (this.validate()) {
+      const data = this.state.userFormDetails;
+      this.props.onUpdate(data);
+      this.setState({ showUserDetailsForm: false });
     }
-    changeRetypedPasswordHandler = (event) =>{
-        this.setState({
-            reTypedPassword : event.target.value
-        })
-    }
+  };
 
-    updatePassword = (event) => {
-        console.log("clicked update Password")
-        console.log(this.state.password +" "+ this.state.reTypedPassword)
+  render() {
+    return (
+      <div>
+        <EditUser
+          {...this.state.userFormDetails}
+          {...this.state.error}
+          showUserDetailsForm={this.state.showUserDetailsForm}
+          showEditUserDetailsForm={this.showEditUserDetailsForm}
+          updateUserDetails={this.updateUserDetails}
+          changeUserDetailsHandler={this.changeUserDetailsHandler}
+        />
 
-        if(this.state.password === this.state.reTypedPassword){
-            if(this.state.password.length > 6){
-                console.log(this.state.password +" == "+ this.state.reTypedPassword)
-                const userpass ={
-                    password : this.state.password
-                }
-                axios.put("http://localhost:8080/forum/users/password/1", userpass)
-                .then(
-                    (response) => {
-                        console.log(response.data)
-                        this.setState({
-                            showUserDetailsForm : false
-                        })
-                        this.setState({
-                            showPasswordForm : false,
-                            message : response.data.result
-                        })
-                    } 
-                )
-                
-            }else{
-                this.setState({
-                    showPasswordForm : true,
-                    message : "Password must contain more than 6 character"
-                })
-            }
-        }else{
-            this.setState({
-                showPasswordForm : true,
-                message : "Password must be same in both fields"
-            })
-        }
-        
-    }
+        <div className="shadow-lg p-3 mt-3 bg-white rounded ">
+          <div className="row ml-4 justify-content-between">
+            <h3 className="ml-2">Profile :</h3>
+            <Button
+              variant="light"
+              size="sm"
+              className="mb-3 "
+              onClick={this.showEditPasswordForm}
+            >
+              <Icon.ShieldLockFill /> Change Password
+            </Button>
 
+            <Button
+              variant="light"
+              size="sm"
+              className="mr-5 mb-3"
+              onClick={this.showEditUserDetailsForm}
+            >
+              <Icon.PencilFill />
+            </Button>
+          </div>
 
-    showEditUserDetailsForm = () => {
-        console.log("clicked editUser")
-        this.setState({
-            showUserDetailsForm : !this.state.showUserDetailsForm
-          
-        })
-    } 
-
-    changeUserDetailsHandler = (event) =>{
-        const {name,value} = event.target
-        const updatedUser = {...this.state.userDetails, [name]:value}
-        this.setState({
-            userDetails : updatedUser   
-        }) 
-    }
-
-    updateUserDetails = (event) => {
-        console.log("clicked updateUserDetails")
-        console.log(this.state.userDetails)
-        axios.put("http://localhost:8080/forum/users", this.state.userDetails)
-        .then(
-            (response) => {
-                console.log(response.data)
-                this.setState({
-                    showUserDetailsForm : false
-                })
-            } 
-        )
-    }
-
-    render(){
-        
-        if(this.state.userDetails != null){
-            return(
-
-        <div>
-            
-             
-            <EditUser  value={this.state.userDetails}
-            showUserDetailsForm={this.state.showUserDetailsForm}
-            showEditUserDetailsForm={this.showEditUserDetailsForm}
-            updateUserDetails={this.updateUserDetails}
-            changeUserDetailsHandler={this.changeUserDetailsHandler}
-            /> 
-           
-            <div className=" shadow-lg p-3 mt-5 mb-3 bg-white rounded ">
-                
-                    <div className="row ml-4 justify-content-between">
-                        <h3 className="ml-2">Profile :</h3>
-                        <Button variant="light" size="sm" className="mb-3 " onClick={this.showEditPasswordForm}> <Icon.ShieldLockFill/> Change Password </Button>
-                        
-                        <Button variant="light"  size="sm" className="mr-5 mb-3" onClick={this.showEditUserDetailsForm}> <Icon.PencilFill/> </Button>
-                    </div>
-               
-               <div className="row">
-                    <div className="col-sm-4">
-                    <img  className="float-left img-fluid rounded-circle" src={avatar7} alt="Profile Pic"></img>
-                    </div>
-               
-                    <hr/>
-                
-                    <div className="col-sm-8">
-
-
-                    <table className="table table-striped">
-                        <tbody>
-                            <tr>
-                                <td> <h6 className="ml-5">Full Name</h6></td>
-                                <td> <div className="text-secondary ml-5"> {this.state.userDetails.firstName} {this.state.userDetails.lastName}</div></td>
-                            </tr>
-                            <tr>
-                                <td> <h6 className="ml-5">Email</h6></td>
-                                <td> <div className="text-secondary ml-5"> {this.state.userDetails.username}</div></td>
-                            </tr>
-                            <tr>
-                                <td>  <h6 className="ml-5">Date of Birth</h6></td>
-                                <td> <div className="text-secondary ml-5">{this.state.userDetails.dateOfBirth}</div></td>
-                            </tr>
-                            <tr>
-                                <td>  <h6 className="ml-5">Gender</h6></td>
-                                <td> <div className="text-secondary ml-5">{this.state.userDetails.gender}</div></td>
-                            </tr>
-                            <tr>
-                                <td>   <h6 className="ml-5">Role</h6></td>
-                                <td> <div className="text-secondary ml-5">{this.state.userDetails.role}</div></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div className="text-success">{this.state.message}</div>
-                    </div>
-                </div>
+          <div className="row">
+            <div className="col-sm-4">
+              <img
+                className="float-left img-fluid rounded-circle"
+                src={avatar7}
+                alt="Profile Pic"
+              ></img>
             </div>
-            
 
-            <EditPassword password={this.state.password}
-            reTypedPassword={this.state.reTypedPassword}
-            showPasswordForm={this.state.showPasswordForm}
-            message={this.state.message}
-            showEditPasswordForm={this.showEditPasswordForm}
-            changePasswordHandler={this.changePasswordHandler}
-            changeRetypedPasswordHandler={this.changeRetypedPasswordHandler}
-            updatePassword ={this.updatePassword}
-            />
-               
-        </div>            
-            )
-        }
-        else{
-            return(
-                <div>
-                    Loading...
-                </div>
-            )
-        }
-    } 
+            {this.props.isFetching ? (
+              <div className="col d-flex justify-content-center align-items-center">
+                <Spinner loading={true} size={200} />
+              </div>
+            ) : (
+              <div className="col-sm-8">
+                <table className="table table-striped">
+                  <tbody>
+                    <tr>
+                      <td>
+                        <h6 className="ml-5">Full Name</h6>
+                      </td>
+                      <td>
+                        <div className="text-secondary ml-5">
+                          {this.props.user.firstName} {this.props.user.lastName}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h6 className="ml-5">Username</h6>
+                      </td>
+                      <td>
+                        <div className="text-secondary ml-5">
+                          {this.props.user.username}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h6 className="ml-5">Date of Birth</h6>
+                      </td>
+                      <td>
+                        <div className="text-secondary ml-5">
+                          {this.props.user.dateOfBirth}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h6 className="ml-5">Gender</h6>
+                      </td>
+                      <td>
+                        <div className="text-secondary ml-5">
+                          {this.props.user.gender}
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <h6 className="ml-5">Role</h6>
+                      </td>
+                      <td>
+                        <div className="text-secondary ml-5">
+                          {this.props.user.role}
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="text-success">{this.state.message}</div>
+              </div>
+            )}
+          </div>
+        </div>
 
-
+        <EditPassword
+          password={this.state.password}
+          reTypedPassword={this.state.reTypedPassword}
+          showPasswordForm={this.state.showPasswordForm}
+          message={this.state.message}
+          showEditPasswordForm={this.showEditPasswordForm}
+          changePasswordHandler={this.changePasswordHandler}
+          changeRetypedPasswordHandler={this.changeRetypedPasswordHandler}
+          updatePassword={this.updatePassword}
+        />
+      </div>
+    );
+  }
 }
-export default UserDetails;
+
+const mapStateToProps = state => ({
+  ...state.userDetails,
+  isFetching: state.login.isFetching || state.userDetails.isFetching,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onUpdate: data => dispatch(actions.updateUser(data)),
+  onPassword: (id, password) => dispatch(actions.updatePassword(id, password)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserDetails);

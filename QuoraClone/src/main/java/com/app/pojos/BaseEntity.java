@@ -20,6 +20,9 @@ public abstract class BaseEntity {
 		this.id = id;
 	}
 
+	public BaseEntity() {
+	}
+	
 	public Integer getId() {
 		return id;
 	}

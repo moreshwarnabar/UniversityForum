@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -28,10 +29,12 @@ public class Category extends BaseEntity {
 	private boolean facultyAccess;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
 	private List<Question> questions = new ArrayList<>();
 	
 	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST}, mappedBy = "categoriesSubscribed")
 	@JsonIgnoreProperties("categoriesSubscribed")
+	@JsonIgnore
 	private Set<User> subscribers = new HashSet<>();
 	
 	public Category() {
@@ -50,6 +53,13 @@ public class Category extends BaseEntity {
 		this.facultyAccess = facultyAccess;
 	}
 
+
+	public Category(int id, String name, int numberOfSubscribers, boolean facultyAccess) {
+		this.setId(id);
+		this.name = name;
+		this.numberOfSubscribers = numberOfSubscribers;
+		this.facultyAccess = facultyAccess;
+	}
 
 	public String getName() {
 		return name;
@@ -94,7 +104,7 @@ public class Category extends BaseEntity {
 	@Override
 	public String toString() {
 		return "Category [name=" + name + ", numberOfSubscribers=" + numberOfSubscribers + ", blockedForFaculty="
-				+ facultyAccess + "]";
+				+ facultyAccess + "]" + "id: " + this.getId();
 	}
 
 	public void editNumberOfSubscribers(int i) {

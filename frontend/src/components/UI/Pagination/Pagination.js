@@ -15,7 +15,7 @@ const pagination = props => {
       >
         <Icons.CaretLeftFill />
       </button>
-      <span className="font-weight-bold">{current}</span>
+      <span className="font-weight-bold" style={{padding: '3px 0'}}>{current}</span>
       <button
         className="btn btn-primary btn-sm"
         type="button"

@@ -1,5 +1,6 @@
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-base';
+import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
+import axios from '../../../axios-base';
 
 const categoryCreationStart = () => ({
   type: actionTypes.CATEGORY_CREATION_START,
@@ -19,6 +20,10 @@ export const showCategoryForm = () => ({
   type: actionTypes.SHOW_CATEGORY_FORM,
 });
 
+export const hideCategoryForm = () => ({
+  type: actionTypes.HIDE_CATEGORY_FORM,
+});
+
 export const resetCategoryForm = () => ({
   type: actionTypes.RESET_CATEGORY_FORM,
 });
@@ -31,9 +36,9 @@ export const categoryCreation = data => {
       .then(response => {
         dispatch(categoryCreationSuccess());
       })
-      .catch(({ response }) => {
-        console.log(response);
-        dispatch(categoryCreationFail(response.data.errorDetails));
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        dispatch(categoryCreationFail(error.response));
       });
   };
 };

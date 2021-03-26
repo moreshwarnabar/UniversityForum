@@ -29,7 +29,7 @@ public class StudentController {
 	@Autowired
 	private IStudentService StudentService;
 	
-	//get all student details
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> fetchStudents(@PathVariable int id){
 		Student students = StudentService.fetchStudents(id);
@@ -45,7 +45,7 @@ public class StudentController {
 	}
 	
 	
-	@PutMapping("/")
+	@PutMapping
 	public ResponseEntity<?>  updateStudentDetails(@RequestBody Student details) {
 		System.out.println("in controller -"+ details);
 		Student c= StudentService.updateStudentDetails(details);

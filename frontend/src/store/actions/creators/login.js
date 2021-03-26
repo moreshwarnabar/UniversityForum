@@ -1,5 +1,10 @@
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-base';
+import * as actionTypes from '../actionTypes';
+import { networkError } from './networkError';
+import axios from '../../../axios-base';
+
+const loginUserStart = () => ({
+  type: actionTypes.LOGIN_USER_START,
+});
 
 const loginUserSuccess = user => {
   return {
@@ -17,16 +22,18 @@ const loginUserFail = errorMsg => {
 
 export const authenticateUser = loginData => {
   return dispatch => {
+    dispatch(loginUserStart());
     const { username, password } = loginData;
     axios
-      .get(`users/single/${username.value}/${password.value}`)
+      .get(`users/single/${username}/${password}`)
       .then(response => {
         const user = response.data.result;
         dispatch(loginUserSuccess(user));
       })
-      .catch(error =>
-        dispatch(loginUserFail(error.response.data.errorDetails))
-      );
+      .catch(error => {
+        if (!error.response) dispatch(networkError());
+        else dispatch(loginUserFail(error.response));
+      });
   };
 };
 

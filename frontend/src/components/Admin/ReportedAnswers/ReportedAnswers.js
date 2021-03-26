@@ -1,65 +1,37 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import AnswersTable from './AnswersTable/AnswersTable';
 import Pagination from '../../UI/Pagination/Pagination';
 import ModalWindow from '../../UI/ModalWindow/ModalWindow';
+import Spinner from '../../UI/Spinner/Spinner';
+import * as actions from '../../../store/actions/creators/reportedAnswers';
 
 class ReportedAnswers extends Component {
   state = {
-    answers: [],
-    toDisplay: [],
-    pagination: {
-      per: 2,
-      current: 1,
-      last: 1,
-    },
     showModal: false,
     modalData: null,
     selectedAnswer: null,
-    isNoReports: false,
   };
 
   deleteAnswerHandler = () => {
-    axios
-      .delete(
-        `http://localhost:8080/forum/answers/${this.state.selectedAnswer.id}`
-      )
-      .then(response => {
-        const id = this.state.selectedAnswer.id;
-        const answers = this.removeAnswer([...this.state.answers], { id });
-        this.initPagination(answers);
-      });
+    const data = this.state.selectedAnswer.id;
+
+    this.props.onDeleteAnswer(data);
+    this.modalCloseHandler();
   };
 
   removeReportHandler = () => {
     const id = this.state.selectedAnswer.id;
-    axios
-      .put('http://localhost:8080/forum/answers', {
-        id,
-        isReported: !this.state.selectedAnswer.isReported,
-      })
-      .then(response => {
-        const updatedAnswer = response.data.result;
-        const answers = this.removeAnswer(
-          [...this.state.answers],
-          updatedAnswer
-        );
-        this.initPagination(answers);
-      });
-  };
+    const data = { id, isReported: false };
 
-  removeAnswer = (answers, updatedAnswer) => {
-    const answerIndex = answers.findIndex(
-      answer => answer.id === updatedAnswer.id
-    );
-    answers.splice(answerIndex, 1);
-    return answers;
+    this.props.onRemoveReport(data);
+    this.modalCloseHandler();
   };
 
   modalViewHandler = event => {
     const id = +event.target.dataset.answerid;
-    const selectedAnswer = { ...this.state.answers.find(ans => ans.id === id) };
+    const selectedAnswer = { ...this.props.answers.find(ans => ans.id === id) };
 
     const modalData = {};
     modalData.title = (
@@ -96,56 +68,24 @@ class ReportedAnswers extends Component {
   };
 
   modalCloseHandler = () => {
-    this.setState({ showModal: false });
+    this.setState({ showModal: false, modalData: null, selectedAnswer: null });
   };
 
   pageChangeHandler = event => {
-    const { answers, pagination } = this.state;
-
     const parent = event.target.closest('.btn');
     const next = +parent.dataset.goto;
-    const toDisplay = this.pageContentSlicer(answers, next, pagination.per);
 
-    this.setState({ toDisplay, pagination: { ...pagination, current: next } });
-  };
-
-  pageContentSlicer = (answers, page, per) => {
-    const start = per * (page - 1);
-    const end = per * page;
-
-    return answers.slice(start, end);
-  };
-
-  initPagination = answers => {
-    const { pagination } = this.state;
-    let { current, per } = pagination;
-
-    const last = Math.ceil(answers.length / per);
-    current = last < current ? last : current;
-    const toDisplay = this.pageContentSlicer(answers, current, per);
-
-    const isNoReports = answers.length === 0;
-
-    this.setState({
-      answers,
-      toDisplay,
-      pagination: { ...pagination, current, last },
-      showModal: false,
-      isNoReports,
-    });
+    this.props.onPageChange(next);
   };
 
   componentDidMount() {
-    axios.get('http://localhost:8080/forum/answers/reports').then(response => {
-      const answers = response.data.result;
-      this.initPagination(answers);
-    });
+    this.props.onFetchReports();
   }
 
   render() {
     return (
       <div className="row m-0 justify-content-center align-self-start align-items-center w-100">
-        <div className="container p-2 border rounded shadow bg-light">
+        <div className="container p-2 border rounded shadow bg-light d-flex justify-content-center flex-wrap">
           <ModalWindow
             showModal={this.state.showModal}
             closeModal={this.modalCloseHandler}
@@ -154,26 +94,43 @@ class ReportedAnswers extends Component {
             {...this.state.modalData}
           />
 
-          <div>
-            <h3>Reported Answers</h3>
-          </div>
-          <div className="pt-3 border-top table-responsive">
-            <AnswersTable
-              answers={this.state.toDisplay}
-              clicked={this.modalViewHandler}
-              isNoReports={this.state.isNoReports}
-            />
-          </div>
-          <div className="d-flex justify-content-between">
-            <Pagination
-              {...this.state.pagination}
-              clicked={this.pageChangeHandler}
-            />
-          </div>
+          {this.props.isFetching ? (
+            <Spinner loading={true} size={250} />
+          ) : (
+            <React.Fragment>
+              <div>
+                <h3 className="text-uppercase">Reported Answers</h3>
+              </div>
+              <div className="pt-3 border-top table-responsive">
+                <AnswersTable
+                  answers={this.props.toDisplay}
+                  clicked={this.modalViewHandler}
+                  isNoReports={this.props.isAnswersEmpty}
+                />
+              </div>
+              <div className="w-100 d-flex justify-content-between">
+                <Pagination
+                  {...this.props.pagination}
+                  clicked={this.pageChangeHandler}
+                />
+              </div>
+            </React.Fragment>
+          )}
         </div>
       </div>
     );
   }
 }
 
-export default ReportedAnswers;
+const mapStateToProps = state => ({
+  ...state.reportedAnswers,
+});
+
+const mapDispatchToProps = dispatch => ({
+  onFetchReports: () => dispatch(actions.fetchReports()),
+  onRemoveReport: data => dispatch(actions.removeReport(data)),
+  onDeleteAnswer: data => dispatch(actions.deleteAnswer(data)),
+  onPageChange: page => dispatch(actions.changeAnswersPage(page)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ReportedAnswers);

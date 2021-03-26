@@ -1,26 +1,18 @@
-.card-body {
+.card-body-profile {
     flex: 1 1 auto;
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: auto;
     min-height: 1px;
     padding: 1rem;
-    padding-top: 1rem;
-    padding-right: 1rem;
-    padding-bottom: 1rem;
-    padding-left: 1rem;
     width: 26%;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-right: 20px;
-    margin-left: 20px;
+    margin: 20px;
+    
     }
 
 .profileImg{
     width: 100px;
     height: 250px;
-     margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    margin-left: 10px;
+    margin: 10px;
+    
     }

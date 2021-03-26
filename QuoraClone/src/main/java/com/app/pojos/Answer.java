@@ -39,8 +39,17 @@ public class Answer extends BaseEntity {
 
 	@Column(name = "is_reported")
 	private boolean isReported;
-
 	
+	public Answer() {
+	}
+
+	public Answer(Question question, String answer, LocalDate answeredOn, boolean isReported) {
+		this.question = question;
+		this.answer = answer;
+		this.answeredOn = answeredOn;
+		this.isReported = isReported;
+	}
+
 	public User getAnswerBy() {
 		return answerBy;
 	}

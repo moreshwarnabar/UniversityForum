@@ -35,6 +35,16 @@ public class ContactDetails extends BaseEntity {
 	public ContactDetails() {
 		System.out.println("in the const - " + getClass().getName());
 	}
+	
+	public ContactDetails(String street, String city, String state, String pinCode, String phoneNo) {
+		this.street = street;
+		this.city = city;
+		this.state = state;
+		this.pinCode = pinCode;
+		this.phoneNo = phoneNo;
+	}
+
+
 
 	public String getStreet() {
 		return street;
