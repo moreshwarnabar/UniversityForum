@@ -50,7 +50,6 @@ class LoginPage extends Component {
   };
 
   render() {
-    console.log(this.props.isFetching);
     return (
       <div
         className={`min-vh-100 d-flex justify-content-center align-items-center ${styles.LoginPage}`}

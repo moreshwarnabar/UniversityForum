@@ -18,7 +18,7 @@ class App extends Component {
         <NetworkError />
 
         <Switch>
-          <AuthRoute path="/admin" component={AdminPage} />
+          <AuthRoute path="/admin" component={AdminPage} /> 
           <AuthRoute path="/profile" component={ProfilePage} />
           <AuthRoute path="/categories" component={CategoryPage} />
           <AuthRoute path="/questions" component={QuestionsPage} />
