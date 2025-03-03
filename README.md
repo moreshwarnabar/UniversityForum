@@ -90,6 +90,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 *   Moreshwar Nabar
 *   Nikhil More
+*   Anmol Bhardwaj
 
 ## Contact
 
