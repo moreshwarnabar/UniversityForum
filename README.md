@@ -89,7 +89,7 @@ This project is licensed under the [MIT License](LICENSE).
 ## Team
 
 *   Moreshwar Nabar
-*   Group 4 e-DAC
+*   Nikhil More
 
 ## Contact
 
